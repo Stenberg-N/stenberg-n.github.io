@@ -2,7 +2,6 @@
   import { fly } from 'svelte/transition';
 
   import '../styles.css';
-	import favicon from '$lib/assets/favicon.svg';
 	import { setContext } from 'svelte';
 
   setContext('onHomeScreen', { getOnHomeScreen: () => onHomeScreen, setOnHomeScreen });
@@ -16,7 +15,7 @@
 
   $effect(() => {
     if (isAlert && !isRedirecting) {
-      setTimeout(() => { isAlert = false; }, 3000);
+      setTimeout(() => { isAlert = false; isRedirecting = false; }, 3000);
     }
   });
 
@@ -43,7 +42,7 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" href={favicon} />
+	<link rel="icon" href="/assets/favicon.svg" />
 </svelte:head>
 
 {#if isAlert}
@@ -51,7 +50,7 @@
     <div class="alert-content" style="display: flex; flex-direction: row;">
       <p id="alert-message" style="margin: 0;">{alertMessage}</p>
       <div style="display: flex; flex: 1;"></div>
-      <button id="alert-close-btn" onclick={() => {isAlert = false; isRedirecting = false; }}><img src="../src/lib/assets/close-x.svg" alt="Close alert"></button>
+      <button id="alert-close-btn" onclick={() => {isAlert = false; isRedirecting = false; }}><img src="/assets/close-x.svg" alt="Close alert"></button>
     </div>
     {#if isRedirecting}
       <div style="display: flex; flex: 1;"></div>
@@ -65,14 +64,14 @@
 
 <nav id="nav-bar">
   {#if !onHomeScreen}
-    <a id="back-btn" style="position: fixed; left: 16px; max-height: 24px;" href="/projects" transition:fly={{ y: 20, duration: 200, delay: 100 }}><img style="transform: rotate(90deg); max-width: 24px; max-height: 24px;" src="../src/lib/assets/arrow.svg"alt="Back arrow"></a>
+    <a id="back-btn" style="position: fixed; left: 16px; max-height: 24px;" href="/projects" transition:fly={{ y: 20, duration: 200, delay: 100 }}><img style="transform: rotate(90deg); max-width: 24px; max-height: 24px;" src="/assets/arrow.svg"alt="Back arrow"></a>
   {/if}
   <div style="display: flex; flex: 1; justify-content: center; gap: 40px;">
     <a class="anchor" href="/">Home</a>
     <a class="anchor" href="/projects">Projects</a>
   </div>
-  <button id="github-link" style="position: fixed; right: 64px;" onclick={() => redirect()}><img src="../src/lib/assets/github-logo.svg" alt="GitHub Profile"></button>
-  <button id="email-link" style="position: fixed; right: 16px;" onclick={() => { copyEmail(); }} class:disabled={isRedirecting}><img src="../src/lib/assets/email-logo.svg" alt="Email"></button> 
+  <button id="github-link" style="position: fixed; right: 64px;" onclick={() => redirect()}><img src="/assets/github-logo.svg" alt="GitHub Profile"></button>
+  <button id="email-link" style="position: fixed; right: 16px;" onclick={() => { if (!isRedirecting) copyEmail(); }} class:disabled={isRedirecting}><img src="/assets/email-logo.svg" alt="Email"></button> 
 </nav>
 
 <main class="content">
