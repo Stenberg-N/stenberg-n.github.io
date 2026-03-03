@@ -6,9 +6,6 @@ const config = {
   preprocess: vitePreprocess(),
   kit: {
     adapter: adapter(),
-    paths: {
-      base: process.argv.includes('dev') ? '' : '/stenberg-n.github.io'
-    }
   }
 };
 
