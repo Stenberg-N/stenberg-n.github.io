@@ -1,0 +1,42 @@
+html {
+  box-sizing: border-box;
+  background-image: linear-gradient(180deg, #0f0f0f, #0a0a0a);
+  color: #f6f6f6;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+}
+
+*, *::after, *::before {
+  box-sizing: inherit;
+}
+
+html::-webkit-scrollbar {
+  display: none;
+}
+
+a:hover, button:hover {
+  cursor: pointer;
+}
+
+.anchor:link, .anchor:visited, .anchor:active, .anchor:focus {
+  position: relative;
+  font-weight: 800;
+  text-decoration: none;
+  color: inherit;
+  padding-bottom: 4px;
+}
+
+.anchor::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 3px;
+  background-color: currentColor;
+  transition: width 0.2s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+}
+
+.anchor:hover::after {
+  width: 100%;
+}
