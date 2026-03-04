@@ -1,7 +1,11 @@
 <script lang="ts">
   import { getContext, onMount } from "svelte";
   import { projects } from '$lib/projects';
-  import { goto } from "$app/navigation";
+  import { goto } from '$app/navigation';
+  import { resolve } from '$app/paths';
+
+  type ProjectSlug = 'finance-tracker' | 'focusboard' | 'waste-classifier';
+  type ProjectRoute = `/projects/${ProjectSlug}`;
 
   const { setOnHomeScreen } = getContext<{ getOnHomeScreen: () => boolean, setOnHomeScreen: (state: boolean) => void }>('onHomeScreen');
 
@@ -14,8 +18,8 @@
 <h1 style="justify-self: center; filter: drop-shadow(0 10px 12px rgba(0,0,0,0.8)); user-select: none;">All projects</h1>
 
 <div id="projects">
-  {#each projects as { id, title, slug, picture, description }}
-    <div role="link" tabindex="0" class="project anchor" style="background-image: url({picture});" onclick={() => goto(`/projects/${slug}`)} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goto(`/projects/${slug}`); }}}>
+  {#each projects as { id, title, slug, picture, description } (id)}
+    <div role="link" tabindex="0" class="project anchor" style="background-image: url({picture});" onclick={() => goto(resolve(`/projects/${slug}` as ProjectRoute))} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goto(resolve(`/projects/${slug}` as ProjectRoute))} }}>
       <div style="margin-bottom: 16px; position: relative; z-index: 1;">
         <p style="filter: drop-shadow(0 10px 12px rgba(0,0,0,0.8)); font-weight: 800;">{ title }</p>
       </div>
@@ -76,7 +80,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    backdrop-filter: blur(1.5px);
+    backdrop-filter: blur(1px);
     background-color: rgba(0,0,0,0.3);
     z-index: 0;
     box-shadow: 0 8px 24px rgba(0,0,0,1);

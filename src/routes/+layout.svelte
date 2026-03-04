@@ -1,8 +1,9 @@
 <script lang="ts">
   import { fly } from 'svelte/transition';
+  import { setContext } from 'svelte';
+  import { resolve } from '$app/paths';
 
   import '../styles.css';
-	import { setContext } from 'svelte';
 
   setContext('onHomeScreen', { getOnHomeScreen: () => onHomeScreen, setOnHomeScreen });
 
@@ -66,11 +67,11 @@
 
 <nav id="nav-bar">
   {#if !onHomeScreen}
-    <a id="back-btn" class="interactive-el" style="position: fixed; left: 16px; max-height: 24px;" href="/projects" transition:fly={{ y: 20, duration: 200, delay: 100 }}><img style="transform: rotate(90deg); max-width: 24px; max-height: 24px;" src="/assets/arrow.svg"alt="Back arrow"></a>
+    <a id="back-btn" class="interactive-el" style="position: fixed; left: 16px; max-height: 24px;" href={resolve("/projects")} transition:fly={{ y: 20, duration: 200, delay: 100 }}><img style="transform: rotate(90deg); max-width: 24px; max-height: 24px;" src="/assets/arrow.svg"alt="Back arrow"></a>
   {/if}
   <div style="display: flex; flex: 1; justify-content: center; gap: 40px;">
-    <a class="anchor" href="/">Home</a>
-    <a class="anchor" href="/projects">Projects</a>
+    <a class="anchor" href={resolve("/")}>Home</a>
+    <a class="anchor" href={resolve("/projects")}>Projects</a>
   </div>
   <button id="github-link" class="interactive-el" style="position: fixed; right: 74px;" onclick={() => redirect()}><img src="/assets/github-logo.svg" alt="GitHub Profile"></button>
   <button id="email-link" class="interactive-el" style="position: fixed; right: 16px;" onclick={() => { if (!isRedirecting) copyEmail(); }} class:disabled={isRedirecting}><img src="/assets/email-logo.svg" alt="Email"></button> 

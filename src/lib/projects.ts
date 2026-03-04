@@ -11,9 +11,9 @@ export const projects = [
     id: 2,
     title: "FocusBoard",
     slug: "focusboard",
-    description: "",
+    description: "A note taking app that integrates a calendar and a timer.",
     tech: ["Svelte", "Rust", "TypeScript", "JavaScript", "Tauri"],
-    picture: "",
+    picture: "/images/focusboard5.png",
   },
   {
     id: 3,
