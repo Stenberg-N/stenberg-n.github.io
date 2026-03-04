@@ -1,18 +1,24 @@
 <script lang="ts">
   import { fly } from 'svelte/transition';
-  import { setContext } from 'svelte';
+  import { onMount, setContext } from 'svelte';
   import { resolve } from '$app/paths';
+  import { t, lang } from '$lib/i18n';
 
   import '../styles.css';
 
   setContext('onHomeScreen', { getOnHomeScreen: () => onHomeScreen, setOnHomeScreen });
 
 	let { children } = $props();
+  let currentPage = $state<string>('/')
   let isAlert = $state<boolean>(false);
   let isRedirecting = $state<boolean>(false);
   let alertMessage = $state<string>('');
   let onHomeScreen = $state<boolean>(true);
   let height = $state<number>(40);
+
+  onMount(() => {
+    currentPage = window.location.pathname;
+  });
 
   $effect(() => {
     if (isAlert && !isRedirecting) {
@@ -26,14 +32,14 @@
 
   function redirect() {
     isRedirecting = true;
-    alertMessage = 'Continue to GitHub?';
+    alertMessage = $t['alert.message'];
     isAlert = true;
   }
 
   function copyEmail() {
     let text = 'stenbergniko@outlook.com';
     navigator.clipboard.writeText(text);
-    alertMessage = 'Email copied!';
+    alertMessage = $t['alert.email'];
     isAlert = true;
   }
 
@@ -49,15 +55,15 @@
 {#if isAlert}
   <div id="alert-container" style="height: {height}px" transition:fly={{ y: 100, duration: 400, delay: 100 }}>
     <div class="alert-content" style="display: flex; flex-direction: row;">
-      <p id="alert-message" style="margin: 0;">{alertMessage}</p>
+      <p id="alert-message">{alertMessage}</p>
       <div style="display: flex; flex: 1;"></div>
       <button id="alert-close-btn" class="interactive-el" onclick={() => {isAlert = false; isRedirecting = false; }}><img src="/assets/close-x.svg" alt="Close alert"></button>
     </div>
     {#if isRedirecting}
       <div style="display: flex; flex: 1;"></div>
       <div id="redirect-buttons" style="display: flex; flex-direction: row; gap: 10px; padding-bottom: 5px;">
-        <a class="anchor interactive-el" href="https://github.com/Stenberg-N">Confirm</a>
-        <button class="interactive-el" onclick={() => { isAlert = false; isRedirecting = false; }}>Cancel</button>
+        <a class="anchor interactive-el" href="https://github.com/Stenberg-N">{$t['alert.confirm']}</a>
+        <button class="interactive-el" onclick={() => { isAlert = false; isRedirecting = false; }}>{$t['alert.cancel']}</button>
       </div>
     {/if}
   </div>
@@ -69,12 +75,15 @@
   {#if !onHomeScreen}
     <a id="back-btn" class="interactive-el" style="position: fixed; left: 16px; max-height: 24px;" href={resolve("/projects")} transition:fly={{ y: 20, duration: 200, delay: 100 }}><img style="transform: rotate(90deg); max-width: 24px; max-height: 24px;" src="/assets/arrow.svg"alt="Back arrow"></a>
   {/if}
-  <div style="display: flex; flex: 1; justify-content: center; gap: 40px;">
-    <a class="anchor" href={resolve("/")}>Home</a>
-    <a class="anchor" href={resolve("/projects")}>Projects</a>
+  <div id="nav-links">
+    <a class="anchor" class:current={currentPage === '/'} onclick={() => currentPage = '/'} href={resolve("/")}>{$t.home}</a>
+    <a class="anchor" class:current={currentPage === '/projects'} onclick={() => currentPage = '/projects'} href={resolve("/projects")}>{$t.projects}</a>
   </div>
-  <button id="github-link" class="interactive-el" style="position: fixed; right: 74px;" onclick={() => redirect()}><img src="/assets/github-logo.svg" alt="GitHub Profile"></button>
-  <button id="email-link" class="interactive-el" style="position: fixed; right: 16px;" onclick={() => { if (!isRedirecting) copyEmail(); }} class:disabled={isRedirecting}><img src="/assets/email-logo.svg" alt="Email"></button> 
+  <div id="link-btns">
+    <button id="lang-switch" class="interactive-el" style="color: #f6f6f6; font-weight: 800;" onclick={() => { if ($lang === 'en') { lang.set('fi'); } else lang.set('en'); }}>{$lang === 'en' ? 'FI' : 'EN'}</button>
+    <button id="github-link" class="interactive-el" onclick={() => redirect()}><img src="/assets/github-logo.svg" alt="GitHub Profile"></button>
+    <button id="email-link" class="interactive-el" onclick={() => { if (!isRedirecting) copyEmail(); }} class:disabled={isRedirecting}><img src="/assets/email-logo.svg" alt="Email"></button>
+  </div>
 </nav>
 
 <main class="content">
@@ -84,9 +93,9 @@
 <style>
   #grid-background {
     position: fixed;
-    top: 70px;
+    top: 90px;
     left: 0;
-    height: calc(100vh - 70px);
+    height: calc(100vh - 90px);
     width: 100vw;
     z-index: -1;
     background-image:
@@ -100,7 +109,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 70px;
+    height: 90px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -112,9 +121,27 @@
   }
 
   .content {
-    margin-top: 70px;
-    min-height: calc(100vh - 78px);
+    height: 100vh;
     padding: 1rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  #nav-links {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    gap: 40px;
+  }
+
+  #link-btns {
+    position: fixed;
+    right: 16px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    width: 138px;
   }
 
   #github-link img, #email-link img, #back-btn img {
@@ -182,5 +209,24 @@
     filter: brightness(0) invert(0.3);
     cursor: not-allowed;
     transform: none;
+  }
+
+  .current::after {
+    width: 100%;
+  }
+
+  @media (max-width: 500px) {
+    #nav-bar {
+      height: 150px;
+    }
+
+    #nav-links {
+      align-self: flex-end;
+    }
+
+    #link-btns {
+      right: calc(50% - 69px);
+      align-self: flex-start;
+    }
   }
 </style>
