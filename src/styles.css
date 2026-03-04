@@ -1,6 +1,6 @@
 html {
   box-sizing: border-box;
-  background-image: linear-gradient(180deg, #0f0f0f, #0a0a0a);
+  background-image: linear-gradient(180deg, #0f0f0f 50%, #0a0a0a 90%, #1f1110);
   color: #f6f6f6;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-size: 16px;
@@ -39,4 +39,16 @@ a:hover, button:hover {
 
 .anchor:hover::after {
   width: 100%;
+}
+
+.interactive-el {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  transition: transform 0.2s;
+  max-height: 38px;
+}
+
+.interactive-el:hover {
+  transform: translateY(-4px);
 }

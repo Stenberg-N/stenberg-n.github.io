@@ -50,28 +50,30 @@
     <div class="alert-content" style="display: flex; flex-direction: row;">
       <p id="alert-message" style="margin: 0;">{alertMessage}</p>
       <div style="display: flex; flex: 1;"></div>
-      <button id="alert-close-btn" onclick={() => {isAlert = false; isRedirecting = false; }}><img src="/assets/close-x.svg" alt="Close alert"></button>
+      <button id="alert-close-btn" class="interactive-el" onclick={() => {isAlert = false; isRedirecting = false; }}><img src="/assets/close-x.svg" alt="Close alert"></button>
     </div>
     {#if isRedirecting}
       <div style="display: flex; flex: 1;"></div>
       <div id="redirect-buttons" style="display: flex; flex-direction: row; gap: 10px; padding-bottom: 5px;">
-        <a class="anchor" href="https://github.com/Stenberg-N">Confirm</a>
-        <button onclick={() => { isAlert = false; isRedirecting = false; }}>Cancel</button>
+        <a class="anchor interactive-el" href="https://github.com/Stenberg-N">Confirm</a>
+        <button class="interactive-el" onclick={() => { isAlert = false; isRedirecting = false; }}>Cancel</button>
       </div>
     {/if}
   </div>
 {/if}
 
+<div id="grid-background"></div>
+
 <nav id="nav-bar">
   {#if !onHomeScreen}
-    <a id="back-btn" style="position: fixed; left: 16px; max-height: 24px;" href="/projects" transition:fly={{ y: 20, duration: 200, delay: 100 }}><img style="transform: rotate(90deg); max-width: 24px; max-height: 24px;" src="/assets/arrow.svg"alt="Back arrow"></a>
+    <a id="back-btn" class="interactive-el" style="position: fixed; left: 16px; max-height: 24px;" href="/projects" transition:fly={{ y: 20, duration: 200, delay: 100 }}><img style="transform: rotate(90deg); max-width: 24px; max-height: 24px;" src="/assets/arrow.svg"alt="Back arrow"></a>
   {/if}
   <div style="display: flex; flex: 1; justify-content: center; gap: 40px;">
     <a class="anchor" href="/">Home</a>
     <a class="anchor" href="/projects">Projects</a>
   </div>
-  <button id="github-link" style="position: fixed; right: 64px;" onclick={() => redirect()}><img src="/assets/github-logo.svg" alt="GitHub Profile"></button>
-  <button id="email-link" style="position: fixed; right: 16px;" onclick={() => { if (!isRedirecting) copyEmail(); }} class:disabled={isRedirecting}><img src="/assets/email-logo.svg" alt="Email"></button> 
+  <button id="github-link" class="interactive-el" style="position: fixed; right: 74px;" onclick={() => redirect()}><img src="/assets/github-logo.svg" alt="GitHub Profile"></button>
+  <button id="email-link" class="interactive-el" style="position: fixed; right: 16px;" onclick={() => { if (!isRedirecting) copyEmail(); }} class:disabled={isRedirecting}><img src="/assets/email-logo.svg" alt="Email"></button> 
 </nav>
 
 <main class="content">
@@ -79,6 +81,19 @@
 </main>
 
 <style>
+  #grid-background {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    height: calc(100vh - 70px);
+    width: 100vw;
+    z-index: -1;
+    background-image:
+      repeating-linear-gradient(to right, rgba(119,119,119,0.1) 0, rgba(119,119,119,0.1) 1px, transparent 1px, transparent 80px),
+      repeating-linear-gradient(to bottom, rgba(119,119,119,0.1) 0, rgba(119,119,119,0.1) 1px, transparent 1px, transparent 80px);
+    background-size: 100% 100%;
+  }
+
   #nav-bar {
     position: fixed;
     top: 0;
@@ -97,20 +112,8 @@
 
   .content {
     margin-top: 70px;
-    min-height: 100vh;
+    min-height: calc(100vh - 78px);
     padding: 1rem;
-  }
-
-  #github-link, #email-link, #back-btn, #alert-close-btn, #redirect-buttons a, #redirect-buttons button {
-    border: none;
-    background-color: transparent;
-    padding: 0;
-    transition: transform 0.2s;
-    max-height: 38px;
-  }
-
-  #github-link:hover, #email-link:hover, #back-btn:hover, #redirect-buttons a:hover, #redirect-buttons button:hover {
-    transform: translateY(-4px);
   }
 
   #github-link img, #email-link img, #back-btn img {
@@ -126,6 +129,7 @@
     z-index: 100;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     max-width: 250px;
     width: 100%;
     max-height: 80px;
