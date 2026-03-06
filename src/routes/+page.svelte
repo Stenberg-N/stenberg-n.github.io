@@ -14,10 +14,10 @@
   <div id="intro-contact">
     <div id="intro">
       <div id="intro-text">
-        <h1 style="margin: 0; transform: translateY(20px); -webkit-text-stroke: 1px #f6f6f6; color: transparent; font-size: 40px;" class="intro-title">{$t['intro-title1']}</h1>
-        <h1 style="margin: 0; font-size: 48px;" class="intro-title">{$t['intro-title2']}</h1>
-        <h1 style="margin: 0; transform: translateY(-20px); z-index: 1; -webkit-text-stroke: 1px #f6f6f6; color: #191919; font-size: 40px;" class="intro-title">{$t['intro-title3']}</h1>
-        <p style="padding-left: 2rem;">{$t['intro-paragraph']}</p>
+        <h1 style="margin: 0; -webkit-text-stroke: 1px #f6f6f6; color: transparent; font-size: 40px; font-family: 'InterStatic', sans-serif;" class="intro-title">{$t['intro-title1']}</h1>
+        <h1 style="margin: 0; font-size: 48px; font-family: 'InterStatic', sans-serif;" class="intro-title">{$t['intro-title2']}</h1>
+        <h1 style="margin: 0; -webkit-text-stroke: 1px #f6f6f6; color: #191919; font-size: 40px; font-family: 'InterStatic', sans-serif;" class="intro-title">{$t['intro-title3']}</h1>
+        <p style="padding-left: 2rem; margin-top: 20px;">{$t['intro-paragraph']}</p>
       </div>
       <div id="contact" style="display: flex; flex-direction: column; gap: 12px; padding: 10px; margin-top: 40px;">
         <div id="github"><img src="/assets/github-logo.svg" alt="Github logo"><a class="anchor" href="https://github.com/Stenberg-N">Stenberg-N</a></div>
@@ -179,5 +179,14 @@
     .category {
       max-width: 100%;
     }
+  }
+
+  @font-face {
+    font-family: 'Inter Variable';
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100 900;
+    src: url(https://cdn.jsdelivr.net/fontsource/fonts/inter:vf@latest/latin-wght-normal.woff2) format('woff2-variations');
+    unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
   }
 </style>

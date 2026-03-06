@@ -34,7 +34,7 @@ const translations: Record<Language, Record<string, string>> = {
     "alert.email": "Sähköpostiosoite kopioitu!",
     "intro-title1": "Hei! Olen",
     "intro-title2": "Niko Stenberg",
-    "intro-title3": "Tuleva ICT insinööri",
+    "intro-title3": "Tuleva ICT-insinööri",
     "intro-paragraph": "Intohimoinen järjestelmistä, turvallisuudesta, ohjelmoinnista/koodaamisesta ja kaikesta muusta näiden väliltä, voisi kutsua 'Full-stack' tai 'generalist'. Tykkään tietokoneista.",
     "contact-location": "Suomi, Kanta-Häme",
   }
