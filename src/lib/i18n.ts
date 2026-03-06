@@ -14,7 +14,12 @@ const translations: Record<Language, Record<string, string>> = {
     "alert.message": "Continue to GitHub?",
     "alert.confirm": "Confirm",
     "alert.cancel": "Cancel",
-    "alert.email": "Email copied!"
+    "alert.email": "Email copied!",
+    "intro-title1": "Hello, I'm",
+    "intro-title2": "Niko Stenberg",
+    "intro-title3": "Aspiring ICT engineer",
+    "intro-paragraph": "Passionate about systems, security, programming and everything in between, a full-stack or generalist of sorts. What can I say, I love computers.",
+    "contact-location": "Finland, Tavastia Proper",
   },
   fi: {
     home: 'Koti',
@@ -26,7 +31,12 @@ const translations: Record<Language, Record<string, string>> = {
     "alert.message": "Siirrytkö GitHubiin?",
     "alert.confirm": "Vahvista",
     "alert.cancel": "Peruuta",
-    "alert.email": "Sähköpostiosoite kopioitu!"
+    "alert.email": "Sähköpostiosoite kopioitu!",
+    "intro-title1": "Hei! Olen",
+    "intro-title2": "Niko Stenberg",
+    "intro-title3": "Tuleva ICT insinööri",
+    "intro-paragraph": "Intohimoinen järjestelmistä, turvallisuudesta, ohjelmoinnista/koodaamisesta ja kaikesta muusta näiden väliltä, voisi kutsua 'Full-stack' tai 'generalist'. Tykkään tietokoneista.",
+    "contact-location": "Suomi, Kanta-Häme",
   }
 };
 

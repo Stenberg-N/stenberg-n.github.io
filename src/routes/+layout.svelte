@@ -140,6 +140,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: right;
     gap: 20px;
     width: 138px;
   }
