@@ -29,7 +29,23 @@ body {
 }
 
 *::-webkit-scrollbar {
-  display: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 8px;
+  background-color: #222;
+}
+
+*::-webkit-scrollbar-track {
+  margin-top: 90px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 8px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #ccc;
 }
 
 a:hover, button:hover {
@@ -42,6 +58,7 @@ a:hover, button:hover {
   text-decoration: none;
   color: inherit;
   padding-bottom: 4px;
+  filter: drop-shadow(0 10px 12px rgba(0,0,0,0.8));
 }
 
 .anchor::after {

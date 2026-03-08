@@ -14,7 +14,7 @@ export const projects = [
     title: "FocusBoard",
     slug: "focusboard",
     descriptionKey: "project.focusboard.description",
-    tech: ["Svelte", "Rust", "TypeScript", "JavaScript", "Tauri"],
+    tech: ["Svelte", "Rust", "TypeScript", "Tauri"],
     picture: "/images/focusboard5.png",
     isWIP: true,
     demo: "",

@@ -36,7 +36,7 @@
             {/each}
           </div>
           {#if id === 1}
-            <a class="anchor" style="width: fit-content; filter: drop-shadow(0 10px 12px rgba(0,0,0,0.8));" onclick={(e) => e.stopPropagation()} href="https://site--financetracker-app--kwlb8kg8h4nw.code.run/login/?next=/">{$t[demo]}</a>
+            <a class="anchor" style="width: fit-content;" onclick={(e) => e.stopPropagation()} href="https://site--financetracker-app--kwlb8kg8h4nw.code.run/login/?next=/">{$t[demo]}</a>
           {/if}
       </div>
     </div>

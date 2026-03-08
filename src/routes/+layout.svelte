@@ -12,9 +12,11 @@
   let currentPage = $state<string>('/')
   let isAlert = $state<boolean>(false);
   let isRedirecting = $state<boolean>(false);
-  let alertMessage = $state<string>('');
+  let alertMessage = $state<string | string[]>('');
   let onHomeScreen = $state<boolean>(true);
   let height = $state<number>(40);
+  let mainContainer: HTMLElement;
+  let hasScrolled = $state<boolean>(false);
 
   onMount(() => {
     currentPage = window.location.pathname;
@@ -46,11 +48,21 @@
   function setOnHomeScreen(state: boolean) {
     onHomeScreen = state;
   }
+
+  function handleScroll() {
+    hasScrolled = mainContainer.scrollTop > 1000;
+  }
 </script>
 
 <svelte:head>
 	<link rel="icon" href="/assets/favicon.svg" />
 </svelte:head>
+
+{#if hasScrolled}
+  <button id="scroll-to-top" class="interactive-el" onclick={() => mainContainer.scrollTop = 0} transition:fly={{ y: 100, duration: 300, delay: 100 }}>
+    <img src="/assets/arrow.svg" alt="arrow" style="transform: rotate(180deg); filter: brightness(0) invert(0.9); max-width: 20px; max-height: 20px;">
+  </button>
+{/if}
 
 {#if isAlert}
   <div id="alert-container" style="height: {height}px" transition:fly={{ y: 100, duration: 400, delay: 100 }}>
@@ -86,7 +98,7 @@
   </div>
 </nav>
 
-<main class="content">
+<main class="content" bind:this={mainContainer} onscroll={handleScroll}>
   {@render children()}
 </main>
 
@@ -125,6 +137,8 @@
     padding: 1rem;
     overflow-y: auto;
     overflow-x: hidden;
+    margin-left: 8px;
+    margin-right: 2px;
   }
 
   #nav-links {
@@ -214,6 +228,28 @@
 
   .current::after {
     width: 100%;
+  }
+
+  #scroll-to-top {
+    position: fixed;
+    bottom: 9px;
+    right: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 50px;
+    width: 100%;
+    max-height: 50px;
+    height: 100%;
+    padding: 5px;
+    background-color: #222;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  #scroll-to-top:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,1);
   }
 
   @media (max-width: 500px) {
