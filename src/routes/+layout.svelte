@@ -15,7 +15,6 @@
   let alertMessage = $state<string | string[]>('');
   let onHomeScreen = $state<boolean>(true);
   let height = $state<number>(40);
-  let mainContainer: HTMLElement;
   let hasScrolled = $state<boolean>(false);
 
   onMount(() => {
@@ -50,7 +49,8 @@
   }
 
   function handleScroll() {
-    hasScrolled = mainContainer.scrollTop > 1000;
+    hasScrolled = window.scrollY > 700;
+    console.log("scroll", hasScrolled);
   }
 </script>
 
@@ -58,8 +58,10 @@
 	<link rel="icon" href="/assets/favicon.svg" />
 </svelte:head>
 
+<svelte:window onscroll={handleScroll} />
+
 {#if hasScrolled}
-  <button id="scroll-to-top" class="interactive-el" onclick={() => mainContainer.scrollTop = 0} transition:fly={{ y: 100, duration: 300, delay: 100 }}>
+  <button id="scroll-to-top" class="interactive-el" onclick={() => window.scrollTo(0, 0)} transition:fly={{ y: 100, duration: 300, delay: 100 }}>
     <img src="/assets/arrow.svg" alt="arrow" style="transform: rotate(180deg); filter: brightness(0) invert(0.9); max-width: 20px; max-height: 20px;">
   </button>
 {/if}
@@ -81,6 +83,7 @@
   </div>
 {/if}
 
+<div id="background"></div>
 <div id="grid-background"></div>
 
 <nav id="nav-bar">
@@ -98,22 +101,27 @@
   </div>
 </nav>
 
-<main class="content" bind:this={mainContainer} onscroll={handleScroll}>
+<main class="content">
   {@render children()}
 </main>
 
 <style>
+  #background {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0);
+    background-image: linear-gradient(to bottom, rgba(15, 15, 15, 0.5) 90%, rgba(255, 70, 70, 0.1));
+    z-index: -1;
+  }
+
   #grid-background {
     position: fixed;
+    inset: 0;
     top: 90px;
-    left: 0;
-    height: calc(100vh - 90px);
-    width: 100vw;
     z-index: -1;
     background-image:
-      repeating-linear-gradient(to right, rgba(119,119,119,0.1) 0, rgba(119,119,119,0.1) 1px, transparent 1px, transparent 80px),
-      repeating-linear-gradient(to bottom, rgba(119,119,119,0.1) 0, rgba(119,119,119,0.1) 1px, transparent 1px, transparent 80px);
-    background-size: 100% 100%;
+      repeating-linear-gradient(to right, rgba(119,119,119,0.1) 0, rgba(119,119,119,0.1) 1px, transparent 1px, transparent 101px),
+      repeating-linear-gradient(to bottom, rgba(119,119,119,0.1) 0, rgba(119,119,119,0.1) 1px, transparent 1px, transparent 101px);
   }
 
   #nav-bar {
@@ -133,12 +141,19 @@
   }
 
   .content {
-    height: 100vh;
-    padding: 1rem;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 0;
+    justify-self: center;
+    max-width: 1200px;
+    width: 100%;
+    margin: auto;
+    margin-top: 210px;
+    padding: 2rem 1rem;
+    gap: 100px;
+    background-color: #0f0f0f;
+    z-index: 1;
     overflow-x: hidden;
-    margin-left: 8px;
-    margin-right: 2px;
   }
 
   #nav-links {
@@ -179,7 +194,13 @@
     border-radius: 8px;
     padding: 6px 10px;
     background-color: #222;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+    border: 1px solid rgba(119,119,119,0.4);
+    transition: border 0.2s;
+  }
+
+  #alert-container:hover {
+    border-color: rgba(255, 70, 70, 1);
   }
 
   #alert-close-btn {
@@ -204,6 +225,7 @@
     font-size: 14px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+    filter: none;
   }
 
   #redirect-buttons a:hover, #redirect-buttons button:hover {
@@ -242,14 +264,23 @@
     max-height: 50px;
     height: 100%;
     padding: 5px;
-    background-color: #222;
+    background-color: #0f0f0f;
     border-radius: 12px;
+    border: 1px solid rgba(119, 119, 119, 0.4);
     box-shadow: 0 4px 12px rgba(0,0,0,0.8);
     transition: transform 0.2s, box-shadow 0.2s;
+    z-index: 1;
   }
 
   #scroll-to-top:hover {
-    box-shadow: 0 8px 24px rgba(0,0,0,1);
+    box-shadow: 0 8px 24px rgba(255, 70, 70, 0.3);
+    border-color: rgba(255, 70, 70, 1);
+  }
+
+  @media (max-width: 1200px) {
+    .content {
+      width: 85%;
+    }
   }
 
   @media (max-width: 500px) {

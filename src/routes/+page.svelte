@@ -3,10 +3,12 @@
   import { t } from '$lib/i18n';
   import { home } from '$lib/home';
   import { fly } from "svelte/transition";
+  import { projects } from '$lib/projects';
 
   const { setOnHomeScreen } = getContext<{ getOnHomeScreen: () => boolean, setOnHomeScreen: (state: boolean) => void }>('onHomeScreen');
 
   let zoomedBadge = $state<string | null>(null);
+  let currentProject = projects.find(p => p.isCurrent) || null;
 
   onMount(() => {
     setOnHomeScreen(true);
@@ -51,82 +53,76 @@
   </div>
 {/if}
 
-<div id="main">
-  <div id="intro-contact">
-    <div id="intro">
-      <div id="intro-text">
-        <h1 style="margin: 0; -webkit-text-stroke: 1px #f6f6f6; color: #191919; font-size: 40px; font-family: 'Inter'; paint-order: stroke fill;" class="intro-title">{$t['intro-title1']}</h1>
-        <h1 style="margin: 0; font-size: 48px; font-family: 'Inter'; paint-order: stroke fill;" class="intro-title">{$t['intro-title2']}</h1>
-        <h1 style="margin: 0; -webkit-text-stroke: 1px #f6f6f6; color: #191919; font-size: 40px; font-family: 'Inter'; paint-order: stroke fill;" class="intro-title">{$t['intro-title3']}</h1>
-        <p style="padding-left: 2rem; margin-top: 20px;">{$t['intro-paragraph']}</p>
-      </div>
-      <div id="contact" style="display: flex; flex-direction: column; gap: 12px; margin-top: 40px;">
-        <div id="github"><img src="/assets/github-logo.svg" alt="Github logo"><a class="anchor" href="https://github.com/Stenberg-N">Stenberg-N</a></div>
-        <div id="email" style="user-select: text; word-break: break-all;"><img src="/assets/email-logo.svg" alt="Email logo" style="user-select: none;">stenbergniko@outlook.com</div>
-        <div id="location"><img src="/assets/location-pin.svg" alt="Location logo">{$t['contact-location']}</div>
-      </div>
+<div id="intro-contact">
+  <div id="intro">
+    <div id="intro-text">
+      <h1 style="margin: 0; -webkit-text-stroke: 1px #f6f6f6; color: #0f0f0f; font-size: 40px; font-family: 'Inter'; paint-order: stroke fill;" class="intro-title">{$t['intro-title1']}</h1>
+      <h1 style="margin: 0; font-size: 48px; font-family: 'Inter'; paint-order: stroke fill;" class="intro-title">{$t['intro-title2']}</h1>
+      <h1 style="margin: 0; -webkit-text-stroke: 1px #f6f6f6; color: #0f0f0f; font-size: 40px; font-family: 'Inter'; paint-order: stroke fill;" class="intro-title">{$t['intro-title3']}</h1>
+      <p style="padding-left: 2rem; margin-top: 20px;">{$t['intro-paragraph']}</p>
     </div>
-    <div id="selfie-image">
-
+    <div id="contact" style="display: flex; flex-direction: column; gap: 12px; margin-top: 40px;">
+      <div id="github"><img src="/assets/github-logo.svg" alt="Github logo"><a class="anchor" href="https://github.com/Stenberg-N">Stenberg-N</a></div>
+      <div id="email" style="user-select: text; word-break: break-all;"><img src="/assets/email-logo.svg" alt="Email logo" style="user-select: none;">stenbergniko@outlook.com</div>
+      <div id="location"><img src="/assets/location-pin.svg" alt="Location logo">{$t['contact-location']}</div>
     </div>
   </div>
+  <div id="selfie-image">
 
-  <div class="divider"></div>
+  </div>
+</div>
 
-  <div id="sub-content">
-    <h2 style="align-self: center; margin: 0;">{$t['home.sub-content.knowledge.title']}</h2>
-    <div id="categories-outer">
-      <div id="categories" use:scrollHorizontal>
-        {#each home as { id, titleKey, descriptionKey, badges } (id)}
-          <div class="category">
-            <h3 style="margin: 0; margin-bottom: 40px;">{$t[titleKey]}</h3>
-            <div class="content">
-              {#each $t[descriptionKey] as item (item)}
-                <span>{item}</span>
-              {/each}
-              {#if id === 3}
-                <div style="display: flex; flex-direction: column;">
-                  <a class="anchor" style="width: fit-content;" href="https://thenixuchallenge.com/c/">NIXU</a>
-                  <a class="anchor" style="width: fit-content;" href="https://cs4e.pages.labranet.jamk.fi/ooc/20-Background/">{$t["home.cybersec.description"].slice(-1)}</a>
-                </div>
-              {/if}
-            </div>
-            <div style="display: flex; flex: 1 1 0;"></div>
-            {#if badges.length >= 1}
-              <div style="overflow: hidden;">
-                <div id="badges" use:scrollHorizontal>
-                  {#each badges as badge (badge)}
-                    <button class="interactive-el" onclick={() => zoombadge(badge)}><img class="badge" src={badge} alt="badge"></button>
-                  {/each}
-                </div>
+<div class="divider"></div>
+
+<div id="sub-content">
+  <h2>{$t['home.sub-content.knowledge.title']}</h2>
+  <div id="categories-outer">
+    <div id="categories" use:scrollHorizontal>
+      {#each home as { id, titleKey, descriptionKey, badges } (id)}
+        <div class="category hover-highlight">
+          <h3 style="margin: 0; margin-bottom: 40px;">{$t[titleKey]}</h3>
+          <div class="content">
+            {#each $t[descriptionKey] as item (item)}
+              <span>{item}</span>
+            {/each}
+            {#if id === 3}
+              <div style="display: flex; flex-direction: column;">
+                <a class="anchor" style="width: fit-content;" href="https://thenixuchallenge.com/c/">NIXU</a>
+                <a class="anchor" style="width: fit-content;" href="https://cs4e.pages.labranet.jamk.fi/ooc/20-Background/">{$t["home.cybersec.description"].slice(-1)}</a>
               </div>
             {/if}
           </div>
-        {/each}
-      </div>
+          <div style="display: flex; flex: 1 1 0;"></div>
+          {#if badges.length >= 1}
+            <div style="overflow: hidden;">
+              <div id="badges" use:scrollHorizontal>
+                {#each badges as badge (badge)}
+                  <button class="interactive-el" onclick={() => zoombadge(badge)}><img class="badge" src={badge} alt="badge"></button>
+                {/each}
+              </div>
+            </div>
+          {/if}
+        </div>
+      {/each}
     </div>
+  </div>
 
-    <h2 style="align-self: center; margin: 0;">{$t['home.sub-content.working-on.title']}</h2>
+  <h2>{$t['home.sub-content.working-on.title']}</h2>
+  <div id="current-project" style="display: flex; flex-direction: column;">
+    {#if currentProject}
+      <h2 style="margin-bottom: 10px;">{currentProject.title}</h2>
+      <span style="align-self: center;">{$t[currentProject.descriptionKey]}</span>
+      <div id="current-project-image" class="hover-highlight">
+        <img style="object-fit: contain; height: 100%; width: 100%;" src="/images/focusboard1.png" alt="current project">
+      </div>
+    {/if}
   </div>
 </div>
 
 <style>
-  #main {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 0;
-    justify-content: top;
-    justify-self: center;
-    width: 75%;
-    margin-top: 210px;
-    padding: 1rem;
-    gap: 100px;
-    background-color: #191919;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.8);
-  }
 
   .divider {
-    border-bottom: 1px solid #555;
+    border-bottom: 1px solid rgba(119, 119, 119, 0.4);
   }
 
   #intro-contact {
@@ -178,36 +174,42 @@
 
   #sub-content h2 {
     font-weight: 300;
+    align-self: center;
+    margin: 0;
   }
 
   #categories {
     display: flex;
     flex-direction: row;
-    overflow-x: auto;
     justify-self: center;
+    overflow-x: auto;
     overflow-y: hidden;
     width: 100%;
-    gap: 20px;
-    padding-bottom: 5px;
+    padding: 6px 10px 30px;
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgb(0, 0, 0) 5%, rgb(0, 0, 0) 95%, rgba(0, 0, 0, 0));
+  }
+
+  #categories::-webkit-scrollbar-track {
+    margin: 0 40px;
   }
 
   #categories-outer {
     overflow: hidden;
-    padding: 0 100px;
+    padding: 0 50px;
   }
 
   .category {
     display: flex;
     flex-direction: column;
-    min-width: calc(50% - 10px);
+    min-width: calc(50% - 40px);
     max-width: 650px;
     width: 100%;
-    max-height: 500px;
+    max-height: 535px;
     height: 100vh;
     padding: 1rem;
+    margin: 0 20px;
     border-radius: 12px;
-    background-color: #777;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+    background-color: rgba(15, 15, 15, 0.8);
   }
 
   .content {
@@ -245,21 +247,23 @@
 
   .interactive-el {
     max-height: 120px;
+    height: 100%;
     max-width: 120px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+    border-radius: 16px;
     transition: transform 0.2s, box-shadow 0.2s;
   }
 
   .interactive-el:hover {
     transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 8px 24px rgba(0,0,0,1);
+    box-shadow: 0 8px 24px rgba(255, 70, 70, 0.5);
     cursor: pointer;
+    outline: 2px solid rgba(255, 70, 70, 1);
   }
 
   .badge {
     height: 120px;
     width: 120px;
+    border-radius: 16px;
   }
 
   #zoomedBadge {
@@ -284,10 +288,14 @@
     box-shadow: none;
   }
 
-  @media (max-width: 1150px) {
-    #main {
-      width: 100%;
-    }
+  #current-project-image {
+    padding: 40px;
+    background-color: rgb(0, 0, 0);
+    background-image: linear-gradient(135deg, rgba(255, 70, 70, 0.1) 0%, rgba(15, 15, 15, 0.8) 50%, #181227 100%);
+    border-radius: 12px;
+  }
+
+  @media (max-width: 1200px) {
 
     #intro-contact {
       flex-direction: column;
@@ -305,13 +313,22 @@
     #categories-outer {
       padding: 0;
     }
-
-    .category {
-      min-width: 100%;
-    }
   }
 
   @media (max-width: 750px) {
+    .category {
+      min-width: calc(100% - 40px);
+    }
+
+    .category h3 {
+      font-size: 16px;
+    }
+
+    .content span {
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
     #zoomedBadge-image {
       height: 300px;
       width: 300px;
