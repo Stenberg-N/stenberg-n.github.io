@@ -7,8 +7,12 @@
 
   const { setOnHomeScreen } = getContext<{ getOnHomeScreen: () => boolean, setOnHomeScreen: (state: boolean) => void }>('onHomeScreen');
 
-  let zoomedBadge = $state<string | null>(null);
   let currentProject = projects.find(p => p.isCurrent) || null;
+  const { chosenImages = [], imageNotes = [] } = currentProject || {};
+  let zoomedBadge = $state<string | null>(null);
+  let zoomedImg = $state<string | null>(null);
+  let zoomedImgId = $state<number | null>(null);
+  let zoomedImgNote = $derived.by(() => { return zoomedImgId !== null ? imageNotes.find(note => note.id === zoomedImgId) : null; });
 
   onMount(() => {
     setOnHomeScreen(true);
@@ -18,10 +22,17 @@
     zoomedBadge = badge;
   }
 
+  const zoomImg = (image: string, id: number) => {
+    zoomedImg = image;
+    zoomedImgId = id;
+  }
+
   const clickOutside = (node: HTMLElement) => {
     const handleClick = (event: MouseEvent) => {
-      if (zoomedBadge && node && !node.contains(event.target as Node)) {
+      if (zoomedBadge || zoomedImg && node && !node.contains(event.target as Node)) {
         zoomedBadge = null;
+        zoomedImg = null;
+        zoomedImgId = null;
       }
     };
     document.addEventListener('click', handleClick, true);
@@ -44,11 +55,19 @@
 
 </script>
 
-{#if zoomedBadge}
-  <div id="zoomedBadge" transition:fly={{ y: 100, duration: 200, delay: 100 }}>
-    <div use:clickOutside>
-      <button id="zoomedBadge-close" class="interactive-el" onclick={() => zoomedBadge = null}><img style="max-height: 20px; max-width: 20px; filter: brightness(0) invert(0.9);" src="/assets/close-x.svg" alt="close"></button>
-      <img id="zoomedBadge-image" src={zoomedBadge} alt="badge">
+{#if zoomedBadge || zoomedImg}
+  <div id="zoomedOverlay" transition:fly={{ y: 100, duration: 200, delay: 100 }}>
+    <div use:clickOutside style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
+      {#if zoomedBadge}
+        <button id="zoomedBadge-close" onclick={() => zoomedBadge = null}><img src="/assets/close-x.svg" alt="close"></button>
+        <img id="zoomedBadge-image" src={zoomedBadge} alt="badge">
+      {:else if zoomedImg}
+        <button id="zoomedImg-close" onclick={() => { zoomedImg = null; zoomedImgId = null; }}><img src="/assets/close-x.svg" alt="close"></button>
+        <img id="zoomedImg-image" src={zoomedImg} alt="Current project">
+        {#if zoomedImgNote}
+          <span>{$t[zoomedImgNote.note]}</span>
+        {/if}
+      {/if}
     </div>
   </div>
 {/if}
@@ -112,8 +131,15 @@
     {#if currentProject}
       <h2 style="margin-bottom: 10px;">{currentProject.title}</h2>
       <span style="align-self: center;">{$t[currentProject.descriptionKey]}</span>
-      <div id="current-project-image" class="hover-highlight">
-        <img style="object-fit: contain; height: 100%; width: 100%;" src="/images/focusboard1.png" alt="current project">
+      <div id="project-images">
+        {#each chosenImages as { image, id }, i (image)}
+          {#if $t[currentProject.imageTexts]}
+            <span>{$t[currentProject.imageTexts][i]}</span>
+          {/if}
+          <button class="current-project-image hover-highlight" onclick={() => zoomImg(image, id)}>
+            <img style="object-fit: contain; height: 100%; width: 100%;" src={image} alt="current project">
+          </button>
+        {/each}
       </div>
     {/if}
   </div>
@@ -266,7 +292,7 @@
     border-radius: 16px;
   }
 
-  #zoomedBadge {
+  #zoomedOverlay {
     position: fixed;
     inset: 0;
     z-index: 100;
@@ -274,6 +300,7 @@
     align-items: center;
     justify-content: center;
     backdrop-filter: blur(4px);
+    user-select: none;
   }
 
   #zoomedBadge-image {
@@ -281,18 +308,59 @@
     width: 600px;
   }
 
-  #zoomedBadge-close {
-    position: absolute;
-    top: calc(50% - 350px);
-    right: calc(50% - 350px);
-    box-shadow: none;
+  #zoomedImg-image {
+    max-height: 80%;
+    max-width: 80%;
   }
 
-  #current-project-image {
-    padding: 40px;
-    background-color: rgb(0, 0, 0);
-    background-image: linear-gradient(135deg, rgba(255, 70, 70, 0.1) 0%, rgba(15, 15, 15, 0.8) 50%, #181227 100%);
+  #zoomedBadge-close, #zoomedImg-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;
+    width: 42px;
+    border: 1px solid rgba(119, 119, 119, 0.4);
+    border-radius: 50%;
+    background-color: #0f0f0f;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  #zoomedBadge-close:hover, #zoomedImg-close:hover {
+    box-shadow: 0 8px 24px rgba(255, 70, 70, 0.3);
+    border-color: rgba(255, 70, 70, 1);
+  }
+
+  #zoomedBadge-close img, #zoomedImg-close img {
+    max-height: 20px;
+    max-width: 20px;
+    filter: brightness(0) invert(0.9);
+  }
+
+  #project-images {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 80px;
+    padding: 0 80px;
+  }
+
+  .current-project-image {
+    padding: 2rem;
+    background-color: #0f0f0f;
+    height: 550px;
+    width: 100%;
+    margin-top: 20px;
+    border: 0;
     border-radius: 12px;
+  }
+
+  .current-project-image:not(:last-child) {
+    margin-bottom: 80px;
+  }
+
+  .current-project-image:hover {
+    cursor: pointer;
   }
 
   @media (max-width: 1200px) {
@@ -312,6 +380,15 @@
 
     #categories-outer {
       padding: 0;
+    }
+
+    #project-images {
+      padding: 0 30px;
+    }
+
+    .current-project-image {
+      height: auto;
+      max-height: 550px;
     }
   }
 
@@ -337,6 +414,10 @@
     #zoomedBadge-close {
       top: calc(50% - 200px);
       right: calc(50% - 200px);
+    }
+
+    .current-project-image {
+      padding: 5px;
     }
   }
 

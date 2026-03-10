@@ -50,7 +50,6 @@
 
   function handleScroll() {
     hasScrolled = window.scrollY > 700;
-    console.log("scroll", hasScrolled);
   }
 </script>
 
@@ -264,7 +263,7 @@
     max-height: 50px;
     height: 100%;
     padding: 5px;
-    background-color: #0f0f0f;
+    background-color: hsl(0, 0%, 96%);
     border-radius: 12px;
     border: 1px solid rgba(119, 119, 119, 0.4);
     box-shadow: 0 4px 12px rgba(0,0,0,0.8);

@@ -1,4 +1,6 @@
-export const projects = [
+import type { Project } from "./types";
+
+export const projects: Project[] = [
   {
     id: 1,
     title: "Finance Tracker",
@@ -6,6 +8,9 @@ export const projects = [
     descriptionKey: "project.finance-tracker.description",
     tech: ["Python", "JavaScript", "Django", "PostgreSQL", "Scikit-learn", "Optuna"],
     picture: "/images/desktop-finance-tracker1.png",
+    chosenImages: [],
+    imageNotes: [],
+    imageTexts: "project.finance-tracker.imagetexts",
     demo: "project.finance-tracker.demo",
     isWIP: false,
     isCurrent: false,
@@ -17,6 +22,9 @@ export const projects = [
     descriptionKey: "project.focusboard.description",
     tech: ["Svelte", "Rust", "TypeScript", "Tauri"],
     picture: "/images/focusboard5.png",
+    chosenImages: [ { id: 1, image: "/images/focusboard1.png" }, { id: 2, image: "/images/focusboard2.png"}, { id: 3, image: "/images/focusboard3.png"}, { id: 4, image: "/images/focusboard5.png" } ],
+    imageNotes: [ { id: 4, note: "project.focusboard.imagenotes" } ],
+    imageTexts: "project.focusboard.imagetexts",
     demo: "",
     isWIP: true,
     isCurrent: true,
@@ -28,6 +36,9 @@ export const projects = [
     descriptionKey: "project.waste-classifier.description",
     tech: ["Python", "PyTorch", "PyQt 6"],
     picture: "/images/waste-classifier1.png",
+    chosenImages: [],
+    imageNotes: [],
+    imageTexts: "project.waste-classifier.imagetexts",
     demo: "",
     isWIP: false,
     isCurrent: false,
