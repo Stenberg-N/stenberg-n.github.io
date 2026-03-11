@@ -9,7 +9,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     projects: 'Projects',
     "project.finance-tracker.description": "A desktop and a web app for tracking, predicting, and visualizing finances.",
     "project.finance-tracker.demo": "Web demo",
-    "project.finance-tracker.imagetexts": "",
+    "project.finance-tracker.imagetexts": "Here one flaw can be seen in the X-axis, where the spacing and labels are inconsistent. Stems from the app struggling to draw the X-axis with lower amounts of data. The actual graph line is accurate.",
     "project.waste-classifier.description": "A desktop app with an ML model for classifying waste.",
     "project.waste-classifier.imagetexts": "",
     "project.focusboard.description": "A note taking app that integrates a calendar and a timer.",
@@ -37,7 +37,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "home.cybersec.description": ["Cisco Ethical Hacking course", "NIXU challenges: Bad Memories, Phiscap", "Forensics challenge"],
     "home.d-modeling-printing-embedded.description": ["IoT and microcontrollers: Arduino & Raspberry Pi", "Blender", "Printed a vertical axis wind turbine"],
     "home.data-science-ml.description": ["Frameworks: Scikit-learn, Tensorflow & Keras, PyTorch, Optuna, XGBoost", "Finance tracker app with finance predictions", "Waste classifier app", "Trained models for tree specie recognition"],
-    "projects.project-finance-tracker.paragraph": [
+    "projects.project.finance-tracker.paragraph": [
       "This was my first real project. The purpose behind this app was for it to be something I would personally use. Before this, I had only made simple stuff with Python like calculators, to-do lists, and basic CLI-based tools.",
       "This was supposed to be a simple tracking app for finances made with Python and a combination of Tkinter and the modernized customTkinter for the GUI, but I decided to jump into machine learning since it had been a couple of years since I last had worked with ML \
       and it was the next clear step for the app. When the app began to have functionality, I wanted to create an easy way to test it, so I decided to make a web app for it, which led me to learn some Django, JavaScript, CSS, and HTML. \
@@ -46,12 +46,14 @@ const translations: Record<Language, Record<string, string | string[]>> = {
       My plan was to come back and fix its code, but that would require me to quite frankly write everything from scratch, which has led me to make the decision, that I would create the app on another stack, using Tauri, Svelte.js and Python. \
       This also serves as a next step in my learning, where I need to figure out how I can combine Tauri's Rust backend with Python and make that work with the Svelte frontend."
     ],
+    "projects.project.finance-tracker.variant": ["Desktop", "Web"],
   },
   fi: {
     home: 'Koti',
     projects: 'Projektit',
     "project.finance-tracker.description": "Työpöytä- ja verkkosovellus talousdatan seurantaan, ennustamiseen ja visualisointiin.",
     "project.finance-tracker.demo": "Verkkosovelluksen demo",
+    "project.finance-tracker.imagetexts": "Tässä näkyy yksi ongelmista X-akselissa, missä jaotus ja aikaleimat ovat epäsäännölisiä. Johtuu siitä, että sovellus piirtää X-akselin huonosti, jos dataa on vähän. Itse kaavion käyrä on tarkka.",
     "project.waste-classifier.description": "Työpöytäsovellus jätteen tunnistamiseen.",
     "project.focusboard.description": "Muistiinpanosovellus joka sisältää myös ajastimen ja kalenterin.",
     "project.focusboard.imagetexts": ["Luo muistiinpanoja, muokkaa ja järjestä ne mieluisiksi ja pidä kaikki järjestyksessä välilehtien avulla.", "Lisää ajastin hälyttämään sinua ja vaihtoehtoisesti kiinnitä viesti.", "Seuraa tapahtumiasi kalenterista.", "Näe tapahtumasi valitsemasta päivästäsi tarkemmin aikajana näkymällä."],
@@ -78,7 +80,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "home.cybersec.description": ["Cisco Ethical Hacking -kurssi", "NIXU haasteet: Bad Memories, Phiscap", "Forensiikka haaste"],
     "home.d-modeling-printing-embedded.description": ["IoT ja mikrokontrollerit: Arduino & Raspberry Pi", "Blender", "Tulostanut pystyakselisen tuuliturbiinin"],
     "home.data-science-ml.description": ["Kehykset/Frameworkit: Scikit-learn, Tensorflow & Keras, PyTorch, Optuna, XGBoost", "Talousdatan seurantasovellus ennustuksilla", "Jätteen tunnistamisen sovellus", "Harjoittanut koneoppimismalleja puulajien tunnistamiseen"],
-    "projects.project-finance-tracker.paragraph": [
+    "projects.project.finance-tracker.paragraph": [
       "Tämä oli ensimmäinen kunnon projektini. Tarkoituksena oli tehdä sovellus, mitä itse olisin käyttänyt. Ennen tätä olin vain tehnyt yksinkertaisia asioita Pythonilla, kuten laskimia, to-do listoja ja CLI- tai komentorivi-pohjaisia työkaluja.",
       "Sovelluksen piti olla suhteellisen yksinkertainen sovellus talousdatan seuraamiseen, mikä olisi pohjautunut Pythoniin ja käyttänyt Pythonin omaa Tkinteriä ja modernimpaa versiota, customTkinteriä, käyttöliittymänään (GUI:na), mutta päätin sisällyttää koneoppimista tehdäkseni ennusteita datasta, \
       sillä se olisi ollut seuraava askel sovelluksen kehityksessä ja siitä oli useampi vuosi milloin viimeksi olin tehnyt jotain koneoppimismallien kanssa. Kun sovellus oli kehittynyt tarpeeksi, halusin että sovellusta voisi helposti testata ilman mitään sen suurempia, kuten lataamista yms., \
@@ -87,6 +89,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
       mutta tämä oikeastaan tarkoittaisi sitä, että kirjoittaisin kaiken koodin alusta, mikä sai minut ajattelemaan jos koko sovelluksen tekisi muulla stackillä, eli Tauri + Svelte.js + Python. Tämä olisi myös seuraava askel oppimisessani, sillä minun tulisi saada Python kommunikoimaan Taurin backendin \
       kanssa, mikä on Rustia."
     ],
+    "projects.project.finance-tracker.variant": ["Työpöytä", "Verkko"],
   }
 };
 

@@ -8,6 +8,11 @@ export type imageNote = {
   note: string;
 }
 
+export type allPicture = {
+  id: number;
+  pic: string;
+}
+
 export interface Project {
   id: number;
   title: string;
@@ -15,6 +20,7 @@ export interface Project {
   descriptionKey: string;
   tech: string[];
   picture: string;
+  allPictures: allPicture[];
   chosenImages: chosenImage[];
   imageNotes: imageNote[];
   imageTexts: string;
