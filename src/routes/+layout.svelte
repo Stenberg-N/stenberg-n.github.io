@@ -16,7 +16,7 @@
   let alertMessage = $state<string | string[]>('');
   let onHomeScreen = $state<boolean>(true);
   let height = $state<number>(40);
-  let windowWidth = $state<number>(window.innerWidth);
+  let windowWidth = $state(0);
   let backBtnBottom = $state<string>('unset');
   let hasScrolled = $state<boolean>(false);
 
@@ -35,8 +35,14 @@
   });
 
   $effect(() => {
-    if (isAlert && windowWidth < 500) backBtnBottom = "120px";
-    else if (windowWidth < 500) backBtnBottom = "25px";
+    if (typeof window !== 'undefined') {
+      windowWidth = window.innerWidth;
+    }
+  });
+
+  $effect(() => {
+    if (isAlert && windowWidth <= 500) backBtnBottom = "120px";
+    else if (windowWidth <= 500) backBtnBottom = "25px";
     else backBtnBottom = "unset";
   });
 
@@ -79,7 +85,7 @@
 {/if}
 
 {#if isAlert}
-  <div id="alert-container" style="height: {height}px" transition:fly={{ y: 100, duration: 400 }}>
+  <div id="alert-container" class="hover-highlight" style="height: {height}px" transition:fly={{ y: 100, duration: 400 }}>
     <div class="alert-content" style="display: flex; flex-direction: row;">
       <p id="alert-message">{alertMessage}</p>
       <div style="display: flex; flex: 1;"></div>
@@ -205,6 +211,7 @@
     max-width: 42px;
     padding: 12px;
     border-radius: 50%;
+    background-color: #0f0f0f;
     z-index: 101;
   }
 
@@ -226,13 +233,6 @@
     border-radius: 8px;
     padding: 6px 10px;
     background-color: #222;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.8);
-    border: 1px solid rgba(119,119,119,0.4);
-    transition: border 0.2s;
-  }
-
-  #alert-container:hover {
-    border-color: rgba(255, 70, 70, 1);
   }
 
   #alert-close-btn {

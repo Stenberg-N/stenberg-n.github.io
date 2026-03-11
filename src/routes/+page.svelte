@@ -20,6 +20,7 @@
 
   onMount(() => {
     setOnHomeScreen(true);
+    setCurrentPage('/');
   });
 
   const zoombadge = (badge: string) => {
@@ -63,10 +64,10 @@
   <div id="zoomedOverlay" transition:fly={{ y: 100, duration: 200, delay: 100 }}>
     <div use:clickOutside style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
       {#if zoomedBadge}
-        <button id="zoomedBadge-close" class="hover-highlight" onclick={() => zoomedBadge = null}><img src="/assets/close-x.svg" alt="close"></button>
+        <button class="zoomedImg-close hover-highlight" onclick={() => zoomedBadge = null}><img src="/assets/close-x.svg" alt="close"></button>
         <img id="zoomedBadge-image" src={zoomedBadge} alt="badge">
       {:else if zoomedImg}
-        <button id="zoomedImg-close" class="hover-highlight" onclick={() => { zoomedImg = null; zoomedImgId = null; }}><img src="/assets/close-x.svg" alt="close"></button>
+        <button class="zoomedImg-close hover-highlight" onclick={() => { zoomedImg = null; zoomedImgId = null; }}><img src="/assets/close-x.svg" alt="close"></button>
         <img id="zoomedImg-image" src={zoomedImg} alt="Current project">
         {#if zoomedImgNote}
           <span>{$t[zoomedImgNote.note]}</span>
@@ -96,7 +97,7 @@
   </div>
 </div>
 
-<div class="divider"></div>
+<div style="border-bottom: 1px solid rgba(119, 119, 119, 0.4);"></div>
 
 <div id="sub-content">
   <h2>{$t['home.sub-content.knowledge.title']}</h2>
@@ -151,11 +152,6 @@
 </div>
 
 <style>
-
-  .divider {
-    border-bottom: 1px solid rgba(119, 119, 119, 0.4);
-  }
-
   #intro-contact {
     display: flex;
     flex-direction: row;
@@ -174,13 +170,9 @@
   }
 
   #view-projects {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
     justify-content: space-between;
     max-width: 170px;
-    max-height: 50px;
-    height: 100%;
+    height: 50px;
     margin-top: 60px;
     background-color: #0f0f0f; 
     border-radius: 16px;
@@ -353,27 +345,6 @@
     max-width: 80%;
   }
 
-  #zoomedBadge-close, #zoomedImg-close {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 42px;
-    width: 42px;
-    border: none;
-    border-radius: 50%;
-    background-color: #0f0f0f;
-  }
-
-  #zoomedBadge-close:hover, #zoomedImg-close:hover {
-    transform: translateY(-4px);
-  }
-
-  #zoomedBadge-close img, #zoomedImg-close img {
-    max-height: 20px;
-    max-width: 20px;
-    filter: brightness(0) invert(0.9);
-  }
-
   #project-images {
     display: flex;
     flex-direction: column;
@@ -448,12 +419,6 @@
       height: 300px;
       width: 300px;
     }
-
-    #zoomedBadge-close {
-      top: calc(50% - 200px);
-      right: calc(50% - 200px);
-    }
-
     .current-project-image {
       padding: 5px;
     }
@@ -463,11 +428,6 @@
     #zoomedBadge-image {
       height: 220px;
       width: 220px;
-    }
-
-    #zoomedBadge-close {
-      top: calc(50% - 140px);
-      right: calc(50% - 140px);
     }
   }
 

@@ -48,6 +48,11 @@ a:hover, button:hover {
   cursor: pointer;
 }
 
+.anchor {
+  display: flex;
+  align-items: center;
+}
+
 .anchor:link, .anchor:visited, .anchor:active, .anchor:focus {
   position: relative;
   font-weight: 800;
@@ -93,4 +98,21 @@ a:hover, button:hover {
 .hover-highlight:hover {
   outline-color: rgba(255, 70, 70, 1);
   box-shadow: 0 8px 24px rgba(255, 70, 70, 0.3);
+}
+
+.zoomedImg-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  width: 42px;
+  border: none;
+  border-radius: 50%;
+  background-color: #0f0f0f;
+}
+
+.zoomedImg-close img {
+  max-height: 20px;
+  max-width: 20px;
+  filter: brightness(0) invert(0.9);
 }

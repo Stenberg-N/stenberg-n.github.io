@@ -9,9 +9,11 @@
   type ProjectRoute = `/projects/${ProjectSlug}`;
 
   const { setOnHomeScreen } = getContext<{ getOnHomeScreen: () => boolean, setOnHomeScreen: (state: boolean) => void }>('onHomeScreen');
+  const { setCurrentPage } = getContext<{ setCurrentPage: (page: string) => void }>('currentPage');
 
   onMount(() => {
     setOnHomeScreen(true);
+    setCurrentPage('/projects');
   });
 
 </script>
@@ -63,6 +65,7 @@
   .project {
     display: flex;
     flex-direction: column;
+    align-items: unset;
     min-width: 250px;
     max-width: 420px;
     width: 100%;
