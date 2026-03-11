@@ -8,20 +8,20 @@ html, body {
   scroll-behavior: smooth;
 }
 
-body {
-  margin: 0;
+body::-webkit-scrollbar {
+  display: none;
 }
 
 *, *::after, *::before {
   box-sizing: inherit;
 }
 
-* p {
+* p, * span {
   margin: 0;
   filter: drop-shadow(0 10px 12px rgba(0,0,0,0.8));
 }
 
-* h1, h2, h3 {
+* h1, * h2, * h3 {
   filter: drop-shadow(0 10px 12px rgba(0,0,0,0.8));
 }
 
@@ -87,7 +87,7 @@ a:hover, button:hover {
 .hover-highlight {
   outline: 1px solid rgba(119, 119, 119, 0.4);
   box-shadow: 0 4px 12px rgba(0,0,0,0.8);
-  transition: outline 0.2s, box-shadow 0.2s;
+  transition: outline 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 
 .hover-highlight:hover {

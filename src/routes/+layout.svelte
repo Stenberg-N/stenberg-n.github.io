@@ -7,6 +7,7 @@
   import '../styles.css';
 
   setContext('onHomeScreen', { getOnHomeScreen: () => onHomeScreen, setOnHomeScreen });
+  setContext('currentPage', { setCurrentPage });
 
 	let { children } = $props();
   let currentPage = $state<string>('/')
@@ -50,6 +51,10 @@
 
   function handleScroll() {
     hasScrolled = window.scrollY > 700;
+  }
+
+  function setCurrentPage(page: string) {
+    currentPage = page;
   }
 </script>
 
@@ -263,7 +268,7 @@
     max-height: 50px;
     height: 100%;
     padding: 5px;
-    background-color: hsl(0, 0%, 96%);
+    background-color: #0f0f0f;
     border-radius: 12px;
     border: 1px solid rgba(119, 119, 119, 0.4);
     box-shadow: 0 4px 12px rgba(0,0,0,0.8);

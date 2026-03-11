@@ -4,8 +4,10 @@
   import { home } from '$lib/home';
   import { fly } from "svelte/transition";
   import { projects } from '$lib/projects';
+	import { resolve } from '$app/paths';
 
   const { setOnHomeScreen } = getContext<{ getOnHomeScreen: () => boolean, setOnHomeScreen: (state: boolean) => void }>('onHomeScreen');
+  const { setCurrentPage } = getContext<{ setCurrentPage: (page: string) => void }>('currentPage');
 
   let currentProject = projects.find(p => p.isCurrent) || null;
   const { chosenImages = [], imageNotes = [] } = currentProject || {};
@@ -13,6 +15,8 @@
   let zoomedImg = $state<string | null>(null);
   let zoomedImgId = $state<number | null>(null);
   let zoomedImgNote = $derived.by(() => { return zoomedImgId !== null ? imageNotes.find(note => note.id === zoomedImgId) : null; });
+
+  let twitchRight = $state<boolean>(false);
 
   onMount(() => {
     setOnHomeScreen(true);
@@ -59,10 +63,10 @@
   <div id="zoomedOverlay" transition:fly={{ y: 100, duration: 200, delay: 100 }}>
     <div use:clickOutside style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
       {#if zoomedBadge}
-        <button id="zoomedBadge-close" onclick={() => zoomedBadge = null}><img src="/assets/close-x.svg" alt="close"></button>
+        <button id="zoomedBadge-close" class="hover-highlight" onclick={() => zoomedBadge = null}><img src="/assets/close-x.svg" alt="close"></button>
         <img id="zoomedBadge-image" src={zoomedBadge} alt="badge">
       {:else if zoomedImg}
-        <button id="zoomedImg-close" onclick={() => { zoomedImg = null; zoomedImgId = null; }}><img src="/assets/close-x.svg" alt="close"></button>
+        <button id="zoomedImg-close" class="hover-highlight" onclick={() => { zoomedImg = null; zoomedImgId = null; }}><img src="/assets/close-x.svg" alt="close"></button>
         <img id="zoomedImg-image" src={zoomedImg} alt="Current project">
         {#if zoomedImgNote}
           <span>{$t[zoomedImgNote.note]}</span>
@@ -82,9 +86,10 @@
     </div>
     <div id="contact" style="display: flex; flex-direction: column; gap: 12px; margin-top: 40px;">
       <div id="github"><img src="/assets/github-logo.svg" alt="Github logo"><a class="anchor" href="https://github.com/Stenberg-N">Stenberg-N</a></div>
-      <div id="email" style="user-select: text; word-break: break-all;"><img src="/assets/email-logo.svg" alt="Email logo" style="user-select: none;">stenbergniko@outlook.com</div>
-      <div id="location"><img src="/assets/location-pin.svg" alt="Location logo">{$t['contact-location']}</div>
+      <div id="email" style="user-select: text; word-break: break-all;"><img src="/assets/email-logo.svg" alt="Email logo" style="user-select: none;"><span>stenbergniko@outlook.com</span></div>
+      <div id="location"><img src="/assets/location-pin.svg" alt="Location logo"><span>{$t['contact-location']}</span></div>
     </div>
+    <a id="view-projects" class="anchor hover-highlight" href={resolve("/projects")} onclick={() => setCurrentPage('/projects')} onmouseenter={() => twitchRight = true} onmouseleave={() => twitchRight = false}><span>{$t["home.view-projects"]}</span><img class:twitch={twitchRight} src="/assets/arrow.svg" alt="arrow"></a>
   </div>
   <div id="selfie-image">
 
@@ -116,7 +121,7 @@
             <div style="overflow: hidden;">
               <div id="badges" use:scrollHorizontal>
                 {#each badges as badge (badge)}
-                  <button class="interactive-el" onclick={() => zoombadge(badge)}><img class="badge" src={badge} alt="badge"></button>
+                  <button class="hover-highlight" onclick={() => zoombadge(badge)}><img class="badge" src={badge} alt="badge"></button>
                 {/each}
               </div>
             </div>
@@ -166,6 +171,40 @@
     flex-direction: row;
     gap: 20px;
     align-items: center;
+  }
+
+  #view-projects {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 170px;
+    max-height: 50px;
+    height: 100%;
+    margin-top: 60px;
+    background-color: #0f0f0f; 
+    border-radius: 16px;
+    padding: 8px 12px;
+    transition: background-color 0.2s;
+  }
+
+  #view-projects img {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(0.9);
+    transform: rotateZ(-90deg);
+  }
+
+  .twitch {
+    animation: twitch-left 0.5s;
+  }
+
+  #view-projects:hover {
+    background-color: rgba(255, 70, 70, 1);
+  }
+
+  #view-projects::after {
+    width: 0;
   }
 
   #github img, #email img, #location img {
@@ -271,19 +310,20 @@
     margin-top: 0;
   }
 
-  .interactive-el {
-    max-height: 120px;
-    height: 100%;
-    max-width: 120px;
+  #badges button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    width: 120px;
     border-radius: 16px;
-    transition: transform 0.2s, box-shadow 0.2s;
+    padding: 0;
+    margin: 0;
+    transition: transform 0.2s;
   }
 
-  .interactive-el:hover {
-    transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 8px 24px rgba(255, 70, 70, 0.5);
-    cursor: pointer;
-    outline: 2px solid rgba(255, 70, 70, 1);
+  #badges button:hover {
+    transform: translateY(-4px);
   }
 
   .badge {
@@ -319,16 +359,13 @@
     justify-content: center;
     height: 42px;
     width: 42px;
-    border: 1px solid rgba(119, 119, 119, 0.4);
+    border: none;
     border-radius: 50%;
     background-color: #0f0f0f;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.8);
-    transition: border-color 0.2s, box-shadow 0.2s;
   }
 
   #zoomedBadge-close:hover, #zoomedImg-close:hover {
-    box-shadow: 0 8px 24px rgba(255, 70, 70, 0.3);
-    border-color: rgba(255, 70, 70, 1);
+    transform: translateY(-4px);
   }
 
   #zoomedBadge-close img, #zoomedImg-close img {
@@ -361,6 +398,7 @@
 
   .current-project-image:hover {
     cursor: pointer;
+    transform: translateY(-4px);
   }
 
   @media (max-width: 1200px) {
@@ -431,6 +469,12 @@
       top: calc(50% - 140px);
       right: calc(50% - 140px);
     }
+  }
+
+  @keyframes twitch-left {
+    0% { transform: translateX(0) rotateZ(-90deg); }
+    50% { transform: translateX(6px) rotateZ(-90deg); }
+    100% { transform: translateX(0) rotateZ(-90deg); }
   }
 
   @font-face {
