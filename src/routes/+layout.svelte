@@ -16,6 +16,8 @@
   let alertMessage = $state<string | string[]>('');
   let onHomeScreen = $state<boolean>(true);
   let height = $state<number>(40);
+  let windowWidth = $state<number>(window.innerWidth);
+  let backBtnBottom = $state<string>('unset');
   let hasScrolled = $state<boolean>(false);
 
   onMount(() => {
@@ -30,7 +32,13 @@
 
   $effect(() => {
     if (isRedirecting) height = 80; else height = 40;
-  })
+  });
+
+  $effect(() => {
+    if (isAlert && windowWidth < 500) backBtnBottom = "120px";
+    else if (windowWidth < 500) backBtnBottom = "25px";
+    else backBtnBottom = "unset";
+  });
 
   function redirect() {
     isRedirecting = true;
@@ -62,7 +70,7 @@
 	<link rel="icon" href="/assets/favicon.svg" />
 </svelte:head>
 
-<svelte:window onscroll={handleScroll} />
+<svelte:window onscroll={handleScroll} bind:innerWidth={windowWidth} />
 
 {#if hasScrolled}
   <button id="scroll-to-top" class="interactive-el" onclick={() => window.scrollTo(0, 0)} transition:fly={{ y: 100, duration: 300, delay: 100 }}>
@@ -71,7 +79,7 @@
 {/if}
 
 {#if isAlert}
-  <div id="alert-container" style="height: {height}px" transition:fly={{ y: 100, duration: 400, delay: 100 }}>
+  <div id="alert-container" style="height: {height}px" transition:fly={{ y: 100, duration: 400 }}>
     <div class="alert-content" style="display: flex; flex-direction: row;">
       <p id="alert-message">{alertMessage}</p>
       <div style="display: flex; flex: 1;"></div>
@@ -90,10 +98,11 @@
 <div id="background"></div>
 <div id="grid-background"></div>
 
+{#if !onHomeScreen}
+  <a id="back-btn" class="hover-highlight" style="bottom: {backBtnBottom};" href={resolve("/projects")} transition:fly={{ y: 20, duration: 200, delay: 100 }}><img style="transform: rotate(90deg); filter: brightness(0) invert(0.9); max-width: 20px; max-height: 20px;" src="/assets/arrow.svg"alt="Back arrow"></a>
+{/if}
+
 <nav id="nav-bar">
-  {#if !onHomeScreen}
-    <a id="back-btn" class="interactive-el" style="position: fixed; left: 16px; max-height: 24px;" href={resolve("/projects")} transition:fly={{ y: 20, duration: 200, delay: 100 }}><img style="transform: rotate(90deg); max-width: 24px; max-height: 24px;" src="/assets/arrow.svg"alt="Back arrow"></a>
-  {/if}
   <div id="nav-links">
     <a class="anchor" class:current={currentPage === '/'} onclick={() => currentPage = '/'} href={resolve("/")}>{$t.home}</a>
     <a class="anchor" class:current={currentPage === '/projects'} onclick={() => currentPage = '/projects'} href={resolve("/projects")}>{$t.projects}</a>
@@ -162,7 +171,7 @@
 
   #nav-links {
     display: flex;
-    flex: 1;
+    margin: 0 auto;
     justify-content: center;
     gap: 40px;
   }
@@ -178,10 +187,29 @@
     width: 138px;
   }
 
-  #github-link img, #email-link img, #back-btn img {
+  #github-link img, #email-link img {
     max-width: 38px;
     max-height: 38px;
     filter: brightness(0) invert(0.9);
+  }
+
+  #back-btn {
+    position: fixed;
+    top: 24px;
+    left: calc(50% - 170px);
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    max-height: 42px;
+    max-width: 42px;
+    padding: 12px;
+    border-radius: 50%;
+    z-index: 101;
+  }
+
+  #back-btn:hover {
+    transform: translateY(-4px);
   }
 
   #alert-container {
@@ -290,6 +318,11 @@
   @media (max-width: 500px) {
     #nav-bar {
       height: 150px;
+    }
+
+    #back-btn {
+      top: unset;
+      left: calc(50% - 21px);
     }
 
     #nav-links {

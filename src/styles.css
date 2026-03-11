@@ -87,7 +87,7 @@ a:hover, button:hover {
 .hover-highlight {
   outline: 1px solid rgba(119, 119, 119, 0.4);
   box-shadow: 0 4px 12px rgba(0,0,0,0.8);
-  transition: outline 0.2s, box-shadow 0.2s, transform 0.2s;
+  transition: outline 0.2s, box-shadow 0.2s, transform 0.2s, bottom 0.4s;
 }
 
 .hover-highlight:hover {
