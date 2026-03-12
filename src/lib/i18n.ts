@@ -11,7 +11,8 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "project.finance-tracker.demo": "Web demo",
     "project.finance-tracker.imagetexts": "Here one flaw can be seen in the X-axis, where the spacing and labels are inconsistent. Stems from the app struggling to draw the X-axis with lower amounts of data. The actual graph line is accurate.",
     "project.waste-classifier.description": "A desktop app with an ML model for classifying waste.",
-    "project.waste-classifier.imagetexts": "",
+    "project.waste-classifier.imagetexts": "This is a confusion matrix. It is used to get insights into how well the model makes predictions and in what labels it excels at, and where not. To put this simply, when the X- and Y-axes match on the same label, the model got the prediction right. \
+    A number represent one image",
     "project.focusboard.description": "A note taking app that integrates a calendar and a timer.",
     "project.focusboard.imagetexts": ["Make notes, customize and order them to your liking and keep everything neat with tabs.", "Add a timer to alert you, and optionally a message.", "Keep track of your events with the calendar.", "Get an in-depth perspective of your events for a selected day."],
     "project.focusboard.imagenotes": "All of the vertical grid lines are not captured in the image.",
@@ -48,6 +49,16 @@ const translations: Record<Language, Record<string, string | string[]>> = {
       This also serves as a next step in my learning, where I need to figure out how I can combine Tauri's Rust backend with Python and make that work with the Svelte frontend."
     ],
     "projects.project.finance-tracker.variant": ["Desktop", "Web"],
+    "projects.project.waste-classifier.paragraph": [
+      "This was my second project. The main reason for me to create this app was to bring back some concepts of ML and try refresh my memory. I had previous experience from a few years (in ~2024) back when I had coursework, where I needed to find the best model to classify tree species. \
+      Some of the models were VGGNet19 and 16, Inception, Xception, and ResNet and I used the TensorFlow Keras as the framework. But with this project I needed to use PyTorch and so I just jumped straight into it. Since it had been a long time since I last did anything with classifiers, \
+      and it was my first time using PyTorch, I relied a lot on other people's work. I did implement Optuna myself, since I had recently worked with it.",
+      "I wanted to use PyQt as my frontend so I went with that. I trained my own models and used the TrashNet dataset for training. I split the training to two stages, where the first stage was for training the model fast and getting the foundation up, \
+      and then the second stage for fine tuning and slower learning. I used MobileNetV4 initially, but switched to DenseNet201 since it was performing a lot better. MobileNetV4 is meant to be lightweight and compact, which is why I initially chose it, and is aimed for mobile devices. \
+      I was averaging around 79-87% accuracy with MobileNet, but got consistent results around 97% with DenseNet.",
+      "I would have liked to learn techniques on how to tackle machine vision to differentiate surfaces that share similar features, like gloss, reflectivity and so on, for example metal vs. glass vs. glossy plastic, since this was one of the main issues I think I had with the MobileNet model, \
+      where it repeatedly mistook these materials between each other, but found it extremely difficult, so I moved on to my other project."
+    ],
   },
   fi: {
     home: 'Koti',
@@ -56,6 +67,8 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "project.finance-tracker.demo": "Verkkosovelluksen demo",
     "project.finance-tracker.imagetexts": "Tässä näkyy yksi ongelmista X-akselissa, missä jaotus ja aikaleimat ovat epäsäännölisiä. Johtuu siitä, että sovellus piirtää X-akselin huonosti, jos dataa on vähän. Itse kaavion käyrä on tarkka.",
     "project.waste-classifier.description": "Työpöytäsovellus jätteen tunnistamiseen.",
+    "project.waste-classifier.imagetexts": "Tämä on 'sekaannusmatriisi' (engl. confusion matrix). Yleinen tapa arvioida koneoppimismallin tarkkuutta ja nähdä missä luokissa se suoriutuu ja missä ei. Luokat ovat siis ennaltamääriteltyjä 'nimiä', johon malli luokittelee kuvan. \
+    Tässä luokat ovat eri jätetyyppejä, esim. muovi, paperi, lasi yms. Miten taulukkoa tulkita yksinkertaistettuna on, kun X- ja Y- akselit kohtaavat samassa neliössä, malli veikkasi oikein. Numero ruudussa edustaa yhtä kuvaa.",
     "project.focusboard.description": "Muistiinpanosovellus joka sisältää myös ajastimen ja kalenterin.",
     "project.focusboard.imagetexts": ["Luo muistiinpanoja, muokkaa ja järjestä ne mieluisiksi ja pidä kaikki järjestyksessä välilehtien avulla.", "Lisää ajastin hälyttämään sinua ja vaihtoehtoisesti kiinnitä viesti.", "Seuraa tapahtumiasi kalenterista.", "Näe tapahtumasi valitsemasta päivästäsi tarkemmin aikajana näkymällä."],
     "project.focusboard.imagenotes": "Jotkin pystyviivat näkyvät huonosti.",
@@ -92,6 +105,16 @@ const translations: Record<Language, Record<string, string | string[]>> = {
       kanssa, mikä on Rustia."
     ],
     "projects.project.finance-tracker.variant": ["Työpöytä", "Verkko"],
+    "projects.project.waste-classifier.paragraph": [
+      "Tämä oli minun toinen projekti. Ensisijainen syy miksi tein tämän sovelluksen oli, koska halusin virkistää muistiani liittyen koneoppimiseen. Minulla oli aikaisempaa kokemusta parin vuoden takaa (noin 2024), jolloin minulla oli kursseja jossa minun piti löytää paras koneoppimismalli puulajien \
+      tunnistamiseen. Malleja joita käytin oli muun muassa VGGNet19 ja 16, Inception, Xception ja Resnet, ja kehyksenä (frameworkinä) käytin TensorFlow Keras:ia. Tässä projektissa minun kuitenkin tuli käyttää PyTorchia ja en kauheasti valmistellut vaan hyppäsin suoraan asiaan. \
+      Koska siitä oli jonkin verran aikaa kun olin tehnyt mitään luokittelijoiden (classifier) kanssa ja, kun tämä oli ensimmäinen kerta kun käytän PyTorchia, seurasin paljolti muiden ihmisten töitä. Optunan kylläkin implementoin itse, kun olin hetkittäin juuri työskennellyt sen kanssa.",
+      "Halusin käyttää PyQt:ta sovelluksen käyttöliittymänä (GUI), joten menin sillä. Harjotin omat mallini ja käytin TrashNet datasettiä harjottamisessa. Jaoin harjoituksen kahteen vaiheeseen/osaan, missä ensimmäinen oli harjoittaakseen mallia nopeasti ja rakentaa pohja sille, jonka jälkeen \
+      vaihe 2. oli hienosäätöä ja hitaampaa oppimista. Käytin MobileNetV4 aluksi, mutta vaihdoin DenseNet201:een, sillä se suoriutui huomattavasti paremmin. MobileNetin tarkoituksena on olla kevyt, joka oli syy miksi valitsin sen, ja se on tarkoitettu mobiililaitteille. Tulokseni pyöri 79-87% tarkkuuden \
+      välillä MobileNetillä, mutta sain säännöllisesti 97% ympyröissä DenseNetillä eri testeissä.",
+      "Olisin halunnut oppia eri tekniikoita, miten saada konenäkö erottamaan eri pintoja joilla on samankaltaisia ominaisuuksia, kuten kiilto ja heijastuskyky, esimerkiksi metalli vs. lasi vs. kiiltävä muovi, sillä tämä oli mielestäni yksi ongelmista mikä minulla tuli vastaan MobileNetillä. Mallini säännöllisesti \
+      ei osannut erottaa metallia, lasia ja muovia toisistaan. Tämä kuitenkin oli hyvin vaikeaa, joten jatkoin seuraavaan projektiini."
+    ],
   }
 };
 

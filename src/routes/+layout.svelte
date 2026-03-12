@@ -24,23 +24,23 @@
 
   const setOnHomeScreen = (state: boolean) => {
     onHomeScreen = state;
-  }
+  };
 
   const setCurrentPage = (page: string) => {
     currentPage = page;
-  }
+  };
 
   const setAlert = (state: boolean) => {
     isAlert = state;
-  }
+  };
 
   const setRedirecting = (state: boolean) => {
     isRedirecting = state;
-  }
+  };
 
   const propagateAlert = (state: boolean) => {
     childAlert = state;
-  }
+  };
 
   setContext('onHomeScreen', { getOnHomeScreen: () => onHomeScreen, setOnHomeScreen });
   setContext('currentPage', { setCurrentPage });
@@ -77,18 +77,18 @@
     isRedirecting = true;
     alertMessage = 'alert.message.github';
     isAlert = true;
-  }
+  };
 
   const copyEmail = () => {
     let text = 'stenbergniko@outlook.com';
     navigator.clipboard.writeText(text);
     alertMessage = 'alert.email';
     isAlert = true;
-  }
+  };
 
   const handleScroll = () => {
     hasScrolled = window.scrollY > 700;
-  }
+  };
 </script>
 
 <svelte:head>
@@ -105,7 +105,7 @@
 
 
 {#if isAlert && !childAlert}
-  <Alert height={height} isRedirecting={isRedirecting} link="https://github.com/Stenberg-N/" alertMessage={alertMessage} setAlert={setAlert} setRedirecting={setRedirecting} />
+  <Alert height={height} isRedirecting={isRedirecting} link="https://github.com/Stenberg-N" alertMessage={alertMessage} setAlert={setAlert} setRedirecting={setRedirecting} />
 {/if}
 
 <div id="background"></div>

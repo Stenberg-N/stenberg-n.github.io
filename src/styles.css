@@ -117,14 +117,16 @@ a:hover, button:hover {
   align-items: center;
   justify-content: center;
   height: 42px;
+  min-height: 42px;
   width: 42px;
+  min-width: 42px;
   border: none;
   border-radius: 50%;
   background-color: #0f0f0f;
 }
 
 .zoomedImg-close img {
-  max-height: 20px;
-  max-width: 20px;
+  height: 20px;
+  width: 20px;
   filter: brightness(0) invert(0.9);
 }

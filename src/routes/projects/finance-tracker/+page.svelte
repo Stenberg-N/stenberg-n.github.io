@@ -13,6 +13,7 @@
   let link = $state<"https://site--financetracker-app--kwlb8kg8h4nw.code.run/login/?next=/" | "https://github.com/Stenberg-N/finance-tracker" | null>(null);
   let isAlert = $state<boolean>(false);
   let alertMessage = $state<string>('');
+  let zoomedContainer = $state<HTMLDivElement | null>(null);
 
   // Context and helper/wrapper functions
 
@@ -23,7 +24,7 @@
 
   const setAlert = (state: boolean) => {
     isAlert = state;
-  }
+  };
 
   onMount(() => {
     setOnHomeScreen(false);
@@ -31,7 +32,7 @@
 
   const zoomImg = (image: string) => {
     zoomedImage = image;
-  }
+  };
 
   const clickOutside = (node: HTMLElement) => {
     const handleClick = (event: MouseEvent) => {
@@ -41,20 +42,26 @@
     };
     document.addEventListener('click', handleClick, true);
     return { destroy() { document.removeEventListener('click', handleClick, true); }};
-  }
+  };
 
 </script>
 
 {#if zoomedImage}
-  <div id=zoomedImageOverlay style="position: fixed; inset: 0; z-index: 101; display: flex; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(4px); user-select: none;" transition:fly={{ y: 100, duration: 200, delay: 100 }}>
-    <div use:clickOutside style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
+  <div role="dialog" tabindex="0" id=zoomedImageOverlay style="position: fixed; inset: 0; z-index: 101; display: flex; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(4px); user-select: none;"
+    transition:fly={{ y: 100, duration: 200, delay: 100 }} onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); zoomedImage = null; }}} bind:this={zoomedContainer}
+  >
+    <div use:clickOutside style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; max-width: 90vw; max-height: 90vh;">
       <button class="zoomedImg-close hover-highlight" onclick={() => zoomedImage = null}><img src="/assets/close-x.svg" alt="close"></button>
-      <img src={zoomedImage} alt="zoomed content" style="max-width: 90%; max-height: 90%;">
+      <img src={zoomedImage} alt="zoomed content" style="max-width: 90%; max-height: 90%; object-fit: contain;">
       {#if zoomedImage === desktopPics[desktopPics.length - 1]['pic']}
         <span style="margin-top: 20px; max-width: 90%;">{$t[project.imageTexts]}</span>
       {/if}
     </div>
   </div>
+
+  {#each [zoomedContainer], i (i)}
+    {onMount(() => zoomedContainer?.focus() )}
+  {/each}
 {/if}
 
 {#if isAlert}
@@ -84,7 +91,7 @@
       {/each}
     </div>
     <div id="project-info">
-      <div id="project-images" style="object-fit: contain;">
+      <div id="project-intro-images" style="object-fit: contain;">
         <button class="hover-highlight" onclick={() => zoomImg(project.picture)}><img style="width: 100%; height: auto;" src={project.picture} alt="project"></button>
         <button class="hover-highlight" onclick={() => zoomImg("/images/web-finance-tracker1.png")}><img style="width: 100%; height: auto;" src="/images/web-finance-tracker1.png" alt="web project"></button>
       </div>
@@ -151,7 +158,7 @@
   #intro-text {
     display: flex;
     flex-direction: column;
-    max-width: 50%;
+    width: 50%;
     gap: 1rem;
   }
 
@@ -167,21 +174,21 @@
   #project-info {
     display: flex;
     flex-direction: column;
-    max-width: 50%;
+    width: 50%;
   }
 
-  #project-images {
+  #project-intro-images {
     max-height: 100%;
-    max-width: 100%;
+    width: 100%;
   }
 
-  #project-images button {
+  #project-intro-images button {
     border: none;
     background-color: transparent;
     padding: 0;
   }
 
-  #project-images button:not(:last-child) {
+  #project-intro-images button:not(:last-child) {
     margin-bottom: 20px;
   }
 
@@ -225,7 +232,7 @@
     }
 
     #project-info, #intro-text {
-      max-width: 100%;
+      width: 100%;
     }
   }
 

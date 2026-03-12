@@ -31,7 +31,7 @@
   {#if isRedirecting}
     <div style="display: flex; flex: 1;"></div>
     <div id="redirect-buttons" style="display: flex; flex-direction: row; gap: 10px; padding-bottom: 5px;">
-      <a class="anchor interactive-el" href={link}>{$t['alert.confirm']}</a>
+      <a class="anchor interactive-el" href={link} rel="external">{$t['alert.confirm']}</a>
       <button class="interactive-el" onclick={() => { setAlert(false); setRedirecting(false); propagateAlert(false); }}>{$t['alert.cancel']}</button>
     </div>
   {/if}

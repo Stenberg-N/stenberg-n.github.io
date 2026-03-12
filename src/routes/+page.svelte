@@ -24,12 +24,12 @@
 
   const zoombadge = (badge: string) => {
     zoomedBadge = badge;
-  }
+  };
 
   const zoomImg = (image: string, id: number) => {
     zoomedImg = image;
     zoomedImgId = id;
-  }
+  };
 
   const clickOutside = (node: HTMLElement) => {
     const handleClick = (event: MouseEvent) => {
@@ -41,7 +41,7 @@
     };
     document.addEventListener('click', handleClick, true);
     return { destroy() { document.removeEventListener('click', handleClick, true); }};
-  }
+  };
 
   const scrollHorizontal = (node: HTMLElement) => {
     const handleScroll = (event: WheelEvent) => {
