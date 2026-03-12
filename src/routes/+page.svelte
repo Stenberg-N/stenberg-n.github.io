@@ -6,17 +6,16 @@
   import { projects } from '$lib/projects';
 	import { resolve } from '$app/paths';
 
-  const { setOnHomeScreen } = getContext<{ getOnHomeScreen: () => boolean, setOnHomeScreen: (state: boolean) => void }>('onHomeScreen');
-  const { setCurrentPage } = getContext<{ setCurrentPage: (page: string) => void }>('currentPage');
-
   let currentProject = projects.find(p => p.isCurrent) || null;
   const { chosenImages = [], imageNotes = [] } = currentProject || {};
   let zoomedBadge = $state<string | null>(null);
   let zoomedImg = $state<string | null>(null);
   let zoomedImgId = $state<number | null>(null);
   let zoomedImgNote = $derived.by(() => { return zoomedImgId !== null ? imageNotes.find(note => note.id === zoomedImgId) : null; });
-
   let twitchRight = $state<boolean>(false);
+
+  const { setOnHomeScreen } = getContext<{ getOnHomeScreen: () => boolean, setOnHomeScreen: (state: boolean) => void }>('onHomeScreen');
+  const { setCurrentPage } = getContext<{ setCurrentPage: (page: string) => void }>('currentPage');
 
   onMount(() => {
     setOnHomeScreen(true);
@@ -132,6 +131,8 @@
     </div>
   </div>
 
+  <div style="border-bottom: 1px solid rgba(119, 119, 119, 0.4);"></div>
+
   <h2>{$t['home.sub-content.working-on.title']}</h2>
   <div id="current-project" style="display: flex; flex-direction: column;">
     {#if currentProject}
@@ -177,7 +178,6 @@
     background-color: #0f0f0f; 
     border-radius: 16px;
     padding: 8px 12px;
-    transition: background-color 0.2s;
   }
 
   #view-projects img {
@@ -224,8 +224,6 @@
     flex-direction: column;
     flex: 1 1 0;
     gap: 100px;
-    padding: 40px;
-    padding-top: 0;
     user-select: none;
   }
 

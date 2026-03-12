@@ -20,7 +20,7 @@
 
 <div id="projects">
   {#each projects as { id, title, slug, picture, descriptionKey, demo, tech, isWIP } (id)}
-    <div role="link" tabindex="0" class="project anchor" style="background-image: url({picture});" onclick={() => goto(resolve(`/projects/${slug}` as ProjectRoute))} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goto(resolve(`/projects/${slug}` as ProjectRoute))} }}>
+    <div role="link" tabindex="0" class="project anchor underline-el" style="background-image: url({picture});" onclick={() => goto(resolve(`/projects/${slug}` as ProjectRoute))} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goto(resolve(`/projects/${slug}` as ProjectRoute))} }}>
       <div style="display: flex; flex-direction: row; 16px; position: relative; z-index: 1;">
         <p style="font-weight: 800;">{ title }</p>
         <div style="display: flex; flex: 1;"></div>
@@ -29,7 +29,7 @@
       <div style="display: flex; flex-direction: column; flex: 1 1 0; gap: 20px; margin-top: 20px; position: relative; z-index: 1;">
           <p style="font-weight: normal;">{$t[descriptionKey]}</p>
           {#if id === 1}
-            <a class="anchor" style="width: fit-content;" onclick={(e) => e.stopPropagation()} href="https://site--financetracker-app--kwlb8kg8h4nw.code.run/login/?next=/">{$t[demo]}</a>
+            <a class="anchor underline-el" style="width: fit-content;" onclick={(e) => e.stopPropagation()} href="https://site--financetracker-app--kwlb8kg8h4nw.code.run/login/?next=/">{$t[demo]}</a>
           {/if}
           <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px; max-width: 400px; max-height: 140px; margin-top: auto;">
             {#each tech as t (t)}
@@ -44,14 +44,6 @@
 </div>
 
 <style>
-  .anchor::after{
-    background-color: rgba(255, 70, 70, 1);
-  }
-
-  .anchor {
-    overflow: hidden;
-  }
-
   #projects {
     display: grid;
     grid-template-columns: repeat(3, minmax(250px, 420px));

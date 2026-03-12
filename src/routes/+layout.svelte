@@ -5,20 +5,46 @@
   import { t, lang } from '$lib/i18n';
 
   import '../styles.css';
-
-  setContext('onHomeScreen', { getOnHomeScreen: () => onHomeScreen, setOnHomeScreen });
-  setContext('currentPage', { setCurrentPage });
+	import Alert from './components/Alert.svelte';
 
 	let { children } = $props();
   let currentPage = $state<string>('/')
   let isAlert = $state<boolean>(false);
+  let childAlert = $state<boolean>(false);
+  let disableChildAlert = $derived(isAlert);
   let isRedirecting = $state<boolean>(false);
-  let alertMessage = $state<string | string[]>('');
+  let alertMessage = $state<string>('');
   let onHomeScreen = $state<boolean>(true);
   let height = $state<number>(40);
   let windowWidth = $state(0);
   let backBtnBottom = $state<string>('unset');
   let hasScrolled = $state<boolean>(false);
+
+  // Contexts, context and helper/wrapper functions
+
+  const setOnHomeScreen = (state: boolean) => {
+    onHomeScreen = state;
+  }
+
+  const setCurrentPage = (page: string) => {
+    currentPage = page;
+  }
+
+  const setAlert = (state: boolean) => {
+    isAlert = state;
+  }
+
+  const setRedirecting = (state: boolean) => {
+    isRedirecting = state;
+  }
+
+  const propagateAlert = (state: boolean) => {
+    childAlert = state;
+  }
+
+  setContext('onHomeScreen', { getOnHomeScreen: () => onHomeScreen, setOnHomeScreen });
+  setContext('currentPage', { setCurrentPage });
+  setContext('alertContext', { propagateAlert, getParentAlert: () => disableChildAlert });
 
   onMount(() => {
     currentPage = window.location.pathname;
@@ -41,34 +67,27 @@
   });
 
   $effect(() => {
-    if (isAlert && windowWidth <= 500) backBtnBottom = "120px";
+    if ((isAlert || childAlert) && windowWidth <= 500) backBtnBottom = "120px";
     else if (windowWidth <= 500) backBtnBottom = "25px";
     else backBtnBottom = "unset";
   });
 
-  function redirect() {
+
+  const redirect = () => {
     isRedirecting = true;
-    alertMessage = $t['alert.message'];
+    alertMessage = 'alert.message.github';
     isAlert = true;
   }
 
-  function copyEmail() {
+  const copyEmail = () => {
     let text = 'stenbergniko@outlook.com';
     navigator.clipboard.writeText(text);
-    alertMessage = $t['alert.email'];
+    alertMessage = 'alert.email';
     isAlert = true;
   }
 
-  function setOnHomeScreen(state: boolean) {
-    onHomeScreen = state;
-  }
-
-  function handleScroll() {
+  const handleScroll = () => {
     hasScrolled = window.scrollY > 700;
-  }
-
-  function setCurrentPage(page: string) {
-    currentPage = page;
   }
 </script>
 
@@ -84,21 +103,9 @@
   </button>
 {/if}
 
-{#if isAlert}
-  <div id="alert-container" class="hover-highlight" style="height: {height}px" transition:fly={{ y: 100, duration: 400 }}>
-    <div class="alert-content" style="display: flex; flex-direction: row;">
-      <p id="alert-message">{alertMessage}</p>
-      <div style="display: flex; flex: 1;"></div>
-      <button id="alert-close-btn" class="interactive-el" onclick={() => {isAlert = false; isRedirecting = false; }}><img src="/assets/close-x.svg" alt="Close alert"></button>
-    </div>
-    {#if isRedirecting}
-      <div style="display: flex; flex: 1;"></div>
-      <div id="redirect-buttons" style="display: flex; flex-direction: row; gap: 10px; padding-bottom: 5px;">
-        <a class="anchor interactive-el" href="https://github.com/Stenberg-N">{$t['alert.confirm']}</a>
-        <button class="interactive-el" onclick={() => { isAlert = false; isRedirecting = false; }}>{$t['alert.cancel']}</button>
-      </div>
-    {/if}
-  </div>
+
+{#if isAlert && !childAlert}
+  <Alert height={height} isRedirecting={isRedirecting} link="https://github.com/Stenberg-N/" alertMessage={alertMessage} setAlert={setAlert} setRedirecting={setRedirecting} />
 {/if}
 
 <div id="background"></div>
@@ -110,13 +117,13 @@
 
 <nav id="nav-bar">
   <div id="nav-links">
-    <a class="anchor" class:current={currentPage === '/'} onclick={() => currentPage = '/'} href={resolve("/")}>{$t.home}</a>
-    <a class="anchor" class:current={currentPage === '/projects'} onclick={() => currentPage = '/projects'} href={resolve("/projects")}>{$t.projects}</a>
+    <a class="anchor underline-el" class:current={currentPage === '/'} onclick={() => currentPage = '/'} href={resolve("/")}>{$t.home}</a>
+    <a class="anchor underline-el" class:current={currentPage === '/projects'} onclick={() => currentPage = '/projects'} href={resolve("/projects")}>{$t.projects}</a>
   </div>
   <div id="link-btns">
     <button id="lang-switch" class="interactive-el" style="color: #f6f6f6; font-weight: 800;" onclick={() => { if ($lang === 'en') { lang.set('fi'); } else lang.set('en'); }}>{$lang === 'en' ? 'FI' : 'EN'}</button>
-    <button id="github-link" class="interactive-el" onclick={() => redirect()}><img src="/assets/github-logo.svg" alt="GitHub Profile"></button>
-    <button id="email-link" class="interactive-el" onclick={() => { if (!isRedirecting) copyEmail(); }} class:disabled={isRedirecting}><img src="/assets/email-logo.svg" alt="Email"></button>
+    <button id="github-link" class="interactive-el" onclick={() => redirect()} class:disabled={childAlert}><img src="/assets/github-logo.svg" alt="GitHub Profile"></button>
+    <button id="email-link" class="interactive-el" onclick={() => { if (!isRedirecting) copyEmail(); }} class:disabled={isRedirecting || childAlert}><img src="/assets/email-logo.svg" alt="Email"></button>
   </div>
 </nav>
 
@@ -129,7 +136,7 @@
     position: fixed;
     inset: 0;
     background-color: rgba(0, 0, 0);
-    background-image: linear-gradient(to bottom, rgba(15, 15, 15, 0.5) 90%, rgba(255, 70, 70, 0.1));
+    background-image: linear-gradient(to bottom, rgba(15, 15, 15, 0.5) 90%, rgba(255, 70, 70, 0.12));
     z-index: -1;
   }
 
@@ -193,6 +200,11 @@
     width: 138px;
   }
 
+  #github-link, #email-link, #lang-switch {
+    max-width: 38px;
+    max-height: 38px;
+  }
+
   #github-link img, #email-link img {
     max-width: 38px;
     max-height: 38px;
@@ -219,62 +231,7 @@
     transform: translateY(-4px);
   }
 
-  #alert-container {
-    position: fixed;
-    bottom: 20px;
-    left: calc(50% - 125px);
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    max-width: 250px;
-    width: 100%;
-    max-height: 80px;
-    border-radius: 8px;
-    padding: 6px 10px;
-    background-color: #222;
-  }
-
-  #alert-close-btn {
-    width: 12px;
-    height: 12px;
-    transition: transform 0.2s;
-    align-self: center;
-  }
-
-  #alert-close-btn img {
-    max-width: 12px;
-    max-height: 12px;
-    filter: brightness(0) invert(0.7);
-  }
-
-  #redirect-buttons a, #redirect-buttons button {
-    padding: 4px 10px;
-    height: 28px;
-    background-color: #333;
-    color: #f6f6f6;
-    font-weight: unset;
-    font-size: 14px;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.8);
-    filter: none;
-  }
-
-  #redirect-buttons a:hover, #redirect-buttons button:hover {
-    box-shadow: 0 8px 24px rgba(0,0,0,1);
-    background-color: #444;
-  }
-
-  #redirect-buttons a:hover::after, #redirect-buttons a::after {
-    width: 0;
-    transition: none;
-  }
-
-  #alert-close-btn img:hover {
-    filter: brightness(1) invert(1);
-  }
-
-  #email-link.disabled {
+  .disabled {
     filter: brightness(0) invert(0.3);
     cursor: not-allowed;
     transform: none;

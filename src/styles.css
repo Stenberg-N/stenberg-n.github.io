@@ -62,7 +62,42 @@ a:hover, button:hover {
   filter: drop-shadow(0 10px 12px rgba(0,0,0,0.8));
 }
 
-.anchor::after {
+.interactive-el {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  transition: transform 0.2s;
+}
+
+.interactive-el:hover {
+  transform: translateY(-4px);
+}
+
+.hover-highlight {
+  outline: 1px solid rgba(119, 119, 119, 0.4);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+  transition: outline 0.2s, box-shadow 0.2s, transform 0.2s, background-color 0.2s, bottom 0.4s;
+}
+
+.hover-highlight:not(.disabled):hover {
+  outline-color: rgba(255, 70, 70, 1);
+  box-shadow: 0 8px 24px rgba(255, 70, 70, 0.3);
+}
+
+.button-default {
+  border: none;
+  background-color: transparent;
+  color: #f6f6f6;
+  font-weight: 800;
+}
+
+.underline-el {
+  position: relative;
+  padding: 0;
+  overflow: hidden;
+}
+
+.underline-el::after {
   content: '';
   position: absolute;
   left: 0;
@@ -73,31 +108,8 @@ a:hover, button:hover {
   transition: width 0.2s cubic-bezier(0.645, 0.045, 0.355, 1.000);
 }
 
-.anchor:hover::after {
+.underline-el:hover::after {
   width: 100%;
-}
-
-.interactive-el {
-  border: none;
-  background-color: transparent;
-  padding: 0;
-  transition: transform 0.2s;
-  max-height: 38px;
-}
-
-.interactive-el:hover {
-  transform: translateY(-4px);
-}
-
-.hover-highlight {
-  outline: 1px solid rgba(119, 119, 119, 0.4);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.8);
-  transition: outline 0.2s, box-shadow 0.2s, transform 0.2s, bottom 0.4s;
-}
-
-.hover-highlight:hover {
-  outline-color: rgba(255, 70, 70, 1);
-  box-shadow: 0 8px 24px rgba(255, 70, 70, 0.3);
 }
 
 .zoomedImg-close {
