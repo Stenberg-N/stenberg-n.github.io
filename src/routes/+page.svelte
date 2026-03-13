@@ -10,13 +10,14 @@
   let currentProject = projects.find(p => p.isCurrent) || null;
   const { chosenImages = [], imageNotes = [] } = currentProject || {};
   let zoomedBadge = $state<string | null>(null);
-  let zoomedImg = $state<string | null>(null);
-  let zoomedImgId = $state<number | null>(null);
-  let zoomedImgNote = $derived.by(() => { return zoomedImgId !== null ? imageNotes.find(note => note.id === zoomedImgId) : null; });
+  let zoomedImage = $state<string | null>(null);
+  let zoomedImageId = $state<number | null>(null);
+  let zoomedImageNote = $derived.by(() => { return zoomedImageId !== null ? imageNotes.find(note => note.id === zoomedImageId) : null; });
   let twitchRight = $state<boolean>(false);
   let isAlert = $state<boolean>(false);
   let link = $state<"https://github.com/Stenberg-N" | "https://cs4e.pages.labranet.jamk.fi/ooc/20-Background/" | "https://thenixuchallenge.com/c/" | null>(null);
   let alertMessage = $state<string>('');
+  let zoomedContainer = $state<HTMLDivElement | null>(null);
 
   // Context and helper/wrapper functions
 
@@ -40,16 +41,16 @@
   };
 
   const zoomImg = (image: string, id: number) => {
-    zoomedImg = image;
-    zoomedImgId = id;
+    zoomedImage = image;
+    zoomedImageId = id;
   };
 
   const clickOutside = (node: HTMLElement) => {
     const handleClick = (event: MouseEvent) => {
-      if (zoomedBadge || zoomedImg && node && !node.contains(event.target as Node)) {
+      if (zoomedBadge || zoomedImage && node && !node.contains(event.target as Node)) {
         zoomedBadge = null;
-        zoomedImg = null;
-        zoomedImgId = null;
+        zoomedImage = null;
+        zoomedImageId = null;
       }
     };
     document.addEventListener('click', handleClick, true);
@@ -72,21 +73,25 @@
 
 </script>
 
-{#if zoomedBadge || zoomedImg}
-  <div id="zoomedOverlay" transition:fly={{ y: 100, duration: 200, delay: 100 }}>
-    <div use:clickOutside style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;">
+{#if zoomedBadge || zoomedImage}
+  <div role="dialog" tabindex="0" id="zoomedOverlay" bind:this={zoomedContainer} transition:fly={{ y: 100, duration: 200, delay: 100 }} onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); zoomedImage = null; zoomedBadge = null; }}}>
+    <div id="zoomedContainer" use:clickOutside>
       {#if zoomedBadge}
         <button class="zoomedImg-close hover-highlight" onclick={() => zoomedBadge = null}><img src="/assets/close-x.svg" alt="close"></button>
         <img id="zoomedBadge-image" src={zoomedBadge} alt="badge">
-      {:else if zoomedImg}
-        <button class="zoomedImg-close hover-highlight" onclick={() => { zoomedImg = null; zoomedImgId = null; }}><img src="/assets/close-x.svg" alt="close"></button>
-        <img id="zoomedImg-image" src={zoomedImg} alt="Current project">
-        {#if zoomedImgNote}
-          <span>{$t[zoomedImgNote.note]}</span>
+      {:else if zoomedImage}
+        <button class="zoomedImg-close hover-highlight" onclick={() => { zoomedImage = null; zoomedImageId = null; }}><img src="/assets/close-x.svg" alt="close"></button>
+        <img id="zoomedImg-image" src={zoomedImage} alt="Current project">
+        {#if zoomedImageNote}
+          <span>{$t[zoomedImageNote.note]}</span>
         {/if}
       {/if}
     </div>
   </div>
+
+  {#each [zoomedContainer], i (i)}
+    {onMount(() => zoomedContainer?.focus() )}
+  {/each}
 {/if}
 
 {#if isAlert}
@@ -356,20 +361,33 @@
     inset: 0;
     z-index: 100;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     backdrop-filter: blur(4px);
     user-select: none;
   }
 
+  #zoomedContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    max-width: 90vw;
+    max-height: 90vh;
+  }
+
   #zoomedBadge-image {
     height: 600px;
     width: 600px;
+    object-fit: contain;
   }
 
   #zoomedImg-image {
-    max-height: 80%;
-    max-width: 80%;
+    max-height: 90%;
+    max-width: 90%;
+    object-fit: contain;
   }
 
   #current-project-images {
