@@ -21,10 +21,10 @@
 <div id="projects">
   {#each projects as { id, title, slug, picture, descriptionKey, demo, tech, isWIP } (id)}
     <div role="link" tabindex="0" class="project anchor underline-el" style="background-image: url({picture});" onclick={() => goto(resolve(`/projects/${slug}` as ProjectRoute))} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goto(resolve(`/projects/${slug}` as ProjectRoute))} }}>
-      <div style="display: flex; flex-direction: row; 16px; position: relative; z-index: 1;">
-        <p style="font-weight: 800;">{ title }</p>
+      <div style="display: flex; flex-direction: row; position: relative; z-index: 1;">
+        <p style="font-weight: 800; text-align: left;">{ title }</p>
         <div style="display: flex; flex: 1;"></div>
-        <p style="font-weight: 800; color: {isWIP ? '#ff8500' : '#78ff78'};">{isWIP ? 'WIP' : 'Non-active | Done'}</p>
+        <p style="font-weight: 800; text-align: right; color: {isWIP ? '#ff8500' : '#78ff78'};">{isWIP ? 'WIP' : 'Non-active | Done'}</p>
       </div>
       <div style="display: flex; flex-direction: column; flex: 1 1 0; gap: 20px; margin-top: 20px; position: relative; z-index: 1;">
           <p style="font-weight: normal;">{$t[descriptionKey]}</p>

@@ -59,6 +59,14 @@ const translations: Record<Language, Record<string, string | string[]>> = {
       "I would have liked to learn techniques on how to tackle machine vision to differentiate surfaces that share similar features, like gloss, reflectivity and so on, for example metal vs. glass vs. glossy plastic, since this was one of the main issues I think I had with the MobileNet model, \
       where it repeatedly mistook these materials between each other, but found it extremely difficult, so I moved on to my other project."
     ],
+    "projects.project.focusboard.paragraph": [
+      "This is my third ever project. I was interested in how some companies like Discord create their apps so I began investigating and found out they use something called Electron, which I didn't know anything about at that point in time. I found out that it uses a browser engine (Chromium) to render the app's UI, \
+      but runs natively like a desktop app. I explored other options and stumbled across Tauri, which uses Rust, and I had been curious about Rust so I chose this to run my next app, which was a note-taking/productivity-ish app. Tauri is used similarly to Electron, but doesn't use a full browser engine to render the app, \
+      but instead uses the operating system's native WebView (e.g. WebView2 on Windows and WKWebView on macOS).", "Next, I needed to choose the frontend and I had heard great things about Svelte.js and its performance so I went with that. As I have been working on this project, I have fallen in love with Tauri and Svelte, \
+      even though Rust is very different and a lot more difficult of a language when compared to others. I wouldn't say because its inherently difficult, but there are things and concepts that no other language really has, for example ownership.", "The motivation behind this app is the same as with my Finance Tracker, \
+      I am building this for myself. I know there are many options out there, like Microsoft's own app bundle (includes a calendar, to-do list, etc.), Obsidian, and Google NotebookLM, but by having my own application I get privacy and the ability to control everything, so if I am not the biggest fan of some feature, \
+      I can change and tweak it."
+    ],
   },
   fi: {
     home: 'Koti',
@@ -114,6 +122,14 @@ const translations: Record<Language, Record<string, string | string[]>> = {
       välillä MobileNetillä, mutta sain säännöllisesti 97% ympyröissä DenseNetillä eri testeissä.",
       "Olisin halunnut oppia eri tekniikoita, miten saada konenäkö erottamaan eri pintoja joilla on samankaltaisia ominaisuuksia, kuten kiilto ja heijastuskyky, esimerkiksi metalli vs. lasi vs. kiiltävä muovi, sillä tämä oli mielestäni yksi ongelmista mikä minulla tuli vastaan MobileNetillä. Mallini säännöllisesti \
       ei osannut erottaa metallia, lasia ja muovia toisistaan. Tämä kuitenkin oli hyvin vaikeaa, joten jatkoin seuraavaan projektiini."
+    ],
+    "projects.project.focusboard.paragraph": [
+      "Tämä on kolmas projektini, mitä olen tehnyt. Olin kiinnostunut miten yritykset kuten Discord tekevät sovelluksensa, joten selvitin sen ja löysin, että he käyttävät Electronia, mistä en tiennyt mitään. Perehdyin Electroniin ja opin, että se käyttää selainmoottori (browser engine) Chromiumia renderöidäkseen sovelluksen \
+      käyttöliittymän, mutta sovellus samaan aikaan toimii kuten mikä tahansa muu työpöytäsovellus. Tutustuin muihin vaihtoehtoihin ja törmäsin Tauriin joka käyttää Rustia kielenään, ja olin ollut hyvin kiinnostunut Rustista niin valitsin tämän sovellukseni pohjaksi, mikä oli pääasiassa muistiinpano-/tuottavuussovellus. \
+      Tauria käytetään samaan kuin Electronia, mutta se ei käytä kokonaista selainmoottoria sovelluksen renderöimiseksi, vaan käyttöjärjestelmän omaa WebView:iä (Windowsissa WebView2 ja macOS:ssä WKWebView).", "Seuraavaksi minun tuli valita frontend sovellukseni ja olin kuullut paljon hyvää Svelte.js:stä ja sen suorituskyvystä, \
+      joten valitsin sen. Sen kauemmin olen työstänyt tätä projektia, sen enemmän olen tykästynyt Tauriin ja Svelteen, vaikkakin Rust on jokseenkin erilainen ja huomattavasti vaikeampi kieli verrattuna muihin. En sanoisi, että Rust itsessään on mitenkään vaikeaa, mutta Rustissa on erilaisia asioita ja konsepteja joita ei muissa \
+      kielissä oikeastaan ole, kuten omistajuus.", "Syy sovelluksen kehittämiselle on ollut sama kuin minun talousdatan seurantasovelluksellakin, eli teen sovellusta omaan käyttöön. Tiedän, että on useita eri vaihtoehtoja olemassa kuten Microsoftin omat (sisältää kalenterin, to-do listan yms.), Obsidian ja Googlen NotebookLM, \
+      mutta oma sovellus antaa minulle yksityisyyttä ja kyvyn hallita asioita. Esimerkiksi, jos edellämainituissa sovelluksissa olisi jokin ominaisuus, josta en ole kauhean innoissani, voin muuttaa sitä."
     ],
   }
 };

@@ -5,6 +5,7 @@
   import { fly } from "svelte/transition";
   import { projects } from '$lib/projects';
 	import { resolve } from '$app/paths';
+  import Alert from "./components/Alert.svelte";
 
   let currentProject = projects.find(p => p.isCurrent) || null;
   const { chosenImages = [], imageNotes = [] } = currentProject || {};
@@ -13,9 +14,20 @@
   let zoomedImgId = $state<number | null>(null);
   let zoomedImgNote = $derived.by(() => { return zoomedImgId !== null ? imageNotes.find(note => note.id === zoomedImgId) : null; });
   let twitchRight = $state<boolean>(false);
+  let isAlert = $state<boolean>(false);
+  let link = $state<"https://github.com/Stenberg-N" | null>(null);
+
+  // Context and helper/wrapper functions
 
   const { setOnHomeScreen } = getContext<{ getOnHomeScreen: () => boolean, setOnHomeScreen: (state: boolean) => void }>('onHomeScreen');
   const { setCurrentPage } = getContext<{ setCurrentPage: (page: string) => void }>('currentPage');
+  const { propagateAlert, getParentAlert } = getContext<{ propagateAlert: (state: boolean) => void, getParentAlert: () => boolean }>('alertContext');
+
+  const isAlertDisabled = $derived.by(() => getParentAlert());
+
+  const setAlert = (state: boolean) => {
+    isAlert = state;
+  }
 
   onMount(() => {
     setOnHomeScreen(true);
@@ -76,6 +88,10 @@
   </div>
 {/if}
 
+{#if isAlert}
+  <Alert link={link} alertMessage="alert.message.github" setAlert={setAlert} isRedirecting={true} height={80} />
+{/if}
+
 <div id="intro-contact">
   <div id="intro">
     <div id="intro-text">
@@ -85,7 +101,7 @@
       <p style="padding-left: 2rem; margin-top: 20px;">{$t['intro-paragraph']}</p>
     </div>
     <div id="contact" style="display: flex; flex-direction: column; gap: 12px; margin-top: 40px;">
-      <div id="github"><img src="/assets/github-logo.svg" alt="Github logo"><a class="anchor" href="https://github.com/Stenberg-N">Stenberg-N</a></div>
+      <div id="github"><img src="/assets/github-logo.svg" alt="Github logo"><button class="button-default underline-el" class:disabled={isAlertDisabled} disabled={isAlertDisabled} onclick={() => { isAlert = true; propagateAlert(true); }}>Stenberg-N</button></div>
       <div id="email" style="user-select: text; word-break: break-all;"><img src="/assets/email-logo.svg" alt="Email logo" style="user-select: none;"><span>stenbergniko@outlook.com</span></div>
       <div id="location"><img src="/assets/location-pin.svg" alt="Location logo"><span>{$t['contact-location']}</span></div>
     </div>
@@ -153,6 +169,16 @@
 </div>
 
 <style>
+  .disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .disabled:hover::after {
+    width: 0;
+  }
+
   #intro-contact {
     display: flex;
     flex-direction: row;

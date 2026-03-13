@@ -4,6 +4,7 @@
   import Alert from "../../components/Alert.svelte";
   import { t } from "$lib/i18n";
   import { projects } from "$lib/projects";
+  import '../../../styles.project.css';
 
   const project = projects.find(p => p.id === 3); if (!project) throw new Error('Project not found');
   const projectImages = project.allPictures;
@@ -45,10 +46,8 @@
 </script>
 
 {#if zoomedImage}
-  <div role="dialog" tabindex="0" id=zoomedImageOverlay style="position: fixed; inset: 0; z-index: 101; display: flex; flex-direction: column; align-items: center; justify-content: center; backdrop-filter: blur(4px); user-select: none;"
-    transition:fly={{ y: 100, duration: 200, delay: 100 }} onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); zoomedImage = null; }}} bind:this={zoomedContainer}
-  >
-    <div use:clickOutside style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; max-width: 90vw; max-height: 90vh;">
+  <div role="dialog" tabindex="0" id="zoomedImageOverlay" transition:fly={{ y: 100, duration: 200, delay: 100 }} onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); zoomedImage = null; }}} bind:this={zoomedContainer}>
+    <div id="zoomedContainer" use:clickOutside>
       <button class="zoomedImg-close hover-highlight" onclick={() => zoomedImage = null}><img src="/assets/close-x.svg" alt="close"></button>
       <img src={zoomedImage} alt="zoomed content" style="max-width: 90%; max-height: 90%; object-fit: contain;">
       {#if zoomedImage === projectImages[2]['pic']}
@@ -69,7 +68,8 @@
 <div id="intro">
   <div id="title-links">
     <h1>Waste Classifier</h1>
-    <div style="display: flex; flex-direction: row; gap: 10px;"><img style="filter: brightness(0) invert(0.9); width: 25px; height: 25px;" src="/assets/github-logo.svg" alt="github">
+    <div style="display: flex; flex-direction: row; gap: 10px;">
+      <img style="filter: brightness(0) invert(0.9); width: 25px; height: 25px;" src="/assets/github-logo.svg" alt="github">
       <button class="button-default underline-el" class:disabled={isAlertDisabled} disabled={isAlertDisabled} onclick={() => { link="https://github.com/Stenberg-N/waste-classification"; alertMessage="alert.message.github"; isAlert = true; propagateAlert(true); }}>
         Project repository
       </button>
@@ -114,91 +114,6 @@
     width: 0;
   }
 
-  #intro {
-    padding: 1rem;
-    user-select: none;
-  }
-
-  #title-links {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 50px;
-    margin-bottom: 50px;
-  }
-
-  #intro-content {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    gap: 40px;
-    justify-content: space-between;
-  }
-
-  #intro-text {
-    display: flex;
-    flex-direction: column;
-    width: 60%;
-    gap: 1rem;
-  }
-
-  #intro-text p {
-    line-height: 1.5rem;
-    word-wrap: break-word;
-    -webkit-hyphens: auto;
-    -moz-hyphens: auto;
-    -ms-hyphens: auto;
-    hyphens: auto;
-  }
-
-  #project-info {
-    display: flex;
-    flex-direction: column;
-    width: 40%;
-  }
-
-  #project-intro-images {
-    max-height: 100%;
-    width: 100%;
-  }
-
-  #project-intro-images button {
-    border: none;
-    background-color: transparent;
-    padding: 0;
-  }
-
-  #project-intro-images button:not(:last-child) {
-    margin-bottom: 20px;
-  }
-
-  #sub-content {
-    display: flex;
-    flex-direction: column;
-    user-select: none;
-  }
-
-  #sub-content h2 {
-    margin: 0;
-    font-weight: 300;
-    margin-bottom: 100px;
-    align-self: center;
-  }
-
-  #project-images {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-  }
-
-  #project-images button {
-    max-width: calc(50% - 20px);
-    border: none;
-    background-color: transparent;
-  }
-
   @media (max-width: 1000px) {
     #intro-content {
       flex-direction: column;
@@ -222,6 +137,12 @@
 
     #project-images button {
       max-width: 100%;
+    }
+  }
+
+  @media (max-width: 500px) {
+    #title-links {
+      align-items: center;
     }
   }
 </style>
