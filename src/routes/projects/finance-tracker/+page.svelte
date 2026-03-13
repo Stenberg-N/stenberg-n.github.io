@@ -53,7 +53,7 @@
       <button class="zoomedImg-close hover-highlight" onclick={() => zoomedImage = null}><img src="/assets/close-x.svg" alt="close"></button>
       <img src={zoomedImage} alt="zoomed content" style="max-width: 90%; max-height: 90%; object-fit: contain;">
       {#if zoomedImage === desktopPics[desktopPics.length - 1]['pic']}
-        <span style="margin-top: 20px; max-width: 90%;">{$t[project.imageTexts]}</span>
+        <span style="text-align: center; margin-top: 20px; max-width: 90%; background-color: #000;">{$t[project.imageTexts]}</span>
       {/if}
     </div>
   </div>
