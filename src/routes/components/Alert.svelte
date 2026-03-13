@@ -1,7 +1,7 @@
 <script lang="ts">
   import { fly } from 'svelte/transition';
   import { t } from '$lib/i18n';
-  import { getContext } from 'svelte';
+  import { getContext, onMount } from 'svelte';
 
   let {
     alertMessage,
@@ -19,10 +19,14 @@
     setRedirecting?: (state: boolean) => void;
   } = $props();
 
+  let alertContainer = $state<HTMLDivElement | null>(null);
+
   const { propagateAlert } = getContext<{ propagateAlert: (state: boolean) => void; }>('alertContext');
 </script>
 
-<div id="alert-container" class="hover-highlight" style="height: {height}px" transition:fly={{ y: 100, duration: 400 }}>
+<div role="dialog" tabindex="0" id="alert-container" class="hover-highlight" style="height: {height}px" bind:this={alertContainer} transition:fly={{ y: 100, duration: 400 }} 
+  onkeydown={(e) => { if (e.key === 'Escape') { setAlert(false); setRedirecting(false); propagateAlert(false); } if (e.key === 'Enter' && isRedirecting) { if (link) window.location.href = link; }}}
+>
   <div class="alert-content" style="display: flex; flex-direction: row;">
     <p id="alert-message">{$t[alertMessage]}</p>
     <div style="display: flex; flex: 1;"></div>
@@ -36,6 +40,10 @@
     </div>
   {/if}
 </div>
+
+{#each [alertContainer], i (i)}
+  {onMount(() => alertContainer?.focus() )}
+{/each}
 
 <style>
   #alert-container {

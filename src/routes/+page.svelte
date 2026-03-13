@@ -379,8 +379,8 @@
   }
 
   #zoomedBadge-image {
-    height: 600px;
-    width: 600px;
+    max-width: 90%;
+    max-height: 90%;
     object-fit: contain;
   }
 
@@ -460,19 +460,8 @@
       margin-bottom: 10px;
     }
 
-    #zoomedBadge-image {
-      height: 300px;
-      width: 300px;
-    }
     .current-project-image {
       padding: 5px;
-    }
-  }
-
-  @media (max-width: 450px) {
-    #zoomedBadge-image {
-      height: 220px;
-      width: 220px;
     }
   }
 
