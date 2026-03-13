@@ -160,12 +160,12 @@
   <h2>{$t['home.sub-content.working-on.title']}</h2>
   <div id="current-project" style="display: flex; flex-direction: column;">
     {#if currentProject}
-      <h2 style="margin-bottom: 10px;">{currentProject.title}</h2>
-      <span style="align-self: center;">{$t[currentProject.descriptionKey]}</span>
+      <h2 style="margin-bottom: 10px; text-align: center;">{currentProject.title}</h2>
+      <span style="align-self: center; text-align: center;">{$t[currentProject.descriptionKey]}</span>
       <div id="current-project-images">
         {#each chosenImages as { image, id }, i (image)}
           {#if $t[currentProject.imageTexts]}
-            <span>{$t[currentProject.imageTexts][i]}</span>
+            <span style="text-align: center;">{$t[currentProject.imageTexts][i]}</span>
           {/if}
           <button class="current-project-image hover-highlight" onclick={() => zoomImg(image, id)}>
             <img style="object-fit: contain; height: 100%; width: 100%;" src={image} alt="current project">

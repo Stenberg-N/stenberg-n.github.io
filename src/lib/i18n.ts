@@ -47,6 +47,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "home.data-science-ml.description": ["Frameworks: Scikit-learn, Tensorflow & Keras, PyTorch, Optuna, XGBoost", "Finance tracker app with finance predictions", "Waste classifier app", "Trained models for tree specie recognition"],
 
     // PROJECTS
+    "projects.project.imagetitle": "Project Images",
     "projects.project.finance-tracker.paragraph": [
       "This was my first real project. The purpose behind this app was for it to be something I would personally use. Before this, I had only made simple stuff with Python like calculators, to-do lists, and basic CLI-based tools.",
       "This was supposed to be a simple tracking app for finances made with Python and a combination of Tkinter and the modernized customTkinter for the GUI, but I decided to jump into machine learning since it had been a couple of years since I last had worked with ML \
@@ -119,6 +120,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "home.data-science-ml.description": ["Kehykset/Frameworkit: Scikit-learn, Tensorflow & Keras, PyTorch, Optuna, XGBoost", "Talousdatan seurantasovellus ennustuksilla", "Jätteen tunnistamisen sovellus", "Harjoittanut koneoppimismalleja puulajien tunnistamiseen"],
 
     // PROJECTS
+    "projects.project.imagetitle": "Projektin kuvat",
     "projects.project.finance-tracker.paragraph": [
       "Tämä oli ensimmäinen kunnon projektini. Tarkoituksena oli tehdä sovellus, mitä itse olisin käyttänyt. Ennen tätä olin vain tehnyt yksinkertaisia asioita Pythonilla, kuten laskimia, to-do listoja ja CLI- tai komentorivi-pohjaisia työkaluja.",
       "Sovelluksen piti olla suhteellisen yksinkertainen sovellus talousdatan seuraamiseen, mikä olisi pohjautunut Pythoniin ja käyttänyt Pythonin omaa Tkinteriä ja modernimpaa versiota, customTkinteriä, käyttöliittymänään (GUI:na), mutta päätin sisällyttää koneoppimista tehdäkseni ennusteita datasta, \

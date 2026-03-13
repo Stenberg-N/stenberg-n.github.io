@@ -4,12 +4,26 @@
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
   import { t } from '$lib/i18n';
+  import Alert from "../components/Alert.svelte";
 
   type ProjectSlug = 'finance-tracker' | 'focusboard' | 'waste-classifier';
   type ProjectRoute = `/projects/${ProjectSlug}`;
 
+  let link = $state<"https://site--financetracker-app--kwlb8kg8h4nw.code.run/login/?next=/" | null>(null);
+  let alertMessage = $state<string>('');
+  let isAlert = $state<boolean | null>(null);
+
+  // Context and helper/wrapper functions
+
   const { setOnHomeScreen } = getContext<{ getOnHomeScreen: () => boolean, setOnHomeScreen: (state: boolean) => void }>('onHomeScreen');
   const { setCurrentPage } = getContext<{ setCurrentPage: (page: string) => void }>('currentPage');
+  const { propagateAlert, getParentAlert} = getContext<{ propagateAlert: (state: boolean) => void, getParentAlert: () => boolean }>('alertContext');
+
+  const isAlertDisabled = $derived.by(() => getParentAlert());
+
+  const setAlert = (state: boolean) => {
+    isAlert = state;
+  }
 
   onMount(() => {
     setOnHomeScreen(true);
@@ -17,6 +31,10 @@
   });
 
 </script>
+
+{#if isAlert}
+  <Alert link={link} alertMessage={alertMessage} setAlert={setAlert} height={80} isRedirecting={true} />
+{/if}
 
 <div id="projects">
   {#each projects as { id, title, slug, picture, descriptionKey, demo, tech, isWIP } (id)}
@@ -27,23 +45,37 @@
         <p style="font-weight: 800; text-align: right; color: {isWIP ? '#ff8500' : '#78ff78'};">{isWIP ? 'WIP' : 'Non-active | Done'}</p>
       </div>
       <div style="display: flex; flex-direction: column; flex: 1 1 0; gap: 20px; margin-top: 20px; position: relative; z-index: 1;">
-          <p style="font-weight: normal;">{$t[descriptionKey]}</p>
-          {#if id === 1}
-            <a class="anchor underline-el" style="width: fit-content;" onclick={(e) => e.stopPropagation()} href="https://site--financetracker-app--kwlb8kg8h4nw.code.run/login/?next=/">{$t[demo]}</a>
-          {/if}
-          <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px; max-width: 400px; max-height: 140px; margin-top: auto;">
-            {#each tech as t (t)}
-              <div class="technology-card">
-                <p>{t}</p>
-              </div>
-            {/each}
-          </div>
+        <p style="font-weight: normal;">{$t[descriptionKey]}</p>
+        {#if id === 1}
+          <button class="button-default underline-el" style="align-self: flex-start;" class:disabled={isAlertDisabled} disabled={isAlertDisabled} 
+            onclick={(e) => { e.stopPropagation(); link="https://site--financetracker-app--kwlb8kg8h4nw.code.run/login/?next=/"; alertMessage="alert.message.demo"; isAlert = true; propagateAlert(true); }}
+          >
+            {$t[demo]}
+          </button>
+        {/if}
+        <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px; max-width: 400px; max-height: 140px; margin-top: auto;">
+          {#each tech as t (t)}
+            <div class="technology-card">
+              <p>{t}</p>
+            </div>
+          {/each}
+        </div>
       </div>
     </div>
   {/each}
 </div>
 
 <style>
+  .disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  .disabled:hover::after {
+    width: 0;
+  }
+
   #projects {
     display: grid;
     grid-template-columns: repeat(3, minmax(250px, 420px));

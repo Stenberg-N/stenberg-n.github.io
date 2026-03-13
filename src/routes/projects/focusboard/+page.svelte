@@ -90,7 +90,7 @@
 <div style="border-bottom: 1px solid rgba(119, 119, 119, 0.4);"></div>
 
 <div id="sub-content">
-  <h2>Project Images</h2>
+  <h2>{$t['projects.project.imagetitle']}</h2>
   <div id="project-images">
     {#each projectImages as { pic, id} (id)}
       <button class="hover-highlight" onclick={() => zoomImg(pic)}>
