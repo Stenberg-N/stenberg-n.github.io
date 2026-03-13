@@ -15,7 +15,8 @@
   let zoomedImgNote = $derived.by(() => { return zoomedImgId !== null ? imageNotes.find(note => note.id === zoomedImgId) : null; });
   let twitchRight = $state<boolean>(false);
   let isAlert = $state<boolean>(false);
-  let link = $state<"https://github.com/Stenberg-N" | null>(null);
+  let link = $state<"https://github.com/Stenberg-N" | "https://cs4e.pages.labranet.jamk.fi/ooc/20-Background/" | "https://thenixuchallenge.com/c/" | null>(null);
+  let alertMessage = $state<string>('');
 
   // Context and helper/wrapper functions
 
@@ -89,19 +90,21 @@
 {/if}
 
 {#if isAlert}
-  <Alert link={link} alertMessage="alert.message.github" setAlert={setAlert} isRedirecting={true} height={80} />
+  <Alert link={link} alertMessage={alertMessage} setAlert={setAlert} isRedirecting={true} height={80} />
 {/if}
 
 <div id="intro-contact">
   <div id="intro">
-    <div id="intro-text">
+    <div>
       <h1 style="margin: 0; -webkit-text-stroke: 1px #f6f6f6; color: #0f0f0f; font-size: 40px; font-family: 'Inter'; paint-order: stroke fill;" class="intro-title">{$t['intro-title1']}</h1>
       <h1 style="margin: 0; font-size: 48px; font-family: 'Inter'; paint-order: stroke fill;" class="intro-title">{$t['intro-title2']}</h1>
       <h1 style="margin: 0; -webkit-text-stroke: 1px #f6f6f6; color: #0f0f0f; font-size: 40px; font-family: 'Inter'; paint-order: stroke fill;" class="intro-title">{$t['intro-title3']}</h1>
       <p style="padding-left: 2rem; margin-top: 20px;">{$t['intro-paragraph']}</p>
     </div>
     <div id="contact" style="display: flex; flex-direction: column; gap: 12px; margin-top: 40px;">
-      <div id="github"><img src="/assets/github-logo.svg" alt="Github logo"><button class="button-default underline-el" class:disabled={isAlertDisabled} disabled={isAlertDisabled} onclick={() => { isAlert = true; propagateAlert(true); }}>Stenberg-N</button></div>
+      <div id="github"><img src="/assets/github-logo.svg" alt="Github logo">
+        <button class="button-default underline-el" class:disabled={isAlertDisabled} disabled={isAlertDisabled} onclick={() => { link="https://github.com/Stenberg-N"; alertMessage="alert.message.github"; isAlert = true; propagateAlert(true); }}>Stenberg-N</button>
+      </div>
       <div id="email" style="user-select: text; word-break: break-all;"><img src="/assets/email-logo.svg" alt="Email logo" style="user-select: none;"><span>stenbergniko@outlook.com</span></div>
       <div id="location"><img src="/assets/location-pin.svg" alt="Location logo"><span>{$t['contact-location']}</span></div>
     </div>
@@ -126,9 +129,9 @@
               <span>{item}</span>
             {/each}
             {#if id === 3}
-              <div style="display: flex; flex-direction: column;">
-                <a class="anchor" style="width: fit-content;" href="https://thenixuchallenge.com/c/">NIXU</a>
-                <a class="anchor" style="width: fit-content;" href="https://cs4e.pages.labranet.jamk.fi/ooc/20-Background/">{$t["home.cybersec.description"].slice(-1)}</a>
+              <div style="display: flex; flex-direction: column; gap: 5px;">
+                <button class="button-default underline-el" style="width: fit-content;" onclick={() => { link="https://thenixuchallenge.com/c/"; alertMessage='alert.message.nixu'; isAlert = true; propagateAlert(true); }}>NIXU</button>
+                <button class="button-default underline-el" style="width: fit-content;" onclick={() => { link="https://cs4e.pages.labranet.jamk.fi/ooc/20-Background/"; alertMessage='alert.message.jamk'; isAlert = true; propagateAlert(true); }}>{$t["home.cybersec.description"].slice(-1)}</button>
               </div>
             {/if}
           </div>
@@ -154,7 +157,7 @@
     {#if currentProject}
       <h2 style="margin-bottom: 10px;">{currentProject.title}</h2>
       <span style="align-self: center;">{$t[currentProject.descriptionKey]}</span>
-      <div id="project-images">
+      <div id="current-project-images">
         {#each chosenImages as { image, id }, i (image)}
           {#if $t[currentProject.imageTexts]}
             <span>{$t[currentProject.imageTexts][i]}</span>
@@ -369,7 +372,7 @@
     max-width: 80%;
   }
 
-  #project-images {
+  #current-project-images {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -415,7 +418,7 @@
       padding: 0;
     }
 
-    #project-images {
+    #current-project-images {
       padding: 0 30px;
     }
 

@@ -16,11 +16,17 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "project.focusboard.description": "A note taking app that integrates a calendar and a timer.",
     "project.focusboard.imagetexts": ["Make notes, customize and order them to your liking and keep everything neat with tabs.", "Add a timer to alert you, and optionally a message.", "Keep track of your events with the calendar.", "Get an in-depth perspective of your events for a selected day."],
     "project.focusboard.imagenotes": "All of the vertical grid lines are not captured in the image.",
+
+    // ALERTS
     "alert.message.github": "Continue to GitHub?",
     "alert.message.demo": "Continue to demo?",
+    "alert.message.nixu": "Continue to NIXU?",
+    "alert.message.jamk": "Continue to JAMK?",
     "alert.confirm": "Confirm",
     "alert.cancel": "Cancel",
     "alert.email": "Email copied!",
+
+    // MAIN PAGE
     "intro-title1": "Hello, I'm",
     "intro-title2": "Niko Stenberg",
     "intro-title3": "Aspiring ICT engineer",
@@ -39,6 +45,8 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "home.cybersec.description": ["Cisco Ethical Hacking course", "NIXU challenges: Bad Memories, Phiscap", "Forensics challenge"],
     "home.d-modeling-printing-embedded.description": ["IoT and microcontrollers: Arduino & Raspberry Pi", "Blender", "Printed a vertical axis wind turbine"],
     "home.data-science-ml.description": ["Frameworks: Scikit-learn, Tensorflow & Keras, PyTorch, Optuna, XGBoost", "Finance tracker app with finance predictions", "Waste classifier app", "Trained models for tree specie recognition"],
+
+    // PROJECTS
     "projects.project.finance-tracker.paragraph": [
       "This was my first real project. The purpose behind this app was for it to be something I would personally use. Before this, I had only made simple stuff with Python like calculators, to-do lists, and basic CLI-based tools.",
       "This was supposed to be a simple tracking app for finances made with Python and a combination of Tkinter and the modernized customTkinter for the GUI, but I decided to jump into machine learning since it had been a couple of years since I last had worked with ML \
@@ -76,15 +84,21 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "project.finance-tracker.imagetexts": "Tässä näkyy yksi ongelmista X-akselissa, missä jaotus ja aikaleimat ovat epäsäännölisiä. Johtuu siitä, että sovellus piirtää X-akselin huonosti, jos dataa on vähän. Itse kaavion käyrä on tarkka.",
     "project.waste-classifier.description": "Työpöytäsovellus jätteen tunnistamiseen.",
     "project.waste-classifier.imagetexts": "Tämä on 'sekaannusmatriisi' (engl. confusion matrix). Yleinen tapa arvioida koneoppimismallin tarkkuutta ja nähdä missä luokissa se suoriutuu ja missä ei. Luokat ovat siis ennaltamääriteltyjä 'nimiä', johon malli luokittelee kuvan. \
-    Tässä luokat ovat eri jätetyyppejä, esim. muovi, paperi, lasi yms. Miten taulukkoa tulkita yksinkertaistettuna on, kun X- ja Y- akselit kohtaavat samassa neliössä, malli veikkasi oikein. Numero ruudussa edustaa yhtä kuvaa.",
+      Tässä luokat ovat eri jätetyyppejä, esim. muovi, paperi, lasi yms. Miten taulukkoa tulkita yksinkertaistettuna on, kun X- ja Y- akselit kohtaavat samassa neliössä, malli veikkasi oikein. Numero ruudussa edustaa yhtä kuvaa.",
     "project.focusboard.description": "Muistiinpanosovellus joka sisältää myös ajastimen ja kalenterin.",
     "project.focusboard.imagetexts": ["Luo muistiinpanoja, muokkaa ja järjestä ne mieluisiksi ja pidä kaikki järjestyksessä välilehtien avulla.", "Lisää ajastin hälyttämään sinua ja vaihtoehtoisesti kiinnitä viesti.", "Seuraa tapahtumiasi kalenterista.", "Näe tapahtumasi valitsemasta päivästäsi tarkemmin aikajana näkymällä."],
     "project.focusboard.imagenotes": "Jotkin pystyviivat näkyvät huonosti.",
+    
+    // ALERTS
     "alert.message.github": "Siirrytkö GitHubiin?",
     "alert.message.demo": "Siirrytkö demoon?",
+    "alert.message.nixu": "Siirrytkö NIXUun?",
+    "alert.message.jamk": "Siirrytkö JAMKiin?",
     "alert.confirm": "Vahvista",
     "alert.cancel": "Peruuta",
     "alert.email": "Sähköpostiosoite kopioitu!",
+
+    // MAIN PAGE
     "intro-title1": "Hei! Olen",
     "intro-title2": "Niko Stenberg",
     "intro-title3": "Tuleva ICT-insinööri",
@@ -103,6 +117,8 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "home.cybersec.description": ["Cisco Ethical Hacking -kurssi", "NIXU haasteet: Bad Memories, Phiscap", "Forensiikka haaste"],
     "home.d-modeling-printing-embedded.description": ["IoT ja mikrokontrollerit: Arduino & Raspberry Pi", "Blender", "Tulostanut pystyakselisen tuuliturbiinin"],
     "home.data-science-ml.description": ["Kehykset/Frameworkit: Scikit-learn, Tensorflow & Keras, PyTorch, Optuna, XGBoost", "Talousdatan seurantasovellus ennustuksilla", "Jätteen tunnistamisen sovellus", "Harjoittanut koneoppimismalleja puulajien tunnistamiseen"],
+
+    // PROJECTS
     "projects.project.finance-tracker.paragraph": [
       "Tämä oli ensimmäinen kunnon projektini. Tarkoituksena oli tehdä sovellus, mitä itse olisin käyttänyt. Ennen tätä olin vain tehnyt yksinkertaisia asioita Pythonilla, kuten laskimia, to-do listoja ja CLI- tai komentorivi-pohjaisia työkaluja.",
       "Sovelluksen piti olla suhteellisen yksinkertainen sovellus talousdatan seuraamiseen, mikä olisi pohjautunut Pythoniin ja käyttänyt Pythonin omaa Tkinteriä ja modernimpaa versiota, customTkinteriä, käyttöliittymänään (GUI:na), mutta päätin sisällyttää koneoppimista tehdäkseni ennusteita datasta, \
