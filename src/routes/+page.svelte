@@ -74,17 +74,18 @@
 </script>
 
 {#if zoomedBadge || zoomedImage}
-  <div role="dialog" tabindex="0" id="zoomedOverlay" bind:this={zoomedContainer} transition:fly={{ y: 100, duration: 200, delay: 100 }} onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); zoomedImage = null; zoomedBadge = null; }}}>
-    <div id="zoomedContainer" use:clickOutside>
-      {#if zoomedBadge}
-        <button class="zoomedImg-close hover-highlight" onclick={() => zoomedBadge = null}><img src="/assets/close-x.svg" alt="close"></button>
-        <img id="zoomedBadge-image" src={zoomedBadge} alt="badge">
-      {:else if zoomedImage}
-        <button class="zoomedImg-close hover-highlight" onclick={() => { zoomedImage = null; zoomedImageId = null; }}><img src="/assets/close-x.svg" alt="close"></button>
-        <img id="zoomedImg-image" src={zoomedImage} alt="Current project">
-        {#if zoomedImageNote}
-          <span>{$t[zoomedImageNote.note]}</span>
+  <div role="dialog" tabindex="0" id="zoomedImageOverlay" bind:this={zoomedContainer} transition:fly={{ y: 100, duration: 200, delay: 100 }} onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); zoomedImage = null; zoomedBadge = null; }}}>
+    <div id="zoomedContainer">
+      <button class="zoomedImg-close hover-highlight" onclick={() => { if (zoomedImage) {zoomedImage = null; zoomedImageId = null; } if (zoomedBadge) { zoomedBadge = null } }}><img src="/assets/close-x.svg" alt="close"></button>
+      <div class="image-wrapper">
+        {#if zoomedBadge}
+          <img id="zoomedBadge-image" src={zoomedBadge} alt="badge" use:clickOutside>
+        {:else if zoomedImage}
+          <img id="zoomedImg-image" src={zoomedImage} alt="Current project" use:clickOutside>
         {/if}
+      </div>
+      {#if zoomedImageNote}
+        <span>{$t[zoomedImageNote.note]}</span>
       {/if}
     </div>
   </div>
@@ -98,8 +99,8 @@
   <Alert link={link} alertMessage={alertMessage} setAlert={setAlert} isRedirecting={true} height={80} />
 {/if}
 
-<div id="intro-contact">
-  <div id="intro">
+<div id="home-intro-contact">
+  <div id="home-intro">
     <div>
       <h1 style="margin: 0; -webkit-text-stroke: 1px #f6f6f6; color: #0f0f0f; font-size: 40px; font-family: 'Inter'; paint-order: stroke fill;" class="intro-title">{$t['intro-title1']}</h1>
       <h1 style="margin: 0; font-size: 48px; font-family: 'Inter'; paint-order: stroke fill;" class="intro-title">{$t['intro-title2']}</h1>
@@ -122,7 +123,7 @@
 
 <div style="border-bottom: 1px solid rgba(119, 119, 119, 0.4);"></div>
 
-<div id="sub-content">
+<div id="home-sub-content">
   <h2>{$t['home.sub-content.knowledge.title']}</h2>
   <div id="categories-outer">
     <div id="categories" use:scrollHorizontal>
@@ -187,7 +188,7 @@
     width: 0;
   }
 
-  #intro-contact {
+  #home-intro-contact {
     display: flex;
     flex-direction: row;
     flex: 1 1 0;
@@ -241,7 +242,7 @@
     filter: brightness(0) invert(0.9);
   }
 
-  #intro, #selfie-image {
+  #home-intro, #selfie-image {
     max-width: 60%;
     width: 100%;
     height: 100%;
@@ -253,7 +254,7 @@
     border: 1px solid yellow; 
   }
 
-  #sub-content {
+  #home-sub-content {
     display: flex;
     flex-direction: column;
     flex: 1 1 0;
@@ -261,7 +262,7 @@
     user-select: none;
   }
 
-  #sub-content h2 {
+  #home-sub-content h2 {
     font-weight: 300;
     align-self: center;
     margin: 0;
@@ -356,28 +357,6 @@
     border-radius: 16px;
   }
 
-  #zoomedOverlay {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(4px);
-    user-select: none;
-  }
-
-  #zoomedContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    max-width: 90vw;
-    max-height: 90vh;
-  }
-
   #zoomedBadge-image {
     max-width: 90%;
     max-height: 90%;
@@ -419,15 +398,15 @@
 
   @media (max-width: 1200px) {
 
-    #intro-contact {
+    #home-intro-contact {
       flex-direction: column;
     }
 
-    #intro, #selfie-image {
+    #home-intro, #selfie-image {
       max-width: 100%;
     }
 
-    #sub-content {
+    #home-sub-content {
       gap: 50px;
       padding: 0;
     }

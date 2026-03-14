@@ -4,7 +4,6 @@
   import Alert from "../../components/Alert.svelte";
   import { t } from "$lib/i18n";
   import { projects } from "$lib/projects";
-  import '../../../styles.project.css';
 
   const project = projects.find(p => p.id === 2); if (!project) throw new Error('Project not found');
   const projectImages = project.allPictures;
@@ -47,9 +46,11 @@
 
 {#if zoomedImage}
   <div role="dialog" tabindex="0" id="zoomedImageOverlay" transition:fly={{ y: 100, duration: 200, delay: 100 }} onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); zoomedImage = null; }}} bind:this={zoomedContainer}>
-    <div id="zoomedContainer" use:clickOutside>
+    <div id="zoomedContainer">
       <button class="zoomedImg-close hover-highlight" onclick={() => zoomedImage = null}><img src="/assets/close-x.svg" alt="close"></button>
-      <img src={zoomedImage} alt="zoomed content" style="max-width: 90%; max-height: 90%; object-fit: contain;">
+      <div class="image-wrapper">
+        <img src={zoomedImage} alt="zoomed content" use:clickOutside>
+      </div>
     </div>
   </div>
 
@@ -63,8 +64,8 @@
   <Alert link={link} alertMessage={alertMessage} setAlert={setAlert} height={80} isRedirecting={true} />
 {/if}
 
-<div id="intro">
-  <div id="title-links">
+<div id="project-intro">
+  <div id="project-title-links">
     <h1>FocusBoard</h1>
     <div style="display: flex; flex-direction: row; gap: 10px;">
       <img style="filter: brightness(0) invert(0.9); width: 25px; height: 25px;" src="/assets/github-logo.svg" alt="github">
@@ -73,8 +74,8 @@
       </button>
     </div>
   </div>
-  <div id="intro-content">
-    <div id="intro-text">
+  <div id="project-intro-content">
+    <div id="project-intro-text">
       {#each $t['projects.project.focusboard.paragraph'] as text (text)}
         <p>{text}</p>
       {/each}
@@ -89,7 +90,7 @@
 
 <div style="border-bottom: 1px solid rgba(119, 119, 119, 0.4);"></div>
 
-<div id="sub-content">
+<div id="project-sub-content">
   <h2>{$t['projects.project.imagetitle']}</h2>
   <div id="project-images">
     {#each projectImages as { pic, id} (id)}
@@ -110,7 +111,7 @@
     width: 0;
   }
 
-  #intro-text {
+  #project-intro-text {
     width: 50%;
   }
 
@@ -119,33 +120,29 @@
   }
 
   @media (max-width: 1200px) {
-    #intro-content {
+    #project-intro-content {
       flex-direction: column;
     }
 
-    #intro-text, #project-info {
+    #project-intro-text, #project-info {
       width: 100%;
     }
   }
 
   @media (max-width: 820px) {
-    #title-links {
+    #project-title-links {
       flex-direction: column;
       align-items: flex-start;
       gap: 20px;
     }
 
     #project-images {
-      flex-direction: column;
-    }
-
-    #project-images button {
-      max-width: 100%;
+      grid-template-columns: 1fr;
     }
   }
 
   @media (max-width: 500px) {
-    #title-links {
+    #project-title-links {
       align-items: center;
     }
   }

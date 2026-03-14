@@ -15,7 +15,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     A number represent one image",
     "project.focusboard.description": "A note taking app that integrates a calendar and a timer.",
     "project.focusboard.imagetexts": ["Make notes, customize and order them to your liking and keep everything neat with tabs.", "Add a timer to alert you, and optionally a message.", "Keep track of your events with the calendar.", "Get an in-depth perspective of your events for a selected day."],
-    "project.focusboard.imagenotes": "All of the vertical grid lines are not captured in the image.",
+    "project.focusboard.imagenotes": "All of the vertical grid lines might not be captured in the image.",
 
     // ALERTS
     "alert.message.github": "Continue to GitHub?",

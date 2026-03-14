@@ -59,7 +59,7 @@
     max-height: 80px;
     border-radius: 8px;
     padding: 6px 10px;
-    background-color: #222;
+    background-color: #0f0f0f;
   }
 
   #alert-close-btn {
@@ -78,7 +78,7 @@
   #redirect-buttons a, #redirect-buttons button {
     padding: 4px 10px;
     height: 28px;
-    background-color: #333;
+    background-color: #222;
     color: #f6f6f6;
     font-weight: unset;
     font-size: 14px;
@@ -89,7 +89,7 @@
 
   #redirect-buttons a:hover, #redirect-buttons button:hover {
     box-shadow: 0 8px 24px rgba(0,0,0,1);
-    background-color: #444;
+    background-color: #333;
   }
 
   #redirect-buttons a:hover::after, #redirect-buttons a::after {

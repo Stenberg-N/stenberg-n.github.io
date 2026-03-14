@@ -4,7 +4,6 @@
   import { projects } from "$lib/projects";
 	import { fly } from "svelte/transition";
 	import Alert from "../../components/Alert.svelte";
-  import '../../../styles.project.css';
 
   const project = projects.find(p => p.id === 1); if (!project) throw new Error('Project not found');
   const desktopPics = project.allPictures.slice(0, 3).concat(project.allPictures.slice(-2));
@@ -49,9 +48,11 @@
 
 {#if zoomedImage}
   <div role="dialog" tabindex="0" id="zoomedImageOverlay" transition:fly={{ y: 100, duration: 200, delay: 100 }} onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); zoomedImage = null; }}} bind:this={zoomedContainer}>
-    <div id="zoomedContainer" use:clickOutside>
+    <div id="zoomedContainer">
       <button class="zoomedImg-close hover-highlight" onclick={() => zoomedImage = null}><img src="/assets/close-x.svg" alt="close"></button>
-      <img src={zoomedImage} alt="zoomed content" style="max-width: 90%; max-height: 90%; object-fit: contain;">
+      <div class="image-wrapper">
+        <img src={zoomedImage} alt="zoomed content" use:clickOutside>
+      </div>
       {#if zoomedImage === desktopPics[desktopPics.length - 1]['pic']}
         <span style="text-align: center; margin-top: 20px; max-width: 90%; background-color: #000;">{$t[project.imageTexts]}</span>
       {/if}
@@ -67,8 +68,8 @@
   <Alert link={link} alertMessage={alertMessage} setAlert={setAlert} isRedirecting={true} height={80} />
 {/if}
 
-<div id="intro">
-  <div id="title-links">
+<div id="project-intro">
+  <div id="project-title-links">
     <h1 style="margin: 0;">Finance Tracker</h1>
     <div id="links" style="margin-bottom: 0;">
       <button id="demo-link" class="button-custom hover-highlight interactive-el underline-el" class:disabled={isAlertDisabled} disabled={isAlertDisabled} style="max-height: 50px; color: #f6f6f6; font-weight: 800;"
@@ -84,8 +85,8 @@
       </div>
     </div>
     </div>
-  <div id="intro-content">
-    <div id="intro-text">
+  <div id="project-intro-content">
+    <div id="project-intro-text">
       {#each $t['projects.project.finance-tracker.paragraph'] as text (text)}
         <p>{text}</p>
       {/each}
@@ -101,11 +102,11 @@
 
 <div style="border-bottom: 1px solid rgba(119, 119, 119, 0.4);"></div>
 
-<div id="sub-content">
+<div id="project-sub-content">
   {#each variantIndices as i (i)}
     <div class="app-variant">
       <h2>{i === 0 ? $t["projects.project.finance-tracker.variant"][0] : $t["projects.project.finance-tracker.variant"][1]}</h2>
-      <div class="project-images">
+      <div id="project-images">
         {#each (i === 0 ? desktopPics : webPics) as { pic, id } (id)}
           <button class="hover-highlight" onclick={() => zoomImg(pic)}>
             <img style="width: 100%; height: auto;" src={pic} alt="project">
@@ -142,7 +143,7 @@
     border-radius: 8px;
   }
 
-  #intro-text {
+  #project-intro-text {
     width: 50%;
   }
 
@@ -150,11 +151,11 @@
     width: 50%;
   }
 
-  #sub-content {
+  #project-sub-content {
     gap: 100px;
   }
 
-  #sub-content h2 {
+  #project-sub-content h2 {
     align-self: unset;
   }
 
@@ -165,44 +166,30 @@
     align-items: center;
   }
 
-  .project-images {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-  }
-
-  .project-images button {
-    max-width: calc(50% - 20px);
-    border: none;
-    background-color: transparent;
-  }
-
   @media (max-width: 1200px) {
-    #intro-content {
+    #project-intro-content {
       flex-direction: column;
     }
 
-    #project-info, #intro-text {
+    #project-info, #project-intro-text {
       width: 100%;
     }
   }
 
   @media (max-width: 820px) {
-    #title-links, #links {
+    #project-title-links, #links {
       flex-direction: column;
       align-items: flex-start;
       gap: 20px;
     }
 
-    .project-images button {
-      max-width: 100%;
+    #project-images {
+      grid-template-columns: 1fr;
     }
   }
 
   @media (max-width: 500px) {
-    #title-links, #links {
+    #project-title-links, #links {
       align-items: center;
     }
 

@@ -6,6 +6,7 @@ html, body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   font-size: 16px;
   scroll-behavior: smooth;
+  scrollbar-width: none;
 }
 
 body::-webkit-scrollbar {
@@ -129,4 +130,135 @@ a:hover, button:hover {
   height: 20px;
   width: 20px;
   filter: brightness(0) invert(0.9);
+}
+
+#zoomedImageOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+  background-color: rgba(0,0,0,0.4);
+  user-select: none;
+  overflow: hidden;
+}
+
+#zoomedContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 90vw;
+  max-height: 90vh;
+  padding: 6px;
+  overflow: hidden;
+}
+
+.image-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.image-wrapper img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* PROJECTS */
+
+#project-intro {
+  padding: 1rem;
+  user-select: none;
+}
+
+#project-title-links {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 50px;
+  margin-bottom: 50px;
+}
+
+#project-intro-content {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 40px;
+  justify-content: space-between;
+}
+
+#project-intro-text {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  gap: 1rem;
+}
+
+#project-intro-text p {
+  line-height: 1.5rem;
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+
+#project-info {
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+}
+
+#project-intro-images {
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  width: 100%;
+}
+
+#project-intro-images button {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+#project-intro-images button:not(:last-child) {
+  margin-bottom: 20px;
+}
+
+#project-sub-content {
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+#project-sub-content h2 {
+  margin: 0;
+  font-weight: 300;
+  margin-bottom: 100px;
+  align-self: center;
+}
+
+#project-images {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(calc(50% - 20px), 1fr));
+  grid-template-rows: 2, minmax(250px, 1fr);
+  justify-content: center;
+  gap: 20px;
+}
+
+#project-images button {
+  max-width: 100%;
+  border: none;
+  background-color: transparent;
 }
