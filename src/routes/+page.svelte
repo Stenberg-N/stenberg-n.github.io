@@ -357,18 +357,6 @@
     border-radius: 16px;
   }
 
-  #zoomedBadge-image {
-    max-width: 90%;
-    max-height: 90%;
-    object-fit: contain;
-  }
-
-  #zoomedImg-image {
-    max-height: 90%;
-    max-width: 90%;
-    object-fit: contain;
-  }
-
   #current-project-images {
     display: flex;
     flex-direction: column;
