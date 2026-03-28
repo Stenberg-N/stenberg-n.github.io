@@ -122,8 +122,8 @@
   </div>
   <div id="link-btns">
     <button id="lang-switch" class="interactive-el" style="color: #f6f6f6; font-weight: 800;" onclick={() => { if ($lang === 'en') { lang.set('fi'); } else lang.set('en'); }}>{$lang === 'en' ? 'FI' : 'EN'}</button>
-    <button id="github-link" class="interactive-el" onclick={() => redirect()} class:disabled={childAlert}><img src="/assets/github-logo.svg" alt="GitHub Profile"></button>
-    <button id="email-link" class="interactive-el" onclick={() => { if (!isRedirecting) copyEmail(); }} class:disabled={isRedirecting || childAlert}><img src="/assets/email-logo.svg" alt="Email"></button>
+    <button id="github-link" class="interactive-el" onclick={() => redirect()} class:disabled={childAlert} disabled={childAlert}><img src="/assets/github-logo.svg" alt="GitHub Profile"></button>
+    <button id="email-link" class="interactive-el" onclick={() => copyEmail()} class:disabled={isRedirecting || childAlert} disabled={isRedirecting || childAlert}><img src="/assets/email-logo.svg" alt="Email"></button>
   </div>
 </nav>
 
