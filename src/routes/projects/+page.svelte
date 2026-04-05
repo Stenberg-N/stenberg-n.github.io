@@ -38,7 +38,7 @@
 
 <div id="projects">
   {#each projects as { id, title, slug, picture, descriptionKey, demo, tech, isWIP } (id)}
-    <div role="link" tabindex="0" class="project anchor underline-el" style="background-image: url({picture});" onclick={() => goto(resolve(`/projects/${slug}` as ProjectRoute))} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goto(resolve(`/projects/${slug}` as ProjectRoute))} }}>
+    <div role="link" tabindex="0" class="project anchor underline-el" style="background-image: url({picture}); padding-bottom: 24px;" onclick={() => goto(resolve(`/projects/${slug}` as ProjectRoute))} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goto(resolve(`/projects/${slug}` as ProjectRoute))} }}>
       <div style="display: flex; flex-direction: row; position: relative; z-index: 1;">
         <p style="font-weight: 800; text-align: left;">{ title }</p>
         <div style="display: flex; flex: 1;"></div>

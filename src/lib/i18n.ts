@@ -7,15 +7,16 @@ const translations: Record<Language, Record<string, string | string[]>> = {
   en: {
     home: 'Home',
     projects: 'Projects',
-    "project.finance-tracker.description": "A desktop and a web app for tracking, predicting, and visualizing finances.",
+    "project.finance-tracker.description": "My first project. A desktop and a web app for tracking, predicting, and visualizing finances.",
     "project.finance-tracker.demo": "Web demo",
-    "project.finance-tracker.imagetexts": "Here one flaw can be seen in the X-axis, where the spacing and labels are inconsistent. Stems from the app struggling to draw the X-axis with lower amounts of data. The actual graph line is accurate.",
+    "project.finance-tracker.imagenotes": "Here one flaw can be seen in the X-axis, where the spacing and labels are inconsistent. Stems from the app struggling to draw the X-axis with lower amounts of data. The actual graph line is accurate.",
     "project.waste-classifier.description": "A desktop app with an ML model for classifying waste.",
     "project.waste-classifier.imagetexts": "This is a confusion matrix. It is used to get insights into how well the model makes predictions and in what labels it excels at, and where not. To put this simply, when the X- and Y-axes match on the same label, the model got the prediction right. \
     A number represent one image.",
     "project.focusboard.description": "A note taking app that integrates a calendar and a timer.",
     "project.focusboard.imagetexts": ["Make notes, customize and order them to your liking and keep everything neat with tabs.", "Add a timer to alert you, and optionally a message.", "Keep track of your events with the calendar.", "Get an in-depth perspective of your events for a selected day."],
     "project.focusboard.imagenotes": "All of the vertical grid lines might not be captured in the image.",
+    "project.fin-radar.description": "A polished, completely redone version of my first project, the finance tracker.",
 
     // ALERTS
     "alert.message.github": "Continue to GitHub?",
@@ -47,6 +48,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "home.data-science-ml.description": ["Frameworks: Scikit-learn, Tensorflow & Keras, PyTorch, Optuna, XGBoost", "Finance tracker app with finance predictions", "Waste classifier app", "Trained models for tree specie recognition"],
 
     // PROJECTS
+    "projects.project.repository": "Project repository",
     "projects.project.imagetitle": "Project Images",
     "projects.project.finance-tracker.paragraph": [
       "This was my first real project. The purpose behind this app was for it to be something I would personally use. Before this, I had only made simple stuff with Python like calculators, to-do lists, and basic CLI-based tools.",
@@ -76,6 +78,9 @@ const translations: Record<Language, Record<string, string | string[]>> = {
       I am building this for myself. I know there are many options out there, like Microsoft's own app bundle (includes a calendar, to-do list, etc.), Obsidian, and Google NotebookLM, but by having my own application I get privacy and the ability to control everything, so if I am not the biggest fan of some feature, \
       I can change and tweak it."
     ],
+    "projects.project.fin-radar.paragraph": [
+      "This is my fourth project. I am recreating my first project, but now with a lot more knowledge and experience. It is currently in its very early development."
+    ],
   },
   fi: {
     home: 'Koti',
@@ -89,6 +94,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "project.focusboard.description": "Muistiinpanosovellus joka sisältää myös ajastimen ja kalenterin.",
     "project.focusboard.imagetexts": ["Luo muistiinpanoja, muokkaa ja järjestä ne mieluisiksi ja pidä kaikki järjestyksessä välilehtien avulla.", "Lisää ajastin hälyttämään sinua ja vaihtoehtoisesti kiinnitä viesti.", "Seuraa tapahtumiasi kalenterista.", "Näe tapahtumasi valitsemasta päivästäsi tarkemmin aikajana näkymällä."],
     "project.focusboard.imagenotes": "Jotkin pystyviivat näkyvät huonosti.",
+    "project.fin-radar.description": "Siistimpi, valmiimpi, parempi ja täysin uudelleen rakennettu versio ensimmäisestä projektistani talousdatan seurantaan.",
     
     // ALERTS
     "alert.message.github": "Siirrytkö GitHubiin?",
@@ -120,6 +126,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "home.data-science-ml.description": ["Kehykset/Frameworkit: Scikit-learn, Tensorflow & Keras, PyTorch, Optuna, XGBoost", "Talousdatan seurantasovellus ennustuksilla", "Jätteen tunnistamisen sovellus", "Harjoittanut koneoppimismalleja puulajien tunnistamiseen"],
 
     // PROJECTS
+    "projects.project.repository": "Projektin arkisto (engl. repository)",
     "projects.project.imagetitle": "Projektin kuvat",
     "projects.project.finance-tracker.paragraph": [
       "Tämä oli ensimmäinen kunnon projektini. Tarkoituksena oli tehdä sovellus, mitä itse olisin käyttänyt. Ennen tätä olin vain tehnyt yksinkertaisia asioita Pythonilla, kuten laskimia, to-do listoja ja CLI- tai komentorivi-pohjaisia työkaluja.",
@@ -148,6 +155,9 @@ const translations: Record<Language, Record<string, string | string[]>> = {
       joten valitsin sen. Sen kauemmin olen työstänyt tätä projektia, sen enemmän olen tykästynyt Tauriin ja Svelteen, vaikkakin Rust on jokseenkin erilainen ja huomattavasti vaikeampi kieli verrattuna muihin. En sanoisi, että Rust itsessään on mitenkään vaikeaa, mutta Rustissa on erilaisia asioita ja konsepteja joita ei muissa \
       kielissä oikeastaan ole, kuten omistajuus.", "Syy sovelluksen kehittämiselle on ollut sama kuin minun talousdatan seurantasovelluksellakin, eli teen sovellusta omaan käyttöön. Tiedän, että on useita eri vaihtoehtoja olemassa kuten Microsoftin omat (sisältää kalenterin, to-do listan yms.), Obsidian ja Googlen NotebookLM, \
       mutta oma sovellus antaa minulle yksityisyyttä ja kyvyn hallita asioita. Esimerkiksi, jos edellämainituissa sovelluksissa olisi jokin ominaisuus, josta en ole kauhean innoissani, voin muuttaa sitä."
+    ],
+    "projects.project.fin-radar.paragraph": [
+      "Tämä on neljäs projektini. Rakennan ensimmäisen projektini uudelleen, mutta tällä kertaa tietämyksellä ja kokemuksella, mitä minulle on kertynyt. Tällä hetkellä projekti on hyvin alussa kehitystään."
     ],
   }
 };

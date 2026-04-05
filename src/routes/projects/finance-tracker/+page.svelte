@@ -80,7 +80,7 @@
       <div style="display: flex; flex-direction: row; gap: 10px;">
         <img src="/assets/github-logo.svg" alt="Github logo" style="height: 25px; width: 25px; filter: brightness(0) invert(0.9);">
         <button class="button-default underline-el" class:disabled={isAlertDisabled} disabled={isAlertDisabled} onclick={() => { link="https://github.com/Stenberg-N/finance-tracker"; alertMessage="alert.message.github"; isAlert = true; propagateAlert(true); }}>
-          Project repository
+          {$t["projects.project.repository"]}
         </button>
       </div>
     </div>

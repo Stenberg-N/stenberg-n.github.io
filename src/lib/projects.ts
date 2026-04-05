@@ -75,4 +75,22 @@ export const projects: Project[] = [
     isWIP: false,
     isCurrent: false,
   },
+  {
+    id: 4,
+    title: "FinRadar",
+    slug: "fin-radar",
+    descriptionKey: "project.fin-radar.description",
+    tech: ["Svelte", "Rust", "TypeScript", "Tauri"],
+    picture: "",
+    allPictures: [
+      { id: 1, pic: "/images/fin-radar1.png" },
+      { id: 2, pic: "/images/fin-radar2.png" },
+    ],
+    chosenImages: [],
+    imageNotes: [],
+    imageTexts: "project.fin-radar.imagetexts",
+    demo: "",
+    isWIP: true,
+    isCurrent: false,
+  }
 ]

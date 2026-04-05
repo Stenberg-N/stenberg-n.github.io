@@ -70,7 +70,7 @@
     <div style="display: flex; flex-direction: row; gap: 10px;">
       <img style="filter: brightness(0) invert(0.9); width: 25px; height: 25px;" src="/assets/github-logo.svg" alt="github">
       <button class="button-default underline-el" class:disabled={isAlertDisabled} disabled={isAlertDisabled} onclick={() => { link="https://github.com/Stenberg-N/focusboard"; alertMessage="alert.message.github"; isAlert = true; propagateAlert(true); }}>
-        Project repository
+        {$t["projects.project.repository"]}
       </button>
     </div>
   </div>
@@ -100,6 +100,7 @@
     {/each}
   </div>
 </div>
+
 <style>
   .disabled {
     opacity: 0.5;

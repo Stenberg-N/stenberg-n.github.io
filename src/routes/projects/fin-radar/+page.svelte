@@ -5,12 +5,12 @@
   import { t } from "$lib/i18n";
   import { projects } from "$lib/projects";
 
-  const project = projects.find(p => p.id === 3); if (!project) throw new Error('Project not found');
+  const project = projects.find(p => p.id === 4); if (!project) throw new Error('Project not found');
   const projectImages = project.allPictures;
   let zoomedImage = $state<string | null>(null);
   let isAlert = $state<boolean>(false);
   let alertMessage = $state<string>('');
-  let link = $state<"https://github.com/Stenberg-N/waste-classification" | null>(null);
+  let link = $state<"https://github.com/Stenberg-N/fin-radar" | null>(null);
   let zoomedContainer = $state<HTMLDivElement | null>(null);
 
   // Context and helper/wrapper functions
@@ -51,9 +51,6 @@
       <div class="image-wrapper">
         <img src={zoomedImage} alt="zoomed content" use:clickOutside>
       </div>
-      {#if zoomedImage === projectImages[2]['pic']}
-        <span style="text-align: center; max-width: 90%; background-color: #000;">{$t[project.imageTexts]}</span>
-      {/if}
     </div>
   </div>
 
@@ -68,24 +65,24 @@
 
 <div id="project-intro">
   <div id="project-title-links">
-    <h1>Waste Classifier</h1>
+    <h1>FinRadar</h1>
     <div style="display: flex; flex-direction: row; gap: 10px;">
       <img style="filter: brightness(0) invert(0.9); width: 25px; height: 25px;" src="/assets/github-logo.svg" alt="github">
-      <button class="button-default underline-el" class:disabled={isAlertDisabled} disabled={isAlertDisabled} onclick={() => { link="https://github.com/Stenberg-N/waste-classification"; alertMessage="alert.message.github"; isAlert = true; propagateAlert(true); }}>
+      <button class="button-default underline-el" class:disabled={isAlertDisabled} disabled={isAlertDisabled} onclick={() => { link="https://github.com/Stenberg-N/fin-radar"; alertMessage="alert.message.github"; isAlert = true; propagateAlert(true); }}>
         {$t["projects.project.repository"]}
       </button>
     </div>
   </div>
   <div id="project-intro-content">
     <div id="project-intro-text">
-      {#each $t['projects.project.waste-classifier.paragraph'] as text (text)}
+      {#each $t['projects.project.fin-radar.paragraph'] as text (text)}
         <p>{text}</p>
       {/each}
     </div>
     <div id="project-info">
       <div id="project-intro-images" style="object-fit: contain;">
-        <button class="hover-highlight" onclick={() => zoomImg("/images/waste-classifier1.png")}><img style="width: 80%; height: auto;" src="/images/waste-classifier1.png" alt="waste-classifier1"></button>
-        <button class="hover-highlight" onclick={() => zoomImg("/images/waste-classifier2.png")}><img style="width: 80%; height: auto;" src="/images/waste-classifier2.png" alt="waste-classifier2"></button>
+        <button class="hover-highlight" onclick={() => zoomImg("/images/fin-radar1.png")}><img style="width: 80%; height: auto;" src="/images/fin-radar1.png" alt="fin-radar1"></button>
+        <button class="hover-highlight" onclick={() => zoomImg("/images/fin-radar2.png")}><img style="width: 80%; height: auto;" src="/images/fin-radar2.png" alt="fin-radar2"></button>
       </div>
     </div>
   </div>
