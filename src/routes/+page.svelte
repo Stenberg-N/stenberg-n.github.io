@@ -5,7 +5,7 @@
   import { fly } from "svelte/transition";
   import { projects } from '$lib/projects';
 	import { resolve } from '$app/paths';
-  import Alert from "./components/Alert.svelte";
+	import { sendAlert } from "$lib/alert";
 
   let currentProject = projects.find(p => p.isCurrent) || null;
   const { chosenImages = [], imageNotes = [] } = currentProject || {};
@@ -14,22 +14,12 @@
   let zoomedImageId = $state<number | null>(null);
   let zoomedImageNote = $derived.by(() => { return zoomedImageId !== null ? imageNotes.find(note => note.id === zoomedImageId) : null; });
   let twitchRight = $state<boolean>(false);
-  let isAlert = $state<boolean>(false);
-  let link = $state<"https://github.com/Stenberg-N" | "https://cs4e.pages.labranet.jamk.fi/ooc/20-Background/" | "https://thenixuchallenge.com/c/" | null>(null);
-  let alertMessage = $state<string>('');
   let zoomedContainer = $state<HTMLDivElement | null>(null);
 
   // Context and helper/wrapper functions
 
   const { setOnHomeScreen } = getContext<{ getOnHomeScreen: () => boolean, setOnHomeScreen: (state: boolean) => void }>('onHomeScreen');
   const { setCurrentPage } = getContext<{ setCurrentPage: (page: string) => void }>('currentPage');
-  const { propagateAlert, getParentAlert } = getContext<{ propagateAlert: (state: boolean) => void, getParentAlert: () => boolean }>('alertContext');
-
-  const isAlertDisabled = $derived.by(() => getParentAlert());
-
-  const setAlert = (state: boolean) => {
-    isAlert = state;
-  }
 
   onMount(() => {
     setOnHomeScreen(true);
@@ -95,10 +85,6 @@
   {/each}
 {/if}
 
-{#if isAlert}
-  <Alert link={link} alertMessage={alertMessage} setAlert={setAlert} isRedirecting={true} height={80} />
-{/if}
-
 <div id="home-intro-contact">
   <div id="home-intro">
     <div>
@@ -109,7 +95,7 @@
     </div>
     <div id="contact" style="display: flex; flex-direction: column; gap: 12px; margin-top: 40px;">
       <div id="github"><img src="/assets/github-logo.svg" alt="Github logo">
-        <button class="button-default underline-el" class:disabled={isAlertDisabled} disabled={isAlertDisabled} onclick={() => { link="https://github.com/Stenberg-N"; alertMessage="alert.message.github"; isAlert = true; propagateAlert(true); }}>Stenberg-N</button>
+        <button class="button-default underline-el" onclick={() => sendAlert("alert.message.github", false, true, "https://github.com/Stenberg-N")}>Stenberg-N</button>
       </div>
       <div id="email" style="user-select: text; word-break: break-all;"><img src="/assets/email-logo.svg" alt="Email logo" style="user-select: none;"><span>stenbergniko@outlook.com</span></div>
       <div id="location"><img src="/assets/location-pin.svg" alt="Location logo"><span>{$t['contact-location']}</span></div>
@@ -136,8 +122,8 @@
             {/each}
             {#if id === 3}
               <div style="display: flex; flex-direction: column; gap: 5px;">
-                <button class="button-default underline-el" style="width: fit-content;" onclick={() => { link="https://thenixuchallenge.com/c/"; alertMessage='alert.message.nixu'; isAlert = true; propagateAlert(true); }}>NIXU</button>
-                <button class="button-default underline-el" style="width: fit-content;" onclick={() => { link="https://cs4e.pages.labranet.jamk.fi/ooc/20-Background/"; alertMessage='alert.message.jamk'; isAlert = true; propagateAlert(true); }}>{$t["home.cybersec.description"].slice(-1)}</button>
+                <button class="button-default underline-el" style="width: fit-content;" onclick={() => sendAlert("alert.message.nixu", false, true, "https://thenixuchallenge.com/c/")}>NIXU</button>
+                <button class="button-default underline-el" style="width: fit-content;" onclick={() => sendAlert("alert.message.jamk", false, true, "https://cs4e.pages.labranet.jamk.fi/ooc/20-Background/")}>{$t["home.cybersec.description"].slice(-1)}</button>
               </div>
             {/if}
           </div>
@@ -178,16 +164,6 @@
 </div>
 
 <style>
-  .disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-  
-  .disabled:hover::after {
-    width: 0;
-  }
-
   #home-intro-contact {
     display: flex;
     flex-direction: row;

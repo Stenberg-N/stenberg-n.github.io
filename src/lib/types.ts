@@ -28,3 +28,12 @@ export interface Project {
   isWIP: boolean;
   isCurrent: boolean;
 }
+
+export type Alert = {
+  id: number;
+  isTimer: boolean;
+  showButtons: boolean;
+  message: string;
+  link: string | null;
+  onCancel: () => void;
+}

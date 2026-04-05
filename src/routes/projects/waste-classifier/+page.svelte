@@ -1,28 +1,18 @@
 <script lang="ts">
   import { getContext, onMount } from "svelte";
   import { fly } from "svelte/transition";
-  import Alert from "../../components/Alert.svelte";
   import { t } from "$lib/i18n";
   import { projects } from "$lib/projects";
+	import { sendAlert } from "$lib/alert";
 
   const project = projects.find(p => p.id === 3); if (!project) throw new Error('Project not found');
   const projectImages = project.allPictures;
   let zoomedImage = $state<string | null>(null);
-  let isAlert = $state<boolean>(false);
-  let alertMessage = $state<string>('');
-  let link = $state<"https://github.com/Stenberg-N/waste-classification" | null>(null);
   let zoomedContainer = $state<HTMLDivElement | null>(null);
 
   // Context and helper/wrapper functions
 
   const { setOnHomeScreen } = getContext<{ getOnHomeScreen: () => boolean, setOnHomeScreen: (state: boolean) => void }>('onHomeScreen');
-  const { propagateAlert, getParentAlert } = getContext<{ propagateAlert: (state: boolean) => void, getParentAlert: () => boolean }>('alertContext');
-
-  const isAlertDisabled = $derived.by(() => getParentAlert());
-
-  const setAlert = (state: boolean) => {
-    isAlert = state;
-  };
 
   onMount(() => {
     setOnHomeScreen(false);
@@ -62,18 +52,12 @@
   {/each}
 {/if}
 
-{#if isAlert}
-  <Alert link={link} alertMessage={alertMessage} setAlert={setAlert} isRedirecting={true} height={80} />
-{/if}
-
 <div id="project-intro">
   <div id="project-title-links">
     <h1>Waste Classifier</h1>
     <div style="display: flex; flex-direction: row; gap: 10px;">
       <img style="filter: brightness(0) invert(0.9); width: 25px; height: 25px;" src="/assets/github-logo.svg" alt="github">
-      <button class="button-default underline-el" class:disabled={isAlertDisabled} disabled={isAlertDisabled} onclick={() => { link="https://github.com/Stenberg-N/waste-classification"; alertMessage="alert.message.github"; isAlert = true; propagateAlert(true); }}>
-        {$t["projects.project.repository"]}
-      </button>
+      <button class="button-default underline-el" onclick={() => sendAlert("alert.message.github", false, true, "https://github.com/Stenberg-N/waste-classification")}>{$t["projects.project.repository"]}</button>
     </div>
   </div>
   <div id="project-intro-content">
@@ -105,16 +89,6 @@
 </div>
 
 <style>
-  .disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  .disabled:hover::after {
-    width: 0;
-  }
-
   @media (max-width: 1000px) {
     #project-intro-content {
       flex-direction: column;

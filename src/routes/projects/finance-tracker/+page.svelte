@@ -3,28 +3,18 @@
   import { t } from "$lib/i18n";
   import { projects } from "$lib/projects";
 	import { fly } from "svelte/transition";
-	import Alert from "../../components/Alert.svelte";
+	import { sendAlert } from "$lib/alert";
 
   const project = projects.find(p => p.id === 1); if (!project) throw new Error('Project not found');
   const desktopPics = project.allPictures.slice(0, 3).concat(project.allPictures.slice(-2));
   const webPics = project.allPictures.slice(3, 10);
   const variantIndices = Array.from({ length: 2 }, (_, i) => i);
   let zoomedImage = $state<string | null>(null);
-  let link = $state<"https://site--financetracker-app--kwlb8kg8h4nw.code.run/login/?next=/" | "https://github.com/Stenberg-N/finance-tracker" | null>(null);
-  let isAlert = $state<boolean>(false);
-  let alertMessage = $state<string>('');
   let zoomedContainer = $state<HTMLDivElement | null>(null);
 
   // Context and helper/wrapper functions
 
   const { setOnHomeScreen } = getContext<{ getOnHomeScreen: () => boolean, setOnHomeScreen: (state: boolean) => void }>('onHomeScreen');
-  const { propagateAlert, getParentAlert } = getContext<{ propagateAlert: (state: boolean) => void, getParentAlert: () => boolean }>('alertContext');
-
-  const isAlertDisabled = $derived.by(() => getParentAlert());
-
-  const setAlert = (state: boolean) => {
-    isAlert = state;
-  };
 
   onMount(() => {
     setOnHomeScreen(false);
@@ -64,24 +54,18 @@
   {/each}
 {/if}
 
-{#if isAlert}
-  <Alert link={link} alertMessage={alertMessage} setAlert={setAlert} isRedirecting={true} height={80} />
-{/if}
-
 <div id="project-intro">
   <div id="project-title-links">
     <h1 style="margin: 0;">Finance Tracker</h1>
     <div id="links" style="margin-bottom: 0;">
-      <button id="demo-link" class="button-custom hover-highlight interactive-el underline-el" class:disabled={isAlertDisabled} disabled={isAlertDisabled} style="max-height: 50px; color: #f6f6f6; font-weight: 800;"
-        onclick={() => { link="https://site--financetracker-app--kwlb8kg8h4nw.code.run/login/?next=/"; alertMessage="alert.message.demo"; isAlert = true; propagateAlert(true); }}
+      <button id="demo-link" class="button-custom hover-highlight interactive-el underline-el" style="max-height: 50px; color: #f6f6f6; font-weight: 800;"
+        onclick={() => sendAlert("alert.message.demo", false, true, "https://site--financetracker-app--kwlb8kg8h4nw.code.run/login/?next=/")}
       >
         {$t["project.finance-tracker.demo"]}
       </button>
       <div style="display: flex; flex-direction: row; gap: 10px;">
         <img src="/assets/github-logo.svg" alt="Github logo" style="height: 25px; width: 25px; filter: brightness(0) invert(0.9);">
-        <button class="button-default underline-el" class:disabled={isAlertDisabled} disabled={isAlertDisabled} onclick={() => { link="https://github.com/Stenberg-N/finance-tracker"; alertMessage="alert.message.github"; isAlert = true; propagateAlert(true); }}>
-          {$t["projects.project.repository"]}
-        </button>
+        <button class="button-default underline-el" onclick={() => sendAlert("alert.message.github", false, true, "https://github.com/Stenberg-N/finance-tracker")}>{$t["projects.project.repository"]}</button>
       </div>
     </div>
     </div>
@@ -120,16 +104,6 @@
 </div>
 
 <style>
-  .disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-  }
-
-  .disabled:hover::after {
-    width: 0;
-  }
-
   #links {
     display: flex;
     flex-direction: row;

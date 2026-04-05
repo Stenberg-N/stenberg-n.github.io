@@ -6,18 +6,14 @@
 
   import '../styles.css';
 	import Alert from './components/Alert.svelte';
+	import { alerts, sendAlert } from '$lib/alert';
 
 	let { children } = $props();
   let currentPage = $state<string>('/')
-  let isAlert = $state<boolean>(false);
-  let childAlert = $state<boolean>(false);
-  let disableChildAlert = $derived(isAlert);
-  let isRedirecting = $state<boolean>(false);
-  let alertMessage = $state<string>('');
   let onHomeScreen = $state<boolean>(true);
-  let height = $state<number>(40);
   let windowWidth = $state(0);
   let backBtnBottom = $state<string>('unset');
+  let alertsContainerBottom = $state<number>(30);
   let hasScrolled = $state<boolean>(false);
 
   // Contexts, context and helper/wrapper functions
@@ -30,34 +26,11 @@
     currentPage = page;
   };
 
-  const setAlert = (state: boolean) => {
-    isAlert = state;
-  };
-
-  const setRedirecting = (state: boolean) => {
-    isRedirecting = state;
-  };
-
-  const propagateAlert = (state: boolean) => {
-    childAlert = state;
-  };
-
   setContext('onHomeScreen', { getOnHomeScreen: () => onHomeScreen, setOnHomeScreen });
   setContext('currentPage', { setCurrentPage });
-  setContext('alertContext', { propagateAlert, getParentAlert: () => disableChildAlert });
 
   onMount(() => {
     currentPage = window.location.pathname;
-  });
-
-  $effect(() => {
-    if (isAlert && !isRedirecting) {
-      setTimeout(() => { isAlert = false; isRedirecting = false; }, 3000);
-    }
-  });
-
-  $effect(() => {
-    if (isRedirecting) height = 80; else height = 40;
   });
 
   $effect(() => {
@@ -67,23 +40,14 @@
   });
 
   $effect(() => {
-    if ((isAlert || childAlert) && windowWidth <= 500) backBtnBottom = "120px";
-    else if (windowWidth <= 500) backBtnBottom = "25px";
-    else backBtnBottom = "unset";
+    if (windowWidth <= 500) { backBtnBottom = "25px"; alertsContainerBottom = 92 }
+    else { backBtnBottom = "unset"; alertsContainerBottom = 30 }
   });
-
-
-  const redirect = () => {
-    isRedirecting = true;
-    alertMessage = 'alert.message.github';
-    isAlert = true;
-  };
 
   const copyEmail = () => {
     let text = 'stenbergniko@outlook.com';
     navigator.clipboard.writeText(text);
-    alertMessage = 'alert.email';
-    isAlert = true;
+    sendAlert("alert.email", true, false);
   };
 
   const handleScroll = () => {
@@ -103,10 +67,13 @@
   </button>
 {/if}
 
-
-{#if isAlert && !childAlert}
-  <Alert height={height} isRedirecting={isRedirecting} link="https://github.com/Stenberg-N" alertMessage={alertMessage} setAlert={setAlert} setRedirecting={setRedirecting} />
-{/if}
+<div class="alerts-container" style="bottom: {alertsContainerBottom}px;">
+  {#each $alerts as alert (alert.id)}
+    <div>
+      <Alert {alert} />
+    </div>
+  {/each}
+</div>
 
 <div id="background"></div>
 <div id="grid-background"></div>
@@ -122,8 +89,8 @@
   </div>
   <div id="link-btns">
     <button id="lang-switch" class="interactive-el" style="color: #f6f6f6; font-weight: 800;" onclick={() => { if ($lang === 'en') { lang.set('fi'); } else lang.set('en'); }}>{$lang === 'en' ? 'FI' : 'EN'}</button>
-    <button id="github-link" class="interactive-el" onclick={() => redirect()} class:disabled={childAlert} disabled={childAlert}><img src="/assets/github-logo.svg" alt="GitHub Profile"></button>
-    <button id="email-link" class="interactive-el" onclick={() => copyEmail()} class:disabled={isRedirecting || childAlert} disabled={isRedirecting || childAlert}><img src="/assets/email-logo.svg" alt="Email"></button>
+    <button id="github-link" class="interactive-el" onclick={() => sendAlert("alert.message.github", false, true, "https://github.com/Stenberg-N")}><img src="/assets/github-logo.svg" alt="GitHub Profile"></button>
+    <button id="email-link" class="interactive-el" onclick={() => copyEmail()}><img src="/assets/email-logo.svg" alt="Email"></button>
   </div>
 </nav>
 
@@ -231,12 +198,6 @@
     transform: translateY(-4px);
   }
 
-  .disabled {
-    filter: brightness(0) invert(0.3);
-    cursor: not-allowed;
-    transform: none;
-  }
-
   .current::after {
     width: 100%;
   }
@@ -264,6 +225,23 @@
   #scroll-to-top:hover {
     box-shadow: 0 8px 24px rgba(255, 70, 70, 0.3);
     border-color: rgba(255, 70, 70, 1);
+  }
+
+  .alerts-container {
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: unset;
+    transform: translateX(-50%);
+    gap: 12px;
+    pointer-events: none;
+  }
+
+  .alerts-container > * {
+    pointer-events: auto;
   }
 
   @media (max-width: 1200px) {

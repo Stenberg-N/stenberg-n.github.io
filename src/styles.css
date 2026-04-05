@@ -15,6 +15,7 @@ body::-webkit-scrollbar {
 
 *, *::after, *::before {
   box-sizing: inherit;
+  font-family: inherit;
 }
 
 * p, * span {
