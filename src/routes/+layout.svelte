@@ -1,36 +1,29 @@
 <script lang="ts">
   import { fly } from 'svelte/transition';
-  import { onMount, setContext } from 'svelte';
   import { resolve } from '$app/paths';
   import { t, lang } from '$lib/i18n';
+  import { alerts, sendAlert } from '$lib/alert';
+  import { page } from '$app/state';
+  import { onNavigate } from '$app/navigation';
 
   import '../styles.css';
 	import Alert from './components/Alert.svelte';
-	import { alerts, sendAlert } from '$lib/alert';
+
+  type NavRoute = "/" | "/projects";
 
 	let { children } = $props();
-  let currentPage = $state<string>('/')
-  let onHomeScreen = $state<boolean>(true);
   let windowWidth = $state(0);
   let backBtnBottom = $state<string>('unset');
   let alertsContainerBottom = $state<number>(30);
   let hasScrolled = $state<boolean>(false);
+  const mainRoutes = ["/", "/projects"];
 
-  // Contexts, context and helper/wrapper functions
-
-  const setOnHomeScreen = (state: boolean) => {
-    onHomeScreen = state;
-  };
-
-  const setCurrentPage = (page: string) => {
-    currentPage = page;
-  };
-
-  setContext('onHomeScreen', { getOnHomeScreen: () => onHomeScreen, setOnHomeScreen });
-  setContext('currentPage', { setCurrentPage });
-
-  onMount(() => {
-    currentPage = window.location.pathname;
+  onNavigate(({ from, to }) => {
+    return new Promise((resolve) => {
+      document.startViewTransition(() => {
+        resolve();
+      });
+    });
   });
 
   $effect(() => {
@@ -78,14 +71,15 @@
 <div id="background"></div>
 <div id="grid-background"></div>
 
-{#if !onHomeScreen}
+{#if !mainRoutes.includes(page.url.pathname)}
   <a id="back-btn" class="hover-highlight" style="bottom: {backBtnBottom};" href={resolve("/projects")} transition:fly={{ y: 20, duration: 200, delay: 100 }}><img style="transform: rotate(90deg); filter: brightness(0) invert(0.9); max-width: 20px; max-height: 20px;" src="/assets/arrow.svg"alt="Back arrow"></a>
 {/if}
 
 <nav id="nav-bar">
   <div id="nav-links">
-    <a class="anchor underline-el" class:current={currentPage === '/'} onclick={() => currentPage = '/'} href={resolve("/")}>{$t.home}</a>
-    <a class="anchor underline-el" class:current={currentPage === '/projects'} onclick={() => currentPage = '/projects'} href={resolve("/projects")}>{$t.projects}</a>
+    {#each mainRoutes as route, i (i)}
+      <a class="anchor underline-el" class:current={page.url.pathname === route} href={resolve(route as NavRoute)}>{$t["navigation.anchors.names"][i]}</a>
+    {/each}
   </div>
   <div id="link-btns">
     <button id="lang-switch" class="interactive-el" style="color: #f6f6f6; font-weight: 800;" onclick={() => { if ($lang === 'en') { lang.set('fi'); } else lang.set('en'); }}>{$lang === 'en' ? 'FI' : 'EN'}</button>
@@ -94,7 +88,7 @@
   </div>
 </nav>
 
-<main class="content">
+<main class="content" style="view-transition-name: main-content;">
   {@render children()}
 </main>
 
@@ -242,6 +236,23 @@
 
   .alerts-container > * {
     pointer-events: auto;
+  }
+
+  :root::view-transition-old(main-content), :root::view-transition-new(main-content) {
+    animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+  :root::view-transition-old(main-content) {
+    animation: fade-out 0.3s;
+  }
+  :root::view-transition-new(main-content) {
+    animation: fade-in 0.3s;
+  }
+
+  @keyframes fade-out {
+    to { opacity: 0; }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
   }
 
   @media (max-width: 1200px) {

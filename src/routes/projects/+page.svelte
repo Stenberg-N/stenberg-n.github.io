@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { getContext, onMount } from "svelte";
   import { projects } from '$lib/projects';
   import { goto } from '$app/navigation';
   import { resolve } from '$app/paths';
@@ -8,16 +7,6 @@
 
   type ProjectSlug = 'finance-tracker' | 'focusboard' | 'waste-classifier';
   type ProjectRoute = `/projects/${ProjectSlug}`;
-
-  // Context and helper/wrapper functions
-
-  const { setOnHomeScreen } = getContext<{ getOnHomeScreen: () => boolean, setOnHomeScreen: (state: boolean) => void }>('onHomeScreen');
-  const { setCurrentPage } = getContext<{ setCurrentPage: (page: string) => void }>('currentPage');
-
-  onMount(() => {
-    setOnHomeScreen(true);
-    setCurrentPage('/projects');
-  });
 
 </script>
 

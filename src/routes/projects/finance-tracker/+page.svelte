@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getContext, onMount } from "svelte";
+  import { onMount } from "svelte";
   import { t } from "$lib/i18n";
   import { projects } from "$lib/projects";
 	import { fly } from "svelte/transition";
@@ -11,14 +11,6 @@
   const variantIndices = Array.from({ length: 2 }, (_, i) => i);
   let zoomedImage = $state<string | null>(null);
   let zoomedContainer = $state<HTMLDivElement | null>(null);
-
-  // Context and helper/wrapper functions
-
-  const { setOnHomeScreen } = getContext<{ getOnHomeScreen: () => boolean, setOnHomeScreen: (state: boolean) => void }>('onHomeScreen');
-
-  onMount(() => {
-    setOnHomeScreen(false);
-  });
 
   const zoomImg = (image: string) => {
     zoomedImage = image;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getContext, onMount } from "svelte";
+	import { onMount } from "svelte";
   import { t } from '$lib/i18n';
   import { home } from '$lib/home';
   import { fly } from "svelte/transition";
@@ -15,16 +15,6 @@
   let zoomedImageNote = $derived.by(() => { return zoomedImageId !== null ? imageNotes.find(note => note.id === zoomedImageId) : null; });
   let twitchRight = $state<boolean>(false);
   let zoomedContainer = $state<HTMLDivElement | null>(null);
-
-  // Context and helper/wrapper functions
-
-  const { setOnHomeScreen } = getContext<{ getOnHomeScreen: () => boolean, setOnHomeScreen: (state: boolean) => void }>('onHomeScreen');
-  const { setCurrentPage } = getContext<{ setCurrentPage: (page: string) => void }>('currentPage');
-
-  onMount(() => {
-    setOnHomeScreen(true);
-    setCurrentPage('/');
-  });
 
   const zoombadge = (badge: string) => {
     zoomedBadge = badge;
@@ -100,7 +90,7 @@
       <div id="email" style="user-select: text; word-break: break-all;"><img src="/assets/email-logo.svg" alt="Email logo" style="user-select: none;"><span>stenbergniko@outlook.com</span></div>
       <div id="location"><img src="/assets/location-pin.svg" alt="Location logo"><span>{$t['contact-location']}</span></div>
     </div>
-    <a id="view-projects" class="anchor hover-highlight" href={resolve("/projects")} onclick={() => setCurrentPage('/projects')} onmouseenter={() => twitchRight = true} onmouseleave={() => twitchRight = false}><span>{$t["home.view-projects"]}</span><img class:twitch={twitchRight} src="/assets/arrow.svg" alt="arrow"></a>
+    <a id="view-projects" class="anchor hover-highlight" href={resolve("/projects")} onmouseenter={() => twitchRight = true} onmouseleave={() => twitchRight = false}><span>{$t["home.view-projects"]}</span><img class:twitch={twitchRight} src="/assets/arrow.svg" alt="arrow"></a>
   </div>
   <div id="selfie-image">
 

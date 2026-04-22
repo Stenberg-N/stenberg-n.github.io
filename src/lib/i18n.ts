@@ -5,8 +5,7 @@ type Language = 'en' | 'fi'
 
 const translations: Record<Language, Record<string, string | string[]>> = {
   en: {
-    home: 'Home',
-    projects: 'Projects',
+    "navigation.anchors.names": ["Home", "Projects"],
     "project.finance-tracker.description": "My first project. A desktop and a web app for tracking, predicting, and visualizing finances.",
     "project.finance-tracker.demo": "Web demo",
     "project.finance-tracker.imagenotes": "Here one flaw can be seen in the X-axis, where the spacing and labels are inconsistent. Stems from the app struggling to draw the X-axis with lower amounts of data. The actual graph line is accurate.",
@@ -83,8 +82,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     ],
   },
   fi: {
-    home: 'Koti',
-    projects: 'Projektit',
+    "navigation.anchors.names": ["Koti", "Projektit"],
     "project.finance-tracker.description": "Työpöytä- ja verkkosovellus talousdatan seurantaan, ennustamiseen ja visualisointiin.",
     "project.finance-tracker.demo": "Verkkosovelluksen demo",
     "project.finance-tracker.imagetexts": "Tässä näkyy yksi ongelmista X-akselissa, missä jaotus ja aikaleimat ovat epäsäännölisiä. Johtuu siitä, että sovellus piirtää X-akselin huonosti, jos dataa on vähän. Itse kaavion käyrä on tarkka.",
