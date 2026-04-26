@@ -5,9 +5,10 @@
   import { alerts, sendAlert } from '$lib/alert';
   import { page } from '$app/state';
   import { onNavigate } from '$app/navigation';
+  import { setContext } from 'svelte';
 
   import '../styles.css';
-	import Alert from './components/Alert.svelte';
+	import Alert from '../components/Alert.svelte';
 
   type NavRoute = "/" | "/projects";
 
@@ -17,6 +18,7 @@
   let alertsContainerBottom = $state<number>(30);
   let hasScrolled = $state<boolean>(false);
   const mainRoutes = ["/", "/projects"];
+  let selectedProjectId = $state<number | null>(null);
 
   onNavigate(({ from, to }) => {
     return new Promise((resolve) => {
@@ -37,6 +39,15 @@
     else { backBtnBottom = "unset"; alertsContainerBottom = 30 }
   });
 
+  /**********************************************************************************************************************\
+  |
+  | Context, Helper & Wrapper functions
+  |
+  \**********************************************************************************************************************/
+    const setSelectedProjectId = (id: number | null) => { selectedProjectId = id; };
+    setContext('selectedProject', { getSelectedProjectId: () => selectedProjectId, setSelectedProjectId })
+
+  /**********************************************************************************************************************/
   const copyEmail = () => {
     let text = 'stenbergniko@outlook.com';
     navigator.clipboard.writeText(text);
@@ -71,14 +82,14 @@
 <div id="background"></div>
 <div id="grid-background"></div>
 
-{#if !mainRoutes.includes(page.url.pathname)}
-  <a id="back-btn" class="hover-highlight" style="bottom: {backBtnBottom};" href={resolve("/projects")} transition:fly={{ y: 20, duration: 200, delay: 100 }}><img style="transform: rotate(90deg); filter: brightness(0) invert(0.9); max-width: 20px; max-height: 20px;" src="/assets/arrow.svg"alt="Back arrow"></a>
+{#if page.url.pathname !== "/" && selectedProjectId !== null}
+  <button id="back-btn" class="hover-highlight" style="bottom: {backBtnBottom};" onclick={() => setSelectedProjectId(null)} transition:fly={{ y: 20, duration: 200, delay: 100 }}><img style="transform: rotate(90deg); filter: brightness(0) invert(0.9); max-width: 20px; max-height: 20px;" src="/assets/arrow.svg"alt="Back arrow"></button>
 {/if}
 
 <nav id="nav-bar">
   <div id="nav-links">
     {#each mainRoutes as route, i (i)}
-      <a class="anchor underline-el" class:current={page.url.pathname === route} href={resolve(route as NavRoute)}>{$t["navigation.anchors.names"][i]}</a>
+      <a class="anchor underline-el" class:current={page.url.pathname === route} href={resolve(route as NavRoute)} onclick={() => setSelectedProjectId(null)}>{$t["navigation.anchors.names"][i]}</a>
     {/each}
   </div>
   <div id="link-btns">
@@ -88,7 +99,7 @@
   </div>
 </nav>
 
-<main class="content" style="view-transition-name: main-content;">
+<main class="content">
   {@render children()}
 </main>
 
@@ -183,6 +194,7 @@
     max-height: 42px;
     max-width: 42px;
     padding: 12px;
+    border: none;
     border-radius: 50%;
     background-color: #0f0f0f;
     z-index: 101;
@@ -238,18 +250,18 @@
     pointer-events: auto;
   }
 
-  :root::view-transition-old(main-content), :root::view-transition-new(main-content) {
+  :root::view-transition-old(root), :root::view-transition-new(root) {
     animation-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
   }
-  :root::view-transition-old(main-content) {
+  :root::view-transition-old(root) {
     animation: fade-out 0.3s;
   }
-  :root::view-transition-new(main-content) {
+  :root::view-transition-new(root) {
     animation: fade-in 0.3s;
   }
 
   @keyframes fade-out {
-    to { opacity: 0; }
+    to { opacity: 1; }
   }
   @keyframes fade-in {
     from { opacity: 0; }

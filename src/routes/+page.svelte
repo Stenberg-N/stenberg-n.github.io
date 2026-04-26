@@ -2,10 +2,11 @@
 	import { onMount } from "svelte";
   import { t } from '$lib/i18n';
   import { home } from '$lib/home';
-  import { fly } from "svelte/transition";
+  import { fade, fly } from "svelte/transition";
   import { projects } from '$lib/projects';
 	import { resolve } from '$app/paths';
 	import { sendAlert } from "$lib/alert";
+	import { cubicInOut } from "svelte/easing";
 
   let currentProject = projects.find(p => p.isCurrent) || null;
   const { chosenImages = [], imageNotes = [] } = currentProject || {};
@@ -54,10 +55,14 @@
 </script>
 
 {#if zoomedBadge || zoomedImage}
-  <div role="dialog" tabindex="0" id="zoomedImageOverlay" bind:this={zoomedContainer} transition:fly={{ y: 100, duration: 200, delay: 100 }} onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); zoomedImage = null; zoomedBadge = null; }}}>
+  <div role="dialog" tabindex="0" id="zoomedImageOverlay" bind:this={zoomedContainer} transition:fade={{ duration: 300, easing: cubicInOut }} onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); zoomedImage = null; zoomedBadge = null; }}}>
     <div id="zoomedContainer">
-      <button class="zoomedImg-close hover-highlight" onclick={() => { if (zoomedImage) {zoomedImage = null; zoomedImageId = null; } if (zoomedBadge) { zoomedBadge = null } }}><img src="/assets/close-x.svg" alt="close"></button>
-      <div class="image-wrapper">
+      <button class="zoomedImg-close hover-highlight" transition:fly={{ y: -100, duration: 300, delay: 100, easing: cubicInOut }}
+        onclick={() => { if (zoomedImage) {zoomedImage = null; zoomedImageId = null; } if (zoomedBadge) { zoomedBadge = null } }}
+      >
+        <img src="/assets/close-x.svg" alt="close">
+      </button>
+      <div class="image-wrapper" transition:fly={{ y: 100, duration: 300, delay: 100, easing: cubicInOut }}>
         {#if zoomedBadge}
           <img id="zoomedBadge-image" src={zoomedBadge} alt="badge" use:clickOutside>
         {:else if zoomedImage}

@@ -27,6 +27,9 @@ export interface Project {
   demo: string;
   isWIP: boolean;
   isCurrent: boolean;
+  repo: string;
+  demolink?: string;
+  paragraphKey: string;
 }
 
 export type Alert = {

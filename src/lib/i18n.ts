@@ -10,12 +10,13 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "project.finance-tracker.demo": "Web demo",
     "project.finance-tracker.imagenotes": "Here one flaw can be seen in the X-axis, where the spacing and labels are inconsistent. Stems from the app struggling to draw the X-axis with lower amounts of data. The actual graph line is accurate.",
     "project.waste-classifier.description": "A desktop app with an ML model for classifying waste.",
-    "project.waste-classifier.imagetexts": "This is a confusion matrix. It is used to get insights into how well the model makes predictions and in what labels it excels at, and where not. To put this simply, when the X- and Y-axes match on the same label, the model got the prediction right. \
+    "project.waste-classifier.imagenotes": "This is a confusion matrix. It is used to get insights into how well the model makes predictions and in what labels it excels at, and where not. To put this simply, when the X- and Y-axes match on the same label, the model got the prediction right. \
     A number represent one image.",
     "project.focusboard.description": "A note taking app that integrates a calendar and a timer.",
     "project.focusboard.imagetexts": ["Make notes, customize and order them to your liking and keep everything neat with tabs.", "Add a timer to alert you, and optionally a message.", "Keep track of your events with the calendar.", "Get an in-depth perspective of your events for a selected day."],
     "project.focusboard.imagenotes": "All of the vertical grid lines might not be captured in the image.",
     "project.fin-radar.description": "A polished, completely redone version of my first project, the finance tracker.",
+    "project.fin-radar.imagetexts": ["Your data is behind authentication.", "Your home page and menu. Add transactions and control your data.", "Table of your transactions. Add, edit and jump to specific dates.", "Make changes to your added transactions."],
 
     // ALERTS
     "alert.message.github": "Continue to GitHub?",
@@ -85,14 +86,15 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "navigation.anchors.names": ["Koti", "Projektit"],
     "project.finance-tracker.description": "Työpöytä- ja verkkosovellus talousdatan seurantaan, ennustamiseen ja visualisointiin.",
     "project.finance-tracker.demo": "Verkkosovelluksen demo",
-    "project.finance-tracker.imagetexts": "Tässä näkyy yksi ongelmista X-akselissa, missä jaotus ja aikaleimat ovat epäsäännölisiä. Johtuu siitä, että sovellus piirtää X-akselin huonosti, jos dataa on vähän. Itse kaavion käyrä on tarkka.",
+    "project.finance-tracker.imagenotes": "Tässä näkyy yksi ongelmista X-akselissa, missä jaotus ja aikaleimat ovat epäsäännölisiä. Johtuu siitä, että sovellus piirtää X-akselin huonosti, jos dataa on vähän. Itse kaavion käyrä on tarkka.",
     "project.waste-classifier.description": "Työpöytäsovellus jätteen tunnistamiseen.",
-    "project.waste-classifier.imagetexts": "Tämä on 'sekaannusmatriisi' (engl. confusion matrix). Yleinen tapa arvioida koneoppimismallin tarkkuutta ja nähdä missä luokissa se suoriutuu ja missä ei. Luokat ovat siis ennaltamääriteltyjä 'nimiä', johon malli luokittelee kuvan. \
+    "project.waste-classifier.imagenotes": "Tämä on 'sekaannusmatriisi' (engl. confusion matrix). Yleinen tapa arvioida koneoppimismallin tarkkuutta ja nähdä missä luokissa se suoriutuu ja missä ei. Luokat ovat siis ennaltamääriteltyjä 'nimiä', johon malli luokittelee kuvan. \
       Tässä luokat ovat eri jätetyyppejä, esim. muovi, paperi, lasi yms. Miten taulukkoa tulkita yksinkertaistettuna on, kun X- ja Y-akselit kohtaavat samassa luokassa/nimessä, malli veikkasi oikein. Numero ruudussa edustaa yhtä kuvaa.",
     "project.focusboard.description": "Muistiinpanosovellus joka sisältää myös ajastimen ja kalenterin.",
     "project.focusboard.imagetexts": ["Luo muistiinpanoja, muokkaa ja järjestä ne mieluisiksi ja pidä kaikki järjestyksessä välilehtien avulla.", "Lisää ajastin hälyttämään sinua ja vaihtoehtoisesti kiinnitä viesti.", "Seuraa tapahtumiasi kalenterista.", "Näe tapahtumasi valitsemasta päivästäsi tarkemmin aikajana näkymällä."],
     "project.focusboard.imagenotes": "Jotkin pystyviivat näkyvät huonosti.",
     "project.fin-radar.description": "Siistimpi, valmiimpi, parempi ja täysin uudelleen rakennettu versio ensimmäisestä projektistani talousdatan seurantaan.",
+    "project.fin-radar.imagetexts": ["Tietosi ovat tunnistautumisen takana.", "Kotisivusi ja valikko. Lisää tilitapahtumia ja hallitse dataasi.", "Taulukko tilitapahtumistasi. Lisää, muokkaa ja käy läpi tapahtumiasi päivämäärä siirtymisen avulla.", "Muokkaa tilitapahtumiasi."],
     
     // ALERTS
     "alert.message.github": "Siirrytkö GitHubiin?",
