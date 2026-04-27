@@ -18,18 +18,20 @@
 {#if selectedProjectId === null}
   <div id="projects">
     {#each projects as { id, title, picture, descriptionKey, demo, demolink, tech, isWIP } (id)}
-      <div role="link" tabindex="0" class="project anchor underline-el" style="background-image: url({picture}); padding-bottom: 24px;" onclick={() => setSelectedProjectId(id)} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedProjectId(id); } }}>
-        <div style="display: flex; flex-direction: row; position: relative; z-index: 1;">
+      <div role="link" tabindex="0" class="project vertical-flex-box anchor underline-el interactive-el hover-highlight" style="background-image: url({picture}); padding-bottom: 24px;"
+        onclick={() => setSelectedProjectId(id)} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedProjectId(id); } }}
+      >
+        <div class="horizontal-flex-box" style="position: relative; z-index: 1;">
           <p style="font-weight: 800; text-align: left;">{ title }</p>
           <div style="display: flex; flex: 1;"></div>
           <p style="font-weight: 800; text-align: right; color: {isWIP ? '#ff8500' : '#78ff78'};">{isWIP ? 'WIP' : 'Non-active | Done'}</p>
         </div>
-        <div style="display: flex; flex-direction: column; flex: 1 1 0; gap: 20px; margin-top: 20px; position: relative; z-index: 1;">
+        <div class="vertical-flex-box" style="align-items: unset; flex: 1 1 0; gap: 20px; margin-top: 20px; position: relative; z-index: 1;">
           <p style="font-weight: normal;">{$t[descriptionKey]}</p>
           {#if id === 1}
             <button class="demo-button hover-highlight underline-el" onclick={(e) => { e.stopPropagation(); sendAlert("alert.message.demo", false, true, demolink); }}>{$t[demo]}</button>
           {/if}
-          <div style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px; max-width: 400px; max-height: 140px; margin-top: auto;">
+          <div class="technology-cards-container horizontal-flex-box">
             {#each tech as t (t)}
               <div class="technology-card">
                 <p>{t}</p>
@@ -54,8 +56,6 @@
   }
 
   .project {
-    display: flex;
-    flex-direction: column;
     align-items: unset;
     min-width: 250px;
     max-width: 420px;
@@ -87,11 +87,17 @@
   }
 
   .project:hover {
-    outline-color: rgba(255, 70, 70, 1);
-    transform: translateY(-4px);
     background-color: #555;
-    box-shadow: 0 8px 24px rgba(255, 70, 70, 0.5);
     cursor: pointer;
+  }
+
+  .technology-cards-container {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 400px;
+    max-height: 140px;
+    margin-top: auto;
   }
 
   .technology-card {

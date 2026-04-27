@@ -30,15 +30,15 @@
 
 </script>
 
-<div role="alert" class="alert-container hover-highlight" transition:fly={{ y: 100, duration: 400 }}>
-  <div class="alert-content">
+<div role="alert" class="alert-container vertical-flex-box hover-highlight" transition:fly={{ y: 100, duration: 400 }}>
+  <div class="alert-content horizontal-flex-box">
     <p class="alert-message">{$t[alert.message]}</p>
-    <button class="alert-close-btn interactive-el" onclick={() => closeAlert(alert.id)}><img src="/assets/close-x.svg" alt="Close alert"></button>
+    <button class="alert-close-btn vertical-flex-box button-default" onclick={() => closeAlert(alert.id)}><img src="/assets/close-x.svg" alt="Close alert"></button>
   </div>
   {#if alert.showButtons}
-    <div id="redirect-buttons" style="display: flex; flex-direction: row; gap: 10px; padding-bottom: 5px; margin-top: 20px;">
+    <div class="redirect-buttons horizontal-flex-box">
       <a class="anchor interactive-el" href={alert.link} rel="external">{$t['alert.confirm']}</a>
-      <button class="interactive-el" onclick={() => { alert.onCancel(); closeAlert(alert.id); }}>{$t['alert.cancel']}</button>
+      <button class="button-default interactive-el" onclick={() => { alert.onCancel(); closeAlert(alert.id); }}>{$t['alert.cancel']}</button>
     </div>
   {/if}
 </div>
@@ -46,8 +46,6 @@
 <style>
   .alert-container {
     position: relative;
-    display: flex;
-    flex-direction: column;
     max-width: 350px;
     border-radius: 8px;
     padding: 6px 10px;
@@ -56,14 +54,11 @@
   }
 
   .alert-content {
-    display: flex;
+    justify-content: space-between;
     gap: 40px;
   }
 
   .alert-close-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
     width: 12px;
     height: 12px;
     transition: transform 0.2s;
@@ -76,7 +71,15 @@
     filter: brightness(0) invert(0.7);
   }
 
-  #redirect-buttons a, #redirect-buttons button {
+  .redirect-buttons {
+    justify-content: flex-start;
+    width: 100%;
+    gap: 10px;
+    padding-bottom: 5px;
+    margin-top: 20px;
+  }
+
+  .redirect-buttons a, .redirect-buttons button {
     padding: 4px 10px;
     height: 32px;
     background-color: #222;
@@ -88,12 +91,12 @@
     filter: none;
   }
 
-  #redirect-buttons a:hover, #redirect-buttons button:hover {
+  .redirect-buttons a:hover, .redirect-buttons button:hover {
     box-shadow: 0 8px 24px rgba(0,0,0,1);
     background-color: #333;
   }
 
-  #redirect-buttons a:hover::after, #redirect-buttons a::after {
+  .redirect-buttons a:hover::after, .redirect-buttons a::after {
     width: 0;
     transition: none;
   }

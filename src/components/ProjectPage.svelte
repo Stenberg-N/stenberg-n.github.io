@@ -65,17 +65,17 @@
 <div id="project-intro">
   <div id="project-title-links">
     <h1>{project.title}</h1>
-    <div class="links" style="margin-bottom: 0;">
+    <div class="links horizontal-flex-box" style="margin-bottom: 0;">
       {#if project.id === financeTrackerProject.id}
-        <button class="hover-highlight interactive-el underline-el demo-link" style="max-height: 50px; color: #f6f6f6; font-weight: 800;"
+        <button class="button-default-bold hover-highlight interactive-el underline-el demo-link" style="max-height: 50px;"
           onclick={() => sendAlert("alert.message.demo", false, true, financeTrackerProject.demolink)}
         >
           {$t["project.finance-tracker.demo"]}
         </button>
       {/if}
       <div style="display: flex; flex-direction: row; gap: 10px;">
-        <img style="filter: brightness(0) invert(0.9); width: 25px; height: 25px;" src="/assets/github-logo.svg" alt="github">
-        <button class="button-default underline-el" onclick={() => sendAlert("alert.message.github", false, true, project.repo)}>{$t["projects.project.repository"]}</button>
+        <img src="/assets/github-logo.svg" alt="github" class="img-medium" style="filter: brightness(0) invert(0.9);">
+        <button class="button-default-bold underline-el" onclick={() => sendAlert("alert.message.github", false, true, project.repo)}>{$t["projects.project.repository"]}</button>
       </div>
     </div>
   </div>
@@ -96,13 +96,13 @@
   </div>
 </div>
 
-<div style="border-bottom: 1px solid rgba(119, 119, 119, 0.4);"></div>
+<div class="border-divider"></div>
 
 <div id="project-sub-content">
   <h2>{$t['projects.project.imagetitle']}</h2>
   {#if project.id === 1}
     {#each Array.from({ length: 2 }, (_, i) => i) as i (i)}
-      <div class="app-variant">
+      <div class="app-variant vertical-flex-box">
         <h2>{i === 0 ? $t["projects.project.finance-tracker.variant"][0] : $t["projects.project.finance-tracker.variant"][1]}</h2>
         <div id="project-images">
           {#each (i === 0 ? financeTrackerDesktopPics : financeTrackerWebPics) as { pic, id } (id)}
@@ -113,7 +113,7 @@
         </div>
       </div>
       {#if i === 0}
-        <div style="border-bottom: 1px solid rgba(119, 119, 119, 0.4); margin: 100px 0;"></div>
+        <div class="border-divider" style="margin: 100px 0;"></div>
       {/if}
     {/each}
   {:else}
@@ -137,17 +137,10 @@
   }
 
   .app-variant {
-    display: flex;
-    flex-direction: column;
     padding: 0 1rem 1rem;
-    align-items: center;
   }
 
   .links {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 50px;
     gap: 50px;
   }
 
