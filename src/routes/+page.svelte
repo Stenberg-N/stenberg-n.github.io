@@ -314,7 +314,6 @@
     border-radius: 16px;
     padding: 0;
     margin: 0;
-    transition: transform 0.2s;
   }
 
   .badge {

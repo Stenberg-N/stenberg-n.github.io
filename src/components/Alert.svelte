@@ -11,11 +11,29 @@
   } = $props();
 
   let timer: number | null = null;
+  const duration = 3000;
+  let remainingTime = $state<number>(duration);
+  let startTime: number;
+  let intervalId: number | null = null;
 
   const startTimer = () => {
+    startTime = Date.now();
+
     timer = window.setTimeout(() => {
       closeAlert(alert.id);
-    }, 3000);
+    }, remainingTime);
+
+    intervalId = window.setInterval(() => {
+      const newRemaining = Math.max(0, remainingTime - (Date.now() - startTime));
+
+      if (newRemaining <= 0 && intervalId !== null) {
+        remainingTime = 0;
+        clearInterval(intervalId);
+        intervalId = null;
+      } else {
+        remainingTime = newRemaining;
+      }
+    }, 500);
   };
 
   $effect(() => {
@@ -24,6 +42,10 @@
       if (timer !== null) {
         window.clearTimeout(timer);
         timer = null;
+      }
+      if (intervalId !== null) {
+        window.clearInterval(intervalId);
+        intervalId = null;
       }
     };
   });

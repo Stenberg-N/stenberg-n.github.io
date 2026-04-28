@@ -5,6 +5,7 @@
 	import { sendAlert } from "$lib/alert";
 	import { projects } from "$lib/projects";
 	import { cubicInOut } from "svelte/easing";
+	import { error } from "@sveltejs/kit";
 
   let {
     projectId,
@@ -14,11 +15,11 @@
     isSecondIntroPic: boolean;
   } = $props();
 
-  const project = projects.find(p => p.id === projectId); if (!project) throw new Error('Project not found');
+  const project = projects.find(p => p.id === projectId); if (!project) throw error(404, "Project not found");
   const projectImages = $derived(project.allPictures);
 
   // FINANCE TRACKER
-  const financeTrackerProject = projects.find(p => p.id === 1); if (!financeTrackerProject) throw new Error('Project not found');
+  const financeTrackerProject = projects.find(p => p.id === 1); if (!financeTrackerProject) throw error(404, "Project not found");
   const financeTrackerDesktopPics = financeTrackerProject.allPictures.slice(0, 3).concat(financeTrackerProject.allPictures.slice(-2));
   const financeTrackerWebPics = financeTrackerProject.allPictures.slice(3, 10);
 

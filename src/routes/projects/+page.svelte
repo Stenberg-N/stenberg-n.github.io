@@ -4,6 +4,7 @@
 	import { sendAlert } from "$lib/alert";
 	import ProjectPage from '../../components/ProjectPage.svelte';
 	import { getContext } from 'svelte';
+	import Error from '../+error.svelte';
 
   const selectedProject = getContext<{ getSelectedProjectId: () => number | null, setSelectedProjectId: (id: number | null) => void }>('selectedProject');
   const setSelectedProjectId = (id: number | null) => selectedProject.setSelectedProjectId(id);
@@ -11,15 +12,17 @@
 
 </script>
 
-{#if selectedProjectId !== null}
+{#if selectedProjectId !== null && projects.some(p => p.id === selectedProjectId)}
   <ProjectPage projectId={selectedProjectId} isSecondIntroPic={selectedProjectId === 2 ? false : true} />
 {/if}
 
-{#if selectedProjectId === null}
+{#if !projects.some(p => p.id === selectedProjectId) && selectedProjectId !== null}
+  <Error />
+{:else if selectedProjectId === null}
   <div id="projects">
     {#each projects as { id, title, picture, descriptionKey, demo, demolink, tech, isWIP } (id)}
       <div role="link" tabindex="0" class="project vertical-flex-box anchor underline-el interactive-el hover-highlight" style="background-image: url({picture}); padding-bottom: 24px;"
-        onclick={() => setSelectedProjectId(id)} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedProjectId(id); } }}
+        onclick={() => projects.some(p => p.id === id) ? setSelectedProjectId(id) : sendAlert("alert.project-not-found", true, false)} onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedProjectId(id); } }}
       >
         <div class="horizontal-flex-box" style="position: relative; z-index: 1;">
           <p style="font-weight: 800; text-align: left;">{ title }</p>

@@ -47,6 +47,7 @@ body::-webkit-scrollbar {
 }
 
 *::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
   background-color: #ccc;
 }
 
