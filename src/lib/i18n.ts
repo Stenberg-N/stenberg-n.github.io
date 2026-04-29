@@ -6,7 +6,7 @@ type Language = 'en' | 'fi'
 const translations: Record<Language, Record<string, string | string[]>> = {
   en: {
     "navigation.anchors.names": ["Home", "Projects"],
-    "page-not-found": ["Page not found", "The page you are looking for does not exist."],
+    "page-not-found": ["Something went wrong.", "Page not found.", "The page you are looking for does not exist."],
   
     "project.finance-tracker.description": "My first project. A desktop and a web app for tracking, predicting, and visualizing finances.",
     "project.finance-tracker.demo": "Web demo",
@@ -90,7 +90,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
   },
   fi: {
     "navigation.anchors.names": ["Koti", "Projektit"],
-    "page-not-found": ["Sivua ei löytynyt", "Sivua jota etsit ei ole olemassa."],
+    "page-not-found": ["Jokin meni pieleen.", "Sivua ei löytynyt.", "Sivua jota etsit ei ole olemassa."],
 
     "project.finance-tracker.description": "Työpöytä- ja verkkosovellus talousdatan seurantaan, ennustamiseen ja visualisointiin.",
     "project.finance-tracker.demo": "Verkkosovelluksen demo",
