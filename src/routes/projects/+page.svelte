@@ -4,7 +4,7 @@
 	import { sendAlert } from "$lib/alert";
 	import ProjectPage from '../../components/ProjectPage.svelte';
 	import { getContext } from 'svelte';
-	import Error from '../+error.svelte';
+	import ErrorPage from '../404.html/+page.svelte';
 
   const selectedProject = getContext<{ getSelectedProjectId: () => number | null, setSelectedProjectId: (id: number | null) => void }>('selectedProject');
   const setSelectedProjectId = (id: number | null) => selectedProject.setSelectedProjectId(id);
@@ -17,7 +17,7 @@
 {/if}
 
 {#if !projects.some(p => p.id === selectedProjectId) && selectedProjectId !== null}
-  <Error />
+  <ErrorPage />
 {:else if selectedProjectId === null}
   <div id="projects">
     {#each projects as { id, title, picture, descriptionKey, demo, demolink, tech, isWIP } (id)}
