@@ -63,7 +63,7 @@ export const projects: Project[] = [
     slug: "waste-classifier",
     descriptionKey: "project.waste-classifier.description",
     paragraphKey: "projects.project.waste-classifier.paragraph",
-    tech: ["Python", "PyTorch", "PyQt 6"],
+    tech: ["Python", "PyTorch", "PyQt 6", "Optuna"],
     picture: "/images/waste-classifier4.png",
     allPictures: [
       { id: 1, pic: "/images/waste-classifier1.png" },

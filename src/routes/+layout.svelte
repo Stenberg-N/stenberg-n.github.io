@@ -10,14 +10,14 @@
   import '../styles.css';
 	import Alert from '../components/Alert.svelte';
 
-  type NavRoute = "/" | "/projects";
+  type NavRoute = "/" | "/projects" | "/about-me";
 
 	let { children } = $props();
   let windowWidth = $state(0);
   let backBtnBottom = $state<string>('unset');
   let alertsContainerBottom = $state<number>(30);
   let hasScrolled = $state<boolean>(false);
-  const mainRoutes = ["/", "/projects"];
+  const mainRoutes = ["/", "/projects", "/about-me"];
   let selectedProjectId = $state<number | null>(null);
 
   onNavigate(({ from, to, complete }) => {
@@ -236,7 +236,7 @@
   }
 
   @keyframes fade-out {
-    to { opacity: 1; }
+    to { opacity: 0; }
   }
   @keyframes fade-in {
     from { opacity: 0; }
@@ -248,7 +248,7 @@
     }
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: 620px) {
     #nav-bar {
       justify-content: center;
       height: 150px;
@@ -261,6 +261,7 @@
 
     #nav-links {
       align-self: flex-end;
+      width: 100%;
     }
 
     #link-btns {

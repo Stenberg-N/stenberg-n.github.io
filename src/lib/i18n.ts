@@ -5,7 +5,7 @@ type Language = 'en' | 'fi'
 
 const translations: Record<Language, Record<string, string | string[]>> = {
   en: {
-    "navigation.anchors.names": ["Home", "Projects"],
+    "navigation.anchors.names": ["Home", "Projects", "About me"],
     "page-not-found": ["Something went wrong.", "Page not found.", "The page you are looking for does not exist."],
   
     "project.finance-tracker.description": "My first project. A desktop and a web app for tracking, predicting, and visualizing finances.",
@@ -20,8 +20,8 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "project.focusboard.imagetexts": ["Make notes, customize and order them to your liking and keep everything neat with tabs.", "Add a timer to alert you, and optionally a message.", "Keep track of your events with the calendar.", "Get an in-depth perspective of your events for a selected day."],
     "project.focusboard.imagenotes": "All of the vertical grid lines might not be captured in the image.",
 
-    "project.fin-radar.description": "A polished, completely redone version of my first project, the finance tracker.",
-    "project.fin-radar.imagetexts": ["Your data is behind authentication.", "Your home page and menu. Add transactions and control your data.", "Table of your transactions. Add, edit and jump to specific dates.", "Make changes to your added transactions."],
+    "project.fin-radar.description": "A polished, completely redone version of my first project, the finance tracker. Also integrates FocusBoard.",
+    "project.fin-radar.imagetexts": ["Your data is behind authentication.", "Your home page and menu. Add transactions and control your data.", "Table of your transactions. View, add, edit and search your transactions.", "Make changes to your added transactions."],
 
     // ALERTS
     "alert.message.github": "Continue to GitHub?",
@@ -57,39 +57,53 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "projects.project.repository": "Project repository",
     "projects.project.imagetitle": "Project Images",
     "projects.project.finance-tracker.paragraph": [
-      "This was my first real project. The purpose behind this app was for it to be something I would personally use. Before this, I had only made simple stuff with Python like calculators, to-do lists, and basic CLI-based tools.",
-      "This was supposed to be a simple tracking app for finances made with Python and a combination of Tkinter and the modernized customTkinter for the GUI, but I decided to jump into machine learning since it had been a couple of years since I last had worked with ML \
-      and it was the next clear step for the app. When the app began to have functionality, I wanted to create an easy way to test it, so I decided to make a web app for it, which led me to learn some Django, JavaScript, CSS, and HTML. \
-      I also needed a platform to host it on and found NorthFlank, where I needed to learn how their app deployment works.",
-      "As I have continued to code, I have learned a lot along the way, and looking back at this app, naturally, I see there are many things I would do differently, and there are a lot of flaws in its code. \
-      My plan was to come back and fix its code, but that would require me to quite frankly write everything from scratch, which has led me to make the decision, that I would create the app on another stack, using Tauri, Svelte.js and Python. \
-      This also serves as a next step in my learning, where I need to figure out how I can combine Tauri's Rust backend with Python and make that work with the Svelte frontend."
+      "This project is a personal finance tracking application designed for managing expenses and analyzing spending patterns. It started as a desktop application built with Python (Tkinter + customTkinter) and later evolved into a web application using Django.",
+      "Key features the app includes:",
+      "• Expense tracking and categorization",
+      "• Authentication and authorization",
+      "• A machine learning component for predicting future expenses",
+      "• Data visualizations",
+      "To improve accessability, usability, and testing, I extended the project into a web app, which required learning Django, frontend basics (JavaScript, HTML, CSS), and deploying the appliaction using NorthFlank.",
+      "Looking back, the project has its limitations, especially in code structure. Instead of patching it, I decided to rebuild it using a more modern stack (Tauri + Svelte), while applying what I have learned about cleaner architecture and better coding practices."
     ],
     "projects.project.finance-tracker.variant": ["Desktop", "Web"],
     "projects.project.waste-classifier.paragraph": [
-      "This was my second project. The main reason for me to create this app was to bring back some concepts of ML and try refresh my memory. I had previous experience from a few years (in ~2024) back when I had coursework, where I needed to find the best model to classify tree species. \
-      Some of the models were VGGNet19 and 16, Inception, Xception, and ResNet and I used the TensorFlow Keras as the framework. But with this project I needed to use PyTorch and so I just jumped straight into it. Since it had been a long time since I last did anything with classifiers, \
-      and it was my first time using PyTorch, I relied a lot on other people's work. I did implement Optuna myself, since I had recently worked with it.",
-      "I wanted to use PyQt as my frontend so I went with that. I trained my own models and used the TrashNet dataset for training. I split the training to two stages, where the first stage was for training the model fast and getting the foundation up, \
-      and then the second stage for fine tuning and slower learning. I used MobileNetV4 initially, but switched to DenseNet201 since it was performing a lot better. MobileNetV4 is meant to be lightweight and compact, which is why I initially chose it, and is aimed for mobile devices. \
-      I was averaging around 79-87% accuracy with MobileNet, but got consistent results around 97% with DenseNet.",
-      "I would have liked to learn techniques on how to tackle machine vision to differentiate surfaces that share similar features, like gloss, reflectivity and so on, for example metal vs. glass vs. glossy plastic, since this was one of the main issues I think I had with the MobileNet model, \
-      where it repeatedly mistook these materials between each other, but found it extremely difficult, so I moved on to my other project."
+      "This project is an image classification application for sorting waste into categories using deep learning. The goal was to revisit machine learning concepts and apply them in a practical setting using PyTorch.",
+      "The model was trained on the TrashNet dataset using a two-stage training approach:",
+      "• Initial training phase to establish baseline performance",
+      "• Fine-tuning phase with slower learning for improved accuracy",
+      "I experimented with some models and found that DenseNet201 significantly outperformed MobileNet, achieving a consistent accuracy around 97%, compared to 79% - 87% with MobileNet.",
+      "The application includes a PyQt-based interface for interacting with the classifier.",
+      "One of the main challenges was distinguishing between visually similar materials (e.g. glass, metal, and glossy plastic), which exposed limitations in the model's ability to generalize based on surface properties. To address this, it would likely require more advanced feature engineering or dataset improvements."
     ],
     "projects.project.focusboard.paragraph": [
-      "This is my third ever project. I was interested in how some companies like Discord create their apps so I began investigating and found out they use something called Electron, which I didn't know anything about at that point in time. I found out that it uses a browser engine (Chromium) to render the app's UI, \
-      but runs natively like a desktop app. I explored other options and stumbled across Tauri, which uses Rust, and I had been curious about Rust so I chose this to run my next app, which was a note-taking/productivity-ish app. Tauri is used similarly to Electron, but doesn't use a full browser engine to render the app, \
-      but instead uses the operating system's native WebView (e.g. WebView2 on Windows and WKWebView on macOS).", "Next, I needed to choose the frontend and I had heard great things about Svelte.js and its performance so I went with that. As I have been working on this project, I have fallen in love with Tauri and Svelte, \
-      even though Rust is very different and a lot more difficult of a language when compared to others. I wouldn't say because its inherently difficult, but there are things and concepts that no other language really has, for example ownership.", "The motivation behind this app is the same as with my Finance Tracker, \
-      I am building this for myself. I know there are many options out there, like Microsoft's own app bundle (includes a calendar, to-do list, etc.), Obsidian, and Google NotebookLM, but by having my own application I get privacy and the ability to control everything, so if I am not the biggest fan of some feature, \
-      I can change and tweak it."
+      "This project is a desktop note-taking and productivity application built with Tauri and Svelte. The goal was to create a lightweight, private alternative to existing tools while maintaining full control over features and data.",
+      "The application includes:",
+      "• Note creation, organization, and customization",
+      "• Calendar and a timer with customizable notifications",
+      "I chose Tauri over Electron since it doesn't bundle a full browser engine and instead uses the operating system's native WebView, which reduces resource usage and application size. This decision also introduced Rust into the backend, which required learning concepts such as ownership.",
+      "One of the main challenges was working with components in Svelte, especially how to pass variables between the parent and child components.",
+      "This project is part of a broader effort to build tools I actively use myself."
     ],
     "projects.project.fin-radar.paragraph": [
-      "This is my fourth project. I am recreating my first project, but now with a lot more knowledge and experience. It is currently in its very early development."
+      "This project's aim is to bring together my past projects. It combines the finance tracker and FocusBoard applications into one.",
+      "The current functions of the app:",
+      "• Account registration, login, and recovery",
+      "• Home page",
+      "• Transactions table to view, edit, and search transactions",
+      "• Two localizations: English and Finnish",
+    ],
+
+    // ABOUT ME
+    "about-me.hobbies.titles": ["Mountain biking", "3D modeling & printing", "Programming"],
+    "about-me.hobbies.paragraphs": [
+      "Mountain biking is my way of staying active. I enjoy the technical skill and logical decisions you need on the trails.",
+      "I design and 3D print my own small projects, bringing solutions to my needs.",
+      "In my free time, I build programs for my needs. I always try to think of different options for my problem and and choose the most effective one in relation to the added complexity."
     ],
   },
   fi: {
-    "navigation.anchors.names": ["Koti", "Projektit"],
+    "navigation.anchors.names": ["Koti", "Projektit", "Tietoa minusta"],
     "page-not-found": ["Jokin meni pieleen.", "Sivua ei löytynyt.", "Sivua jota etsit ei ole olemassa."],
 
     "project.finance-tracker.description": "Työpöytä- ja verkkosovellus talousdatan seurantaan, ennustamiseen ja visualisointiin.",
@@ -104,8 +118,8 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "project.focusboard.imagetexts": ["Luo muistiinpanoja, muokkaa ja järjestä ne mieluisiksi ja pidä kaikki järjestyksessä välilehtien avulla.", "Lisää ajastin hälyttämään sinua ja vaihtoehtoisesti kiinnitä viesti.", "Seuraa tapahtumiasi kalenterista.", "Näe tapahtumasi valitsemasta päivästäsi tarkemmin aikajana näkymällä."],
     "project.focusboard.imagenotes": "Jotkin pystyviivat näkyvät huonosti.",
 
-    "project.fin-radar.description": "Siistimpi, valmiimpi, parempi ja täysin uudelleen rakennettu versio ensimmäisestä projektistani talousdatan seurantaan.",
-    "project.fin-radar.imagetexts": ["Tietosi ovat tunnistautumisen takana.", "Kotisivusi ja valikko. Lisää tilitapahtumia ja hallitse dataasi.", "Taulukko tilitapahtumistasi. Lisää, muokkaa ja käy läpi tapahtumiasi päivämäärä siirtymisen avulla.", "Muokkaa tilitapahtumiasi."],
+    "project.fin-radar.description": "Siistimpi, valmiimpi, parempi ja täysin uudelleenrakennettu versio ensimmäisestä projektistani talousdatan seurantaan. Yhdistää myös FocusBoardin itseensä.",
+    "project.fin-radar.imagetexts": ["Tietosi ovat tunnistautumisen takana.", "Kotisivusi ja valikko. Lisää tilitapahtumia ja hallitse dataasi.", "Taulukko tilitapahtumistasi. Selaa, lisää, muokkaa ja hae tapahtumiasi.", "Muokkaa tilitapahtumiasi."],
     
     // ALERTS
     "alert.message.github": "Siirrytkö GitHubiin?",
@@ -121,7 +135,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "intro-title1": "Hei! Olen",
     "intro-title2": "Niko Stenberg",
     "intro-title3": "Tuleva ICT-insinööri",
-    "intro-paragraph": "Intohimoinen järjestelmistä, turvallisuudesta, ohjelmoinnista/koodaamisesta ja kaikesta muusta näiden väliltä, voisi kutsua 'Full-stack' tai 'generalist'. Tykkään tietokoneista.",
+    "intro-paragraph": "Intohimoinen järjestelmistä, tietoturvasta, ohjelmoinnista/koodaamisesta ja kaikesta muusta näiden väliltä, voisi kutsua 'Full-stack' tai 'generalist'. Tykkään tietokoneista.",
     "contact-location": "Suomi, Kanta-Häme",
     "home.view-projects": "Projektit",
     "home.sub-content.knowledge.title": "Mitä tiedän",
@@ -141,35 +155,60 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "projects.project.repository": "Projektin arkisto (engl. repository)",
     "projects.project.imagetitle": "Projektin kuvat",
     "projects.project.finance-tracker.paragraph": [
-      "Tämä oli ensimmäinen kunnon projektini. Tarkoituksena oli tehdä sovellus, mitä itse olisin käyttänyt. Ennen tätä olin vain tehnyt yksinkertaisia asioita Pythonilla, kuten laskimia, to-do listoja ja CLI- tai komentorivi-pohjaisia työkaluja.",
-      "Sovelluksen piti olla suhteellisen yksinkertainen sovellus talousdatan seuraamiseen, mikä olisi pohjautunut Pythoniin ja käyttänyt Pythonin omaa Tkinteriä ja modernimpaa versiota, customTkinteriä, käyttöliittymänään (GUI:na), mutta päätin sisällyttää koneoppimista tehdäkseni ennusteita datasta, \
-      sillä se olisi ollut seuraava askel sovelluksen kehityksessä ja siitä oli useampi vuosi milloin viimeksi olin tehnyt jotain koneoppimismallien kanssa. Kun sovellus oli kehittynyt tarpeeksi, halusin että sovellusta voisi helposti testata ilman mitään sen suurempia, kuten lataamista yms., \
-      joten päätin tehdä verkkosovelluksen siitä. Tämän kautta opin jonkin verran Djangoa, JavaScriptiä, CSS:ää ja HTML:ää. Tarvitsin myös jonkin alustan missä sovellus olisi pyörinyt ja löysin NorthFlankin, jossa minun piti opetella miten heidän sovelluksen käyttöönotto (deployment) tapahtuu.",
-      "Olen oppinut paljon matkan varrella, kun olen jatkanut koodamista ja aika ajoin kun olen katsonut tätä projektia, huomaan miten nykyään tekisin monet asiat aivan erilailla, ja lisäksi miten projektin koodissa on paljon virheitä ja vikoja. Ajatuksenani oli ollut, että korjaisin koodin jossain kohtaa, \
-      mutta tämä oikeastaan tarkoittaisi sitä, että kirjoittaisin kaiken koodin alusta, mikä sai minut ajattelemaan jos koko sovelluksen tekisi muulla stackillä, eli Tauri + Svelte.js + Python. Tämä olisi myös seuraava askel oppimisessani, sillä minun tulisi saada Python kommunikoimaan Taurin backendin \
-      kanssa, mikä on Rustia."
+      "Tämä projekti on henkilökohtainen talousdatan seurantasovellus, jolla voit käsitellä menojasi ja nähdä kuluttamistasi. Sovellus oli aluksi työpöytä sovellus, joka oli rakennettu Pythonilla (Tkinter + customTkinter), mutta kehittyi myöhemmin verkkosovellukseksi käyttäen Djangoa.",
+      "Pääominaisuuksia sovelluksessa:",
+      "• Menojen seuranta ja kategoriointi",
+      "• Autentikaatio ja autorisaatio",
+      "• Koneoppimiskomponentti tulevien menojen ennustamiseen",
+      "• Data visualisaatioita",
+      "Parantaakseni saavutettavuutta, käytettävyyttä ja testaamista, laajensin projektia verkkotasolle. Se vaati minua oppimaan Djangon, frontendin perusteet (JavaScript, HTML, CSS) ja sovelluksen käyttöönoton (deployment) NorthFlankissä.",
+      "Jälkeenpäin katsoen projektilla on rajoituksensa, erityisesti koodin rakenteen suhteen. Sen sijaan, että olisin päivittänyt sitä, päätin rakentaa sen uudelleen käyttäen modernimpaa koodipinoa, engl. stack, (Tauri + Svelte) soveltaen oppimiani asioita paremmasta arkkitehtuurista ja koodamisen käytännöistä."
     ],
     "projects.project.finance-tracker.variant": ["Työpöytä", "Verkko"],
     "projects.project.waste-classifier.paragraph": [
-      "Tämä oli minun toinen projekti. Ensisijainen syy miksi tein tämän sovelluksen oli, koska halusin virkistää muistiani liittyen koneoppimiseen. Minulla oli aikaisempaa kokemusta parin vuoden takaa (noin 2024), jolloin minulla oli kursseja jossa minun piti löytää paras koneoppimismalli puulajien \
-      tunnistamiseen. Malleja joita käytin oli muun muassa VGGNet19 ja 16, Inception, Xception ja Resnet, ja kehyksenä (frameworkinä) käytin TensorFlow Keras:ia. Tässä projektissa minun kuitenkin tuli käyttää PyTorchia ja en kauheasti valmistellut vaan hyppäsin suoraan asiaan. \
-      Koska siitä oli jonkin verran aikaa kun olin tehnyt mitään luokittelijoiden (classifier) kanssa ja, kun tämä oli ensimmäinen kerta kun käytän PyTorchia, seurasin paljolti muiden ihmisten töitä. Optunan kylläkin implementoin itse, kun olin hetkittäin juuri työskennellyt sen kanssa.",
-      "Halusin käyttää PyQt:ta sovelluksen käyttöliittymänä (GUI), joten menin sillä. Harjotin omat mallini ja käytin TrashNet datasettiä harjottamisessa. Jaoin harjoituksen kahteen vaiheeseen/osaan, missä ensimmäinen oli harjoittaakseen mallia nopeasti ja rakentaa pohja sille, jonka jälkeen \
-      vaihe 2. oli hienosäätöä ja hitaampaa oppimista. Käytin MobileNetV4 aluksi, mutta vaihdoin DenseNet201:een, sillä se suoriutui huomattavasti paremmin. MobileNetin tarkoituksena on olla kevyt, joka oli syy miksi valitsin sen, ja se on tarkoitettu mobiililaitteille. Tulokseni pyöri 79-87% tarkkuuden \
-      välillä MobileNetillä, mutta sain säännöllisesti 97% ympyröissä DenseNetillä eri testeissä.",
-      "Olisin halunnut oppia eri tekniikoita, miten saada konenäkö erottamaan eri pintoja joilla on samankaltaisia ominaisuuksia, kuten kiilto ja heijastuskyky, esimerkiksi metalli vs. lasi vs. kiiltävä muovi, sillä tämä oli mielestäni yksi ongelmista mikä minulla tuli vastaan MobileNetillä. Mallini säännöllisesti \
-      ei osannut erottaa metallia, lasia ja muovia toisistaan. Tämä kuitenkin oli hyvin vaikeaa, joten jatkoin seuraavaan projektiini."
+      "Tämä projekti on kuvan luokittelu sovellus jätteen kategoriointiin käyttäen syvää oppimista. Tavoitteena oli kerrata koneoppimisen konsepteja ja laittaa ne käytäntöön käyttäen PyTorchia.",
+      "Malli on harjoitettu hyödyntäen TrashNet datasettiä ja kaksivaiheista harjoitusmallia:",
+      "• Ensimmäinen harjoitusvaihe asettaa perustason mallille",
+      "• Hienosäätö harjoitteluvaiheessa käytetään hitaampaa oppimista parantaakseen mallin tarkkuutta",
+      "Testailin joitakin malleja ja havaitsin, että DenseNet201 suoritui huomattavasti paremmin kuin MobileNet, saavuttaen tasaisen noin 97%:n tarkkuuden verrattuna MobileNetin 79-87%:iin.",
+      "Sovellus käyttää PyQt-pohjaista käyttöliittymää.",
+      "Yksi päähaasteista oli erottaa eri materiaalit toisistaan jotka olivat visuaalisesti samankaltaisia, esimerkiksi lasi, metalli ja kiiltävä muovi. Tämä toi esiin mallin yleistämisen, engl. generalization, rajat perustuen jätteiden pintojen ominaisuuksiin. Tämän ratkaisemiseksi todennäköisesti vaadittaisiin edistyneempää ominaisuussuunnittelua tai datasetin parannuksia."
     ],
     "projects.project.focusboard.paragraph": [
-      "Tämä on kolmas projektini, mitä olen tehnyt. Olin kiinnostunut miten yritykset kuten Discord tekevät sovelluksensa, joten selvitin sen ja löysin, että he käyttävät Electronia, mistä en tiennyt mitään. Perehdyin Electroniin ja opin, että se käyttää selainmoottori (browser engine) Chromiumia renderöidäkseen sovelluksen \
-      käyttöliittymän, mutta sovellus samaan aikaan toimii kuten mikä tahansa muu työpöytäsovellus. Tutustuin muihin vaihtoehtoihin ja törmäsin Tauriin joka käyttää Rustia kielenään, ja olin ollut hyvin kiinnostunut Rustista niin valitsin tämän sovellukseni pohjaksi, mikä oli pääasiassa muistiinpano-/tuottavuussovellus. \
-      Tauria käytetään samaan kuin Electronia, mutta se ei käytä kokonaista selainmoottoria sovelluksen renderöimiseksi, vaan käyttöjärjestelmän omaa WebView:iä (Windowsissa WebView2 ja macOS:ssä WKWebView).", "Seuraavaksi minun tuli valita frontend sovellukseni ja olin kuullut paljon hyvää Svelte.js:stä ja sen suorituskyvystä, \
-      joten valitsin sen. Sen kauemmin olen työstänyt tätä projektia, sen enemmän olen tykästynyt Tauriin ja Svelteen, vaikkakin Rust on jokseenkin erilainen ja huomattavasti vaikeampi kieli verrattuna muihin. En sanoisi, että Rust itsessään on mitenkään vaikeaa, mutta Rustissa on erilaisia asioita ja konsepteja joita ei muissa \
-      kielissä oikeastaan ole, kuten omistajuus.", "Syy sovelluksen kehittämiselle on ollut sama kuin minun talousdatan seurantasovelluksellakin, eli teen sovellusta omaan käyttöön. Tiedän, että on useita eri vaihtoehtoja olemassa kuten Microsoftin omat (sisältää kalenterin, to-do listan yms.), Obsidian ja Googlen NotebookLM, \
-      mutta oma sovellus antaa minulle yksityisyyttä ja kyvyn hallita asioita. Esimerkiksi, jos edellämainituissa sovelluksissa olisi jokin ominaisuus, josta en ole kauhean innoissani, voin muuttaa sitä."
+      "Tämä projekti on muistiinpano- ja tuottavuustyöpöytäsovellus, joka on rakennettu Taurilla ja Sveltellä. Tavoitteena oli rakentaa kevyt, yksityinen vaihtoehto olemassa oleville työkaluille.",
+      "Sovellus sisältää:",
+      "• Muistiinpanojen luonnin, järjestelemisen ja kustomoinnin",
+      "• Kalenterin ja ajastimen muokattavilla notifikaatioilla",
+      "Valitsin Taurin Electronin ylitse sillä se ei paketoi, engl. bundle, kokonaista selainmoottoria ja sen sijaan käyttää käyttöjärjestelmän omaa natiivia WebViewiä, mikä vähentää resurssien käyttöä ja sovelluksen kokoa. Tämä päätös toi Rustin osaksi backendiä, joka edellytti esimerkiksi omistajuuden oppimista.",
+      "Yksi päähaasteista oli komponenttien kanssa työskentely Sveltellä. Erityisesti muuttujien välittäminen pää- ja lapsikomponenttien välillä.",
+      "Tämä projekti on osa laajempaa pyrkimystä rakentaa työkaluja, joita itse käytän aktiivisesti."
     ],
     "projects.project.fin-radar.paragraph": [
-      "Tämä on neljäs projektini. Rakennan ensimmäisen projektini uudelleen, mutta tällä kertaa tietämyksellä ja kokemuksella, mitä minulle on kertynyt. Tällä hetkellä projekti on hyvin alussa kehitystään."
+      "This project's aim is to bring together my past projects. It combines the finance tracker and FocusBoard applications into one.",
+      "The current functions of the app:",
+      "• Account registration, login, and recovery",
+      "• Home page",
+      "• Transactions table to view, edit, and search transactions",
+      "• Two localizations: English and Finnish",
+
+      "Tämän projektin tarkoituksena on tuoda aikaisempia projektejani yhteen. Tämä yhdistää aikaisemman FocusBoard ja talousdatan seurantasovelluksen yhdeksi.",
+      "Nykyiset sovelluksen toiminnot",
+      "• Kirjautuminen, tilinluonti ja -palautus",
+      "• Kotisivu",
+      "• Tilitapahtumien taulukko tapahtumien katsontaan, muokkaamiseen ja etsimiseen",
+      "• Kaksi lokalisaatiota: englanti ja suomi",
+    ],
+
+    // ABOUT ME
+    "about-me.paragraph": [
+      "Olen ICT-insinööriopiskelija, joka nauttii asioiden rakentamisesta sekä ruudulla että sen ulkopuolella. Vietän paljon aikaa maastopyöräilessä sekä 3D-suunnittelussa ja -tulostamisessa, kun minulla on jokin idea.",
+      "Tykkään työskennellä käytännönläheisten ideoiden parissa. Erityisesti sellaisten, joissa voin siirtyä ideasta johonkin konkreettiseen asiaan, olipa se ohjelmisto tai fyysinen esine."
+    ],
+    "about-me.hobbies.titles": ["Maastopyöräily", "3D-mallentaminen & -tulostaminen", "Ohjelmointi"],
+    "about-me.hobbies.paragraphs": [
+      "Maastopyöräily on tapani pysyä aktiivisena. Nautin teknisen taidon ja loogisten päätöksien yhdistelmästä poluilla.",
+      "Suunnittelen ja 3D-tulostan omia pieniä projekteja, tuoden ratkaisuja tarpeisiini.",
+      "Vapaa-ajallani koodaan sovelluksia omiin tarpeisiini. Yritän aina miettiä eri vaihtoehtoja ongelmaani ja valita tehokkaimman niistä suhteessa lisättyyn kompleksisuuteen."
     ],
   }
 };
