@@ -184,13 +184,6 @@ const translations: Record<Language, Record<string, string | string[]>> = {
       "Tämä projekti on osa laajempaa pyrkimystä rakentaa työkaluja, joita itse käytän aktiivisesti."
     ],
     "projects.project.fin-radar.paragraph": [
-      "This project's aim is to bring together my past projects. It combines the finance tracker and FocusBoard applications into one.",
-      "The current functions of the app:",
-      "• Account registration, login, and recovery",
-      "• Home page",
-      "• Transactions table to view, edit, and search transactions",
-      "• Two localizations: English and Finnish",
-
       "Tämän projektin tarkoituksena on tuoda aikaisempia projektejani yhteen. Tämä yhdistää aikaisemman FocusBoard ja talousdatan seurantasovelluksen yhdeksi.",
       "Nykyiset sovelluksen toiminnot",
       "• Kirjautuminen, tilinluonti ja -palautus",
