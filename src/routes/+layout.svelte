@@ -83,12 +83,12 @@
 <div id="background"></div>
 <div id="grid-background"></div>
 
-{#if page.url.pathname !== "/" && selectedProjectId !== null}
-  <button id="back-btn" class="button-default vertical-flex-box interactive-el hover-highlight" style="bottom: {backBtnBottom};"
-    onclick={() => setSelectedProjectId(null)} transition:fly={{ y: 20, duration: 200, delay: 100 }}
+{#if page.route.id === "/projects/[slug]"}
+  <a id="back-btn" class="vertical-flex-box interactive-el hover-highlight" style="bottom: {backBtnBottom};"
+    href={resolve("/projects")} onclick={() => setSelectedProjectId(null)} transition:fly={{ y: 20, duration: 200, delay: 100 }}
   >
     <img class="img-small" style="transform: rotate(90deg); filter: brightness(0) invert(0.9);" src="/assets/arrow.svg"alt="Back arrow">
-  </button>
+</a>
 {/if}
 
 <nav id="nav-bar" class="horizontal-flex-box">
@@ -186,7 +186,7 @@
   #back-btn {
     position: fixed;
     top: 24px;
-    left: calc(50% - 170px);
+    left: calc(50% - 216px);
     height: 42px;
     width: 42px;
     padding: 12px;
