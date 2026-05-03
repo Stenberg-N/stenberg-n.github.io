@@ -21,7 +21,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "project.focusboard.imagenotes": "All of the vertical grid lines might not be captured in the image.",
 
     "project.fin-radar.description": "A polished, completely redone version of my first project, the finance tracker. Also integrates FocusBoard.",
-    "project.fin-radar.imagetexts": ["Your data is behind authentication.", "Your home page and menu. Add transactions and control your data.", "Table of your transactions. View, add, edit and search your transactions.", "Make changes to your added transactions."],
+    "project.fin-radar.imagetexts": ["Your data is behind authentication.", "Your home page and menu. Add transactions and control your data.", "Table of your transactions. View, add, edit and search your transactions.", "Visualize your data."],
 
     // ALERTS
     "alert.message.github": "Continue to GitHub?",
@@ -119,7 +119,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     "project.focusboard.imagenotes": "Jotkin pystyviivat näkyvät huonosti.",
 
     "project.fin-radar.description": "Siistimpi, valmiimpi, parempi ja täysin uudelleenrakennettu versio ensimmäisestä projektistani talousdatan seurantaan. Yhdistää myös FocusBoardin itseensä.",
-    "project.fin-radar.imagetexts": ["Tietosi ovat tunnistautumisen takana.", "Kotisivusi ja valikko. Lisää tilitapahtumia ja hallitse dataasi.", "Taulukko tilitapahtumistasi. Selaa, lisää, muokkaa ja hae tapahtumiasi.", "Muokkaa tilitapahtumiasi."],
+    "project.fin-radar.imagetexts": ["Tietosi ovat tunnistautumisen takana.", "Kotisivusi ja valikko. Lisää tilitapahtumia ja hallitse dataasi.", "Taulukko tilitapahtumistasi. Selaa, lisää, muokkaa ja hae tapahtumiasi.", "Visualisoi dataasi."],
     
     // ALERTS
     "alert.message.github": "Siirrytkö GitHubiin?",
