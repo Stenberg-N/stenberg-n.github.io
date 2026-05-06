@@ -2,13 +2,17 @@
   import { projects } from '$lib/projects';
   import { t } from '$lib/i18n';
 	import { sendAlert } from "$lib/alert";
-	import { getContext } from 'svelte';
+	import { getContext, onMount } from 'svelte';
 	import ErrorPage from '../404.html/+page.svelte';
   import { resolve } from '$app/paths';
   import { goto } from '$app/navigation';
 
   type ProjectSlug = "finance-tracker" | "focusboard" | "waste-classifier" | "fin-radar";
   type ProjectRoute = `/projects/${ProjectSlug}`;
+
+  onMount(() => {
+    setSelectedProjectId(null);
+  });
 
   const selectedProject = getContext<{ getSelectedProjectId: () => number | null, setSelectedProjectId: (id: number | null) => void }>('selectedProject');
   const setSelectedProjectId = (id: number | null) => selectedProject.setSelectedProjectId(id);
