@@ -94,6 +94,11 @@
         <button class="button-default-bold underline-el" onclick={() => sendAlert("alert.message.github", false, true, "https://github.com/Stenberg-N")}>Stenberg-N</button>
       </div>
 
+      <div id="linkedin" class="horizontal-flex-box">
+        <img src="/assets/linkedin-logo.svg" alt="LinkedIn logo" class="img-medium">
+        <button class="button-default-bold underline-el" onclick={() => sendAlert("alert.message.linkedin", false, true, "https://www.linkedin.com/in/niko-stenberg-543982408")}>LinkedIn</button>
+      </div>
+
       <div id="email" class="horizontal-flex-box" style="user-select: text; word-break: break-all;">
         <img src="/assets/email-logo.svg" alt="Email logo" style="user-select: none;" class="img-medium">
         <span>stenbergniko@outlook.com</span>
@@ -109,8 +114,8 @@
       <img class:twitch={twitchRight} src="/assets/arrow.svg" alt="arrow" class="img-small">
     </a>
   </div>
-  <div id="selfie-image">
-
+  <div id="selfie-image" class="image-wrapper">
+    <img src="/images/selfie.jpg" alt="Selfie" />
   </div>
 </div>
 
@@ -224,13 +229,11 @@
   #home-intro, #selfie-image {
     max-width: 60%;
     width: 100%;
-    height: 100%;
   }
 
   #selfie-image {
     max-width: 40%;
-    padding: 10px;
-    border: 1px solid yellow; 
+    padding: 1rem;
   }
 
   #home-sub-content {
@@ -348,15 +351,6 @@
   }
 
   @media (max-width: 1200px) {
-
-    #home-intro-contact {
-      flex-direction: column;
-    }
-
-    #home-intro, #selfie-image {
-      max-width: 100%;
-    }
-
     #home-sub-content {
       gap: 50px;
       padding: 0;
@@ -373,6 +367,20 @@
     .current-project-image {
       height: auto;
       max-height: 550px;
+    }
+  }
+
+  @media (max-width: 1000px) {
+    #home-intro-contact {
+      flex-direction: column;
+    }
+
+    #home-intro {
+      max-width: 100%;
+    }
+
+    #selfie-image {
+      max-width: 500px;
     }
   }
 

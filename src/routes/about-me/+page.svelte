@@ -14,7 +14,6 @@
     align-items: flex-start;
     gap: 1rem;
     padding: 1rem;
-    max-width: 50%;
   }
 
   #about-me-container h2:first-of-type {

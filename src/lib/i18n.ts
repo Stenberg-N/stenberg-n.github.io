@@ -25,6 +25,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
 
     // ALERTS
     "alert.message.github": "Continue to GitHub?",
+    "alert.message.linkedin": "Continue to LinkedIn?",
     "alert.message.demo": "Continue to demo?",
     "alert.message.nixu": "Continue to NIXU?",
     "alert.message.jamk": "Continue to JAMK?",
@@ -123,6 +124,7 @@ const translations: Record<Language, Record<string, string | string[]>> = {
     
     // ALERTS
     "alert.message.github": "Siirrytkö GitHubiin?",
+    "alert.message.linkedin": "Siirrytkö LinkedIniin?",
     "alert.message.demo": "Siirrytkö demoon?",
     "alert.message.nixu": "Siirrytkö NIXUun?",
     "alert.message.jamk": "Siirrytkö JAMKiin?",
