@@ -53,7 +53,7 @@ export const projects: Project[] = [
     imageNotes: [ { id: 5, note: "project.focusboard.imagenotes" } ],
     imageTexts: "project.focusboard.imagetexts",
     demo: "",
-    isWIP: true,
+    isWIP: false,
     isCurrent: false,
     repo: "https://github.com/Stenberg-N/focusboard",
   },
