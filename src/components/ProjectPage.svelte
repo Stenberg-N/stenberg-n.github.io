@@ -2,60 +2,62 @@
   import { getContext, onMount } from "svelte";
   import { fade, fly } from 'svelte/transition';
   import { cubicInOut } from "svelte/easing";
-	import { error } from "@sveltejs/kit";
 
   import { t } from "$lib/i18n";
 	import { sendAlert } from "$lib/alert";
-	import { projects } from "$lib/projects";
+  import { type Project } from "$lib/types";
+	import { handleClickOutside } from "$lib/actions";
 
   let {
-    projectId,
+    project,
     isSecondIntroPic,
   }: {
-    projectId: number | null;
+    project: Project;
     isSecondIntroPic: boolean;
   } = $props();
 
-  const project = projects.find(p => p.id === projectId); if (!project) throw error(404, "Project not found");
   const projectImages = $derived(project.allPictures);
-  let windowWidth = $derived.by(() => { return getWindowWidth(); });
+  const windowWidth = $derived.by(() => { return getWindowWidth(); });
+
+  let zoomedImage = $state<string | null>(null);
+  let zoomedImageId = $state<number | null>(null);
+  let zoomedContainer = $state<HTMLDivElement | null>(null);
+  const zoomedImageNote = $derived.by(() => { return zoomedImageId !== null ? project.imageNotes.find(note => note.id === zoomedImageId) : null; });
 
   // FINANCE TRACKER
-  const financeTrackerProject = projects.find(p => p.id === 3); if (!financeTrackerProject) throw error(404, "Project not found");
-  const financeTrackerDesktopPics = financeTrackerProject.allPictures.slice(0, 3).concat(financeTrackerProject.allPictures.slice(-2));
-  const financeTrackerWebPics = financeTrackerProject.allPictures.slice(3, 10);
+  const financeTrackerProject = $derived<Project | null>(project.id === 3 ? project : null);
+  const financeTrackerDesktopPics = $derived(financeTrackerProject
+    ? financeTrackerProject.allPictures.slice(0, 3).concat(financeTrackerProject.allPictures.slice(-2))
+    : []
+  );
+  const financeTrackerWebPics = $derived(financeTrackerProject
+    ? financeTrackerProject.allPictures.slice(3, 10)
+    : []
+  );
 
   // FINRADAR
-  const finRadarProject = projects.find(p => p.id === 1); if (!finRadarProject) throw error(404, "Project not found");
-  const finRadarSectionPics = [
+  const finRadarProject = $derived<Project | null>(project.id === 1 ? project : null);
+  const finRadarSectionPics = $derived(finRadarProject ? [
     { pics: [finRadarProject.allPictures[3], finRadarProject.allPictures[8]] },
     { pics: [finRadarProject.allPictures[2], finRadarProject.allPictures[6]] },
     { pics: [finRadarProject.allPictures[1], finRadarProject.allPictures[4], finRadarProject.allPictures[5]] },
     { pics: [finRadarProject.allPictures[0], finRadarProject.allPictures[9]] },
     { pics: [finRadarProject.allPictures[7], finRadarProject.allPictures[10]] },
-  ];
+  ] : []);
 
-  let zoomedImage = $state<string | null>(null);
-  let zoomedImageId = $state<number | null>(null);
-  let zoomedContainer = $state<HTMLDivElement | null>(null);
-  let zoomedImageNote = $derived.by(() => { return zoomedImageId !== null ? project.imageNotes.find(note => note.id === zoomedImageId) : null; });
+  /**********************************************************************************************************************\
+  |
+  | Context, Helper & Wrapper functions
+  |
+  \**********************************************************************************************************************/
+  const getWindowWidth = getContext<() => number>('windowWidth');
 
-  const zoomImg = (image: string, id: number) => {
+  /**********************************************************************************************************************/
+
+  const zoomImage = (image: string, id: number) => {
     zoomedImage = image;
     zoomedImageId = id;
   };
-
-  const clickOutside = (node: HTMLElement) => {
-    const handleClick = (event: MouseEvent) => {
-      if (zoomedImage && node && !node.contains(event.target as Node)) {
-        zoomedImage = null;
-      }
-    };
-    document.addEventListener('click', handleClick, true);
-    return { destroy() { document.removeEventListener('click', handleClick, true); }};
-  };
-
-  const getWindowWidth = getContext<() => number>('windowWidth');
 
 </script>
 
@@ -64,7 +66,7 @@
     <div id="zoomedContainer">
       <button class="zoomedImg-close hover-highlight" onclick={() => zoomedImage = null} transition:fly={{ y: -100, duration: 300, delay: 100, easing: cubicInOut }}><img src="/assets/close-x.svg" alt="close"></button>
       <div class="image-wrapper">
-        <img src={zoomedImage} alt="zoomed content" use:clickOutside transition:fly={{ y: 100, duration: 300, delay: 100, easing: cubicInOut }}>
+        <img src={zoomedImage} alt="zoomed content" transition:fly={{ y: 100, duration: 300, delay: 100, easing: cubicInOut }} use:handleClickOutside={{ requirements: [zoomedImage], onOutsideClick: () => { zoomedImage = null; zoomedImageId = null; } }}>
       </div>
       {#if zoomedImageNote}
         <span style="text-align: center; max-width: 90%; background-color: #000;">{$t[zoomedImageNote.note]}</span>
@@ -107,9 +109,9 @@
     </div>
     <div id="project-info">
       <div id="project-intro-images">
-        <button class="hover-highlight" onclick={() => zoomImg(projectImages[0].pic, projectImages[0].id)}><img style="width: {project.id === 3 ? '80%' : '100%'}; height: auto;" src={projectImages[0].pic} alt="project"></button>
+        <button class="hover-highlight" onclick={() => zoomImage(projectImages[0].pic, projectImages[0].id)}><img style="width: {project.id === 3 ? '80%' : '100%'}; height: auto;" src={projectImages[0].pic} alt="project"></button>
         {#if isSecondIntroPic}
-          <button class="hover-highlight" onclick={() => zoomImg(projectImages[1].pic, projectImages[1].id)}><img style="width: {project.id === 3 ? '80%' : '100%'}; height: auto;" src={projectImages[1].pic} alt="project"></button>
+          <button class="hover-highlight" onclick={() => zoomImage(projectImages[1].pic, projectImages[1].id)}><img style="width: {project.id === 3 ? '80%' : '100%'}; height: auto;" src={projectImages[1].pic} alt="project"></button>
         {/if}
       </div>
     </div>
@@ -126,7 +128,7 @@
         <h2>{i === 0 ? $t["projects.project.finance-tracker.variant"][0] : $t["projects.project.finance-tracker.variant"][1]}</h2>
         <div id="project-images">
           {#each (i === 0 ? financeTrackerDesktopPics : financeTrackerWebPics) as { pic, id } (id)}
-            <button class="hover-highlight" onclick={() => zoomImg(pic, id)}>
+            <button class="hover-highlight" onclick={() => zoomImage(pic, id)}>
               <img style="width: 100%; height: auto;" src={pic} alt="project">
             </button>
           {/each}
@@ -147,7 +149,7 @@
         </div>
         <div class="finradar-section-images vertical-flex-box" style="align-items: {windowWidth <= 820 ? 'center' : i % 2 ? 'flex-start' : 'flex-end'};">
           {#each section.pics as image, idx (image.id)}
-          <button class="hover-highlight image-wrapper" onclick={() => zoomImg(image.pic, image.id)}>
+          <button class="hover-highlight image-wrapper" onclick={() => zoomImage(image.pic, image.id)}>
             <img src={image.pic} alt="FinRadar image {i + idx}" />
           </button>
           {/each}
@@ -160,7 +162,7 @@
   {:else}
   <div id="project-images">
     {#each projectImages as { pic, id } (id)}
-      <button class="hover-highlight" onclick={() => zoomImg(pic, id)}>
+      <button class="hover-highlight" onclick={() => zoomImage(pic, id)}>
         <img style="width: 100%; height: auto;" src={pic} alt="project">
       </button>
     {/each}

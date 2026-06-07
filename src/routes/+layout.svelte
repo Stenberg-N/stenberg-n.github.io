@@ -16,7 +16,7 @@
 	let { children } = $props();
   let windowWidth = $state(0);
   let alertsContainerBottom = $state<number>(30);
-  let hasScrolled = $state<boolean>(false);
+  let isScrollThreshold = $state<boolean>(false);
   const mainRoutes = ["/", "/projects", "/about-me"];
   let selectedProjectId = $state<number | null>(null);
 
@@ -44,11 +44,12 @@
   | Context, Helper & Wrapper functions
   |
   \**********************************************************************************************************************/
-    const setSelectedProjectId = (id: number | null) => { selectedProjectId = id; };
-    setContext('selectedProject', { getSelectedProjectId: () => selectedProjectId, setSelectedProjectId });
-    setContext('windowWidth', () => windowWidth);
+  const setSelectedProjectId = (id: number | null) => { selectedProjectId = id; };
+  setContext('selectedProject', { getSelectedProjectId: () => selectedProjectId, setSelectedProjectId });
+  setContext('windowWidth', () => windowWidth);
 
   /**********************************************************************************************************************/
+
   const copyEmail = () => {
     const text = 'stenbergniko@outlook.com';
     navigator.clipboard.writeText(text);
@@ -56,7 +57,7 @@
   };
 
   const handleScroll = () => {
-    hasScrolled = window.scrollY > 700;
+    isScrollThreshold = window.scrollY > 700;
   };
 </script>
 
@@ -66,7 +67,7 @@
 
 <svelte:window onscroll={handleScroll} bind:innerWidth={windowWidth} />
 
-{#if hasScrolled}
+{#if isScrollThreshold}
   <button id="scroll-to-top" class="button-default vertical-flex-box interactive-el hover-highlight" onclick={() => window.scrollTo(0, 0)} transition:fly={{ y: 100, duration: 300, delay: 100 }}>
     <img src="/assets/arrow.svg" alt="arrow" class="img-small" style="transform: rotate(180deg); filter: brightness(0) invert(0.9);">
   </button>

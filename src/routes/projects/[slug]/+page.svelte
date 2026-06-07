@@ -6,7 +6,7 @@
   let { data } = $props();
 
   const selectedProject = getContext<{ getSelectedProjectId: () => number | null, setSelectedProjectId: (id: number | null) => void }>('selectedProject');
-  let selectedProjectId = $derived(selectedProject.getSelectedProjectId());
+  const selectedProjectId = $derived(selectedProject.getSelectedProjectId());
 </script>
 
-<ProjectPage projectId={data.project.id} isSecondIntroPic={selectedProjectId === 2 ? false : true} />
+<ProjectPage project={data.project} isSecondIntroPic={selectedProjectId === 2 ? false : true} />

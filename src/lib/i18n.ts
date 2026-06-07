@@ -245,7 +245,7 @@ const translations: Record<Language, Record<string, string | string[] | Array<st
     ],
     "projects.project.fin-radar.section.titles": ["Yksityisyys & turvallisuus", "Kotiruutu", "Talous", "Muistiinpanot", "Ajastimet"],
     "projects.project.fin-radar.section.contents": [
-      ["Luo tili.", "Pidä datasi poissa muiden silmiltä.", "Suojele dataasi oikeuttamattomalta pääsyltä. * Datan salaus on suunnitelmissa, mutta ei vielä implementoitu."],
+      ["Luo tilisi.", "Pidä datasi poissa muiden silmiltä.", "Suojele dataasi oikeuttamattomalta pääsyltä. * Datan salaus on suunnitelmissa, mutta ei vielä implementoitu."],
       ["Kotisivu, josta saat yleiskatsauksen kalenterisi tulevista tapahtumista, nopeita näkemyksiä kuukausittaisista menoistasi ja lomake tilitapahtumien lisäämiseen.", "Sisältää pienen kalenterimoduulin, jolla päivämäärän valinta on nopeaa ja helppoa. \
         * Kotisivu on vielä hyvin keskeneärinen puuttuvien ominaisuuksien vuoksi."
       ],

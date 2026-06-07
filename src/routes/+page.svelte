@@ -8,14 +8,16 @@
   import { home } from '$lib/home';
   import { projects } from '$lib/projects';
 	import { sendAlert } from "$lib/alert";
+  import { handleClickOutside, handleHorizontalScroll } from "$lib/actions";
 
   let currentProject = projects.find(p => p.isCurrent) || null;
   const { chosenImages = [], imageNotes = [] } = currentProject || {};
+  let twitchRight = $state<boolean>(false);
+
   let zoomedBadge = $state<string | null>(null);
   let zoomedImage = $state<string | null>(null);
   let zoomedImageId = $state<number | null>(null);
-  let zoomedImageNote = $derived.by(() => { return zoomedImageId !== null ? imageNotes.find(note => note.id === zoomedImageId) : null; });
-  let twitchRight = $state<boolean>(false);
+  const zoomedImageNote = $derived.by(() => { return zoomedImageId !== null ? imageNotes.find(note => note.id === zoomedImageId) : null; });
   let zoomedContainer = $state<HTMLDivElement | null>(null);
 
   const contactContainerEls = [
@@ -25,39 +27,9 @@
     { img: "/assets/location-pin.svg", alt: "Location", content: "contact-location", command: () => {} },
   ];
 
-  const zoombadge = (badge: string) => {
-    zoomedBadge = badge;
-  };
-
-  const zoomImg = (image: string, id: number) => {
-    zoomedImage = image;
-    zoomedImageId = id;
-  };
-
-  const clickOutside = (node: HTMLElement) => {
-    const handleClick = (event: MouseEvent) => {
-      if (zoomedBadge || zoomedImage && node && !node.contains(event.target as Node)) {
-        zoomedBadge = null;
-        zoomedImage = null;
-        zoomedImageId = null;
-      }
-    };
-    document.addEventListener('click', handleClick, true);
-    return { destroy() { document.removeEventListener('click', handleClick, true); }};
-  };
-
-  const scrollHorizontal = (node: HTMLElement) => {
-    const handleScroll = (event: WheelEvent) => {
-      event.preventDefault();
-      event.stopPropagation();
-      node.scrollLeft += event.deltaY;
-    };
-
-    node.addEventListener('wheel', handleScroll, { passive: false });
-
-    return {
-      destroy: () => node.removeEventListener('wheel', handleScroll),
-    };
+  const zoomElement = (element: "badge" | "image", image: string, id?: number) => {
+    (() => element === "badge" ? zoomedBadge = image : zoomedImage = image)();
+    if (id) zoomedImageId = id;
   };
 
 </script>
@@ -72,9 +44,9 @@
       </button>
       <div class="image-wrapper" transition:fly={{ y: 100, duration: 300, delay: 100, easing: cubicInOut }}>
         {#if zoomedBadge}
-          <img id="zoomedBadge-image" src={zoomedBadge} alt="badge" use:clickOutside>
+          <img id="zoomedBadge-image" src={zoomedBadge} alt="badge" use:handleClickOutside={{ requirements: [zoomedImage, zoomedBadge], onOutsideClick: () => { zoomedImage = null; zoomedBadge = null; zoomedImageId = null; } }}>
         {:else if zoomedImage}
-          <img id="zoomedImg-image" src={zoomedImage} alt="Current project" use:clickOutside>
+          <img id="zoomedImg-image" src={zoomedImage} alt="Current project" use:handleClickOutside={{ requirements: [zoomedImage, zoomedBadge], onOutsideClick: () => { zoomedImage = null; zoomedBadge = null; zoomedImageId = null; } }}>
         {/if}
       </div>
       {#if zoomedImageNote}
@@ -123,7 +95,7 @@
 <div id="home-sub-content" class="vertical-flex-box">
   <h2>{$t['home.sub-content.knowledge.title']}</h2>
   <div id="home-categories-outer">
-    <div id="home-categories" class="horizontal-flex-box" use:scrollHorizontal>
+    <div id="home-categories" class="horizontal-flex-box" use:handleHorizontalScroll>
       {#each home as { id, titleKey, descriptionKey, badges } (id)}
         <div class="home-category vertical-flex-box hover-highlight">
           <h3 style="margin: 0; margin-bottom: 40px;">{$t[titleKey]}</h3>
@@ -141,9 +113,9 @@
           <div style="display: flex; flex: 1 1 0;"></div>
           {#if badges.length >= 1}
             <div style="overflow: hidden;">
-              <div id="home-badges" class="horizontal-flex-box" use:scrollHorizontal>
+              <div id="home-badges" class="horizontal-flex-box" use:handleHorizontalScroll={{ multiplier: 0.5 }}>
                 {#each badges as badge (badge)}
-                  <button class="vertical-flex-box hover-highlight interactive-el" onclick={() => zoombadge(badge)}><img class="badge" src={badge} alt="badge"></button>
+                  <button class="vertical-flex-box hover-highlight interactive-el" onclick={() => zoomElement("badge", badge)}><img class="badge" src={badge} alt="badge"></button>
                 {/each}
               </div>
             </div>
@@ -168,7 +140,7 @@
           {#if $t[currentProject.imageTexts]}
             <span>{$t[currentProject.imageTexts][i]}</span>
           {/if}
-          <button class="current-project-image hover-highlight interactive-el image-wrapper" onclick={() => zoomImg(image, id)}>
+          <button class="current-project-image hover-highlight interactive-el image-wrapper" onclick={() => zoomElement("image", image, id)}>
             <img src={image} alt="current project">
           </button>
         {/each}

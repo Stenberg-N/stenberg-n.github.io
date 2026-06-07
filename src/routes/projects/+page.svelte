@@ -7,59 +7,58 @@
   import { t } from '$lib/i18n';
 	import { sendAlert } from "$lib/alert";
 
-	import ErrorPage from '../404.html/+page.svelte';
-
   type ProjectSlug = "finance-tracker" | "focusboard" | "waste-classifier" | "fin-radar";
   type ProjectRoute = `/projects/${ProjectSlug}`;
-
-  const selectedProject = getContext<{ getSelectedProjectId: () => number | null, setSelectedProjectId: (id: number | null) => void }>('selectedProject');
-  const selectedProjectId = $derived(selectedProject.getSelectedProjectId());
 
   onMount(() => {
     setSelectedProjectId(null);
   });
 
+  /**********************************************************************************************************************\
+  |
+  | Context, Helper & Wrapper functions
+  |
+  \**********************************************************************************************************************/
+  const selectedProject = getContext<{ getSelectedProjectId: () => number | null, setSelectedProjectId: (id: number | null) => void }>('selectedProject');
   const setSelectedProjectId = (id: number | null) => selectedProject.setSelectedProjectId(id);
+
+  /**********************************************************************************************************************/
 
 </script>
 
-{#if !projects.some(p => p.id === selectedProjectId) && selectedProjectId !== null}
-  <ErrorPage />
-{:else if selectedProjectId === null}
-  <div id="projects" class="vertical-flex-box">
-    {#each projects as project (project.id)}
-      <div role="link" tabindex="0" class="project horizontal-flex-box underline-el hover-highlight interactive-el"
-        onclick={() => projects.some(p => p.id === project.id) ? (setSelectedProjectId(project.id), goto(resolve(`/projects/${project.slug}` as ProjectRoute))) : sendAlert("alert.project-not-found", true, false)}
-        onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedProjectId(project.id); goto(resolve(`/projects/${project.slug}` as ProjectRoute)); } }}
-      >
-        <div class="project-info-container vertical-flex-box">
-          <h1 style="margin: 0 0 4px 0;">{project.title}</h1>
-          <div class="project-repo-container horizontal-flex-box">
-            <img src="/assets/github-logo.svg" alt="GitHub" class="img-small" style="filter: brightness(0) invert(0.9);" />
-            <button class="transparent-button-bold underline-el" onclick={(e) => { e.stopPropagation(); sendAlert("alert.message.github", false, true, project.repo); }}>{$t["projects.project.repository"]}</button>
-          </div>
-          <p>{$t[project.descriptionKey]}</p>
-          <p class="project-status" style="color: {project.isWIP ? '#ff8500' : '#78ff78'}">
-            {project.isWIP ? $t["projects.project-status.wip"] : $t["projects.project-status.inactive"]}
-          </p>
-          <div class="project-bottom-container vertical-flex-box">
-            {#if project.demo.trim().length > 0}
-              <button class="demo-button transparent-button-bold underline-el hover-highlight" onclick={(e) => { e.stopPropagation(); sendAlert("alert.message.demo", false, true, project.demolink); }}>{$t[project.demo]}</button>
-            {/if}
-            <div class="tech-card-container horizontal-flex-box">
-              {#each project.tech as tech, i (i)}
-                <span class="tech-card">{tech}</span>
-              {/each}
-            </div>
-          </div>
+<div id="projects" class="vertical-flex-box">
+  {#each projects as project (project.id)}
+    <div role="link" tabindex="0" class="project horizontal-flex-box underline-el hover-highlight interactive-el"
+      onclick={() => projects.some(p => p.id === project.id) ? (setSelectedProjectId(project.id), goto(resolve(`/projects/${project.slug}` as ProjectRoute))) : sendAlert("alert.project-not-found", true, false)}
+      onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedProjectId(project.id); goto(resolve(`/projects/${project.slug}` as ProjectRoute)); } }}
+    >
+      <div class="project-info-container vertical-flex-box">
+        <h1 style="margin: 0 0 4px 0;">{project.title}</h1>
+        <div class="project-repo-container horizontal-flex-box">
+          <img src="/assets/github-logo.svg" alt="GitHub" class="img-small" style="filter: brightness(0) invert(0.9);" />
+          <button class="transparent-button-bold underline-el" onclick={(e) => { e.stopPropagation(); sendAlert("alert.message.github", false, true, project.repo); }}>{$t["projects.project.repository"]}</button>
         </div>
-        <div class="image-wrapper">
-          <img src={project.picture} alt={`${project.title} image`} />
+        <p>{$t[project.descriptionKey]}</p>
+        <p class="project-status" style="color: {project.isWIP ? '#ff8500' : '#78ff78'}">
+          {project.isWIP ? $t["projects.project-status.wip"] : $t["projects.project-status.inactive"]}
+        </p>
+        <div class="project-bottom-container vertical-flex-box">
+          {#if project.demo.trim().length > 0}
+            <button class="demo-button transparent-button-bold underline-el hover-highlight" onclick={(e) => { e.stopPropagation(); sendAlert("alert.message.demo", false, true, project.demolink); }}>{$t[project.demo]}</button>
+          {/if}
+          <div class="tech-card-container horizontal-flex-box">
+            {#each project.tech as tech, i (i)}
+              <span class="tech-card">{tech}</span>
+            {/each}
+          </div>
         </div>
       </div>
-    {/each}
-  </div>
-{/if}
+      <div class="image-wrapper">
+        <img src={project.picture} alt={`${project.title} image`} />
+      </div>
+    </div>
+  {/each}
+</div>
 
 <style>
   #projects {
