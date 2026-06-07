@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+  import { fade, fly } from "svelte/transition";
+  import { cubicInOut } from "svelte/easing";
+  import { resolve } from '$app/paths';
+  
   import { t } from '$lib/i18n';
   import { home } from '$lib/home';
-  import { fade, fly } from "svelte/transition";
   import { projects } from '$lib/projects';
-	import { resolve } from '$app/paths';
 	import { sendAlert } from "$lib/alert";
-	import { cubicInOut } from "svelte/easing";
 
   let currentProject = projects.find(p => p.isCurrent) || null;
   const { chosenImages = [], imageNotes = [] } = currentProject || {};
@@ -16,6 +17,13 @@
   let zoomedImageNote = $derived.by(() => { return zoomedImageId !== null ? imageNotes.find(note => note.id === zoomedImageId) : null; });
   let twitchRight = $state<boolean>(false);
   let zoomedContainer = $state<HTMLDivElement | null>(null);
+
+  const contactContainerEls = [
+    { img: "/assets/github-logo.svg", alt: "Github", content: "Stenberg-N", command: () => sendAlert("alert.message.github", false, true, "https://github.com/Stenberg-N") },
+    { img: "/assets/linkedin-logo.svg", alt: "LinkedIn", content: "LinkedIn", command: () => sendAlert("alert.message.linkedin", false, true, "https://www.linkedin.com/in/niko-stenberg-543982408") },
+    { img: "/assets/email-logo.svg", alt: "Email", content: "stenbergniko@outlook.com", command: () => {} },
+    { img: "/assets/location-pin.svg", alt: "Location", content: "contact-location", command: () => {} },
+  ];
 
   const zoombadge = (badge: string) => {
     zoomedBadge = badge;
@@ -82,34 +90,25 @@
 
 <div id="home-intro-contact" class="horizontal-flex-box">
   <div id="home-intro">
-    <div>
-      <h1 style="margin: 0; -webkit-text-stroke: 1px #f6f6f6; color: #0f0f0f; font-size: 40px; font-family: 'Inter'; paint-order: stroke fill;" class="intro-title">{$t['intro-title1']}</h1>
-      <h1 style="margin: 0; font-size: 48px; font-family: 'Inter'; paint-order: stroke fill;" class="intro-title">{$t['intro-title2']}</h1>
-      <h1 style="margin: 0; -webkit-text-stroke: 1px #f6f6f6; color: #0f0f0f; font-size: 40px; font-family: 'Inter'; paint-order: stroke fill;" class="intro-title">{$t['intro-title3']}</h1>
-      <p style="padding-left: 2rem; margin-top: 20px;">{$t['intro-paragraph']}</p>
+    <div id="home-intro-title">
+      <h1 class="intro-title">{$t['intro-title1']}</h1>
+      <h1 class="intro-title">{$t['intro-title2']}</h1>
+      <h1 class="intro-title">{$t['intro-title3']}</h1>
+      <p>{$t['intro-paragraph']}</p>
     </div>
-    <div id="contact" class="vertical-flex-box">
-      <div id="github" class="horizontal-flex-box">
-        <img src="/assets/github-logo.svg" alt="Github logo" class="img-medium">
-        <button class="button-default-bold underline-el" onclick={() => sendAlert("alert.message.github", false, true, "https://github.com/Stenberg-N")}>Stenberg-N</button>
-      </div>
-
-      <div id="linkedin" class="horizontal-flex-box">
-        <img src="/assets/linkedin-logo.svg" alt="LinkedIn logo" class="img-medium">
-        <button class="button-default-bold underline-el" onclick={() => sendAlert("alert.message.linkedin", false, true, "https://www.linkedin.com/in/niko-stenberg-543982408")}>LinkedIn</button>
-      </div>
-
-      <div id="email" class="horizontal-flex-box" style="user-select: text; word-break: break-all;">
-        <img src="/assets/email-logo.svg" alt="Email logo" style="user-select: none;" class="img-medium">
-        <span>stenbergniko@outlook.com</span>
-      </div>
-
-      <div id="location" class="horizontal-flex-box">
-        <img src="/assets/location-pin.svg" alt="Location logo" class="img-medium">
-        <span>{$t['contact-location']}</span>
-      </div>
+    <div id="home-contact" class="vertical-flex-box">
+      {#each contactContainerEls as el, i (i)}
+        <div class="horizontal-flex-box">
+          <img src={el.img} alt={el.alt} class="img-medium" style="filter: {i === 1 ? 'unset' : 'brightness(0) invert(0.9)'};">
+          {#if i === 0 || i === 1}
+          <button class="transparent-button-bold underline-el" onclick={() => el.command()}>{el.content}</button>
+          {:else}
+            <span>{i === 3 ? $t[el.content] : el.content}</span>
+          {/if}
+        </div>
+      {/each}
     </div>
-    <a id="view-projects" class="anchor hover-highlight" href={resolve("/projects")} onmouseenter={() => twitchRight = true} onmouseleave={() => twitchRight = false}>
+    <a id="home-view-projects" class="anchor hover-highlight" href={resolve("/projects")} onmouseenter={() => twitchRight = true} onmouseleave={() => twitchRight = false}>
       <span>{$t["home.view-projects"]}</span>
       <img class:twitch={twitchRight} src="/assets/arrow.svg" alt="arrow" class="img-small">
     </a>
@@ -123,26 +122,26 @@
 
 <div id="home-sub-content" class="vertical-flex-box">
   <h2>{$t['home.sub-content.knowledge.title']}</h2>
-  <div id="categories-outer">
-    <div id="categories" class="horizontal-flex-box" use:scrollHorizontal>
+  <div id="home-categories-outer">
+    <div id="home-categories" class="horizontal-flex-box" use:scrollHorizontal>
       {#each home as { id, titleKey, descriptionKey, badges } (id)}
-        <div class="category vertical-flex-box hover-highlight">
+        <div class="home-category vertical-flex-box hover-highlight">
           <h3 style="margin: 0; margin-bottom: 40px;">{$t[titleKey]}</h3>
-          <div class="content">
+          <div class="home-category-content vertical-flex-box">
             {#each $t[descriptionKey] as item (item)}
               <span>{item}</span>
             {/each}
             {#if id === 3}
               <div style="display: flex; flex-direction: column; gap: 5px;">
-                <button class="button-default-bold underline-el" style="width: fit-content;" onclick={() => sendAlert("alert.message.nixu", false, true, "https://thenixuchallenge.com/c/")}>NIXU</button>
-                <button class="button-default-bold underline-el" style="width: fit-content;" onclick={() => sendAlert("alert.message.jamk", false, true, "https://cs4e.pages.labranet.jamk.fi/ooc/20-Background/")}>{$t["home.cybersec.description"].slice(-1)}</button>
+                <button class="transparent-button-bold underline-el" style="width: fit-content;" onclick={() => sendAlert("alert.message.nixu", false, true, "https://thenixuchallenge.com/c/")}>NIXU</button>
+                <button class="transparent-button-bold underline-el" style="width: fit-content;" onclick={() => sendAlert("alert.message.jamk", false, true, "https://cs4e.pages.labranet.jamk.fi/ooc/20-Background/")}>{$t["home.cybersec.description"].slice(-1)}</button>
               </div>
             {/if}
           </div>
           <div style="display: flex; flex: 1 1 0;"></div>
           {#if badges.length >= 1}
             <div style="overflow: hidden;">
-              <div id="badges" class="horizontal-flex-box" use:scrollHorizontal>
+              <div id="home-badges" class="horizontal-flex-box" use:scrollHorizontal>
                 {#each badges as badge (badge)}
                   <button class="vertical-flex-box hover-highlight interactive-el" onclick={() => zoombadge(badge)}><img class="badge" src={badge} alt="badge"></button>
                 {/each}
@@ -159,15 +158,18 @@
   <h2>{$t['home.sub-content.working-on.title']}</h2>
   <div id="current-project" style="display: flex; flex-direction: column;">
     {#if currentProject}
-      <h2 style="margin-bottom: 10px; text-align: center;">{currentProject.title}</h2>
-      <span style="align-self: center; text-align: center;">{$t[currentProject.descriptionKey]}</span>
+      <h2 style="margin-bottom: 10px;">{currentProject.title}</h2>
+      <span>{$t[currentProject.descriptionKey]}</span>
+      <a id="view-current-project" class="anchor hover-highlight" style="justify-content: center;" href={resolve("/projects/fin-radar")}>
+        <span>{$t["home.sub-content.view-current-project"]}</span>
+      </a>
       <div id="current-project-images" class="vertical-flex-box">
         {#each chosenImages as { image, id }, i (image)}
           {#if $t[currentProject.imageTexts]}
-            <span style="text-align: center;">{$t[currentProject.imageTexts][i]}</span>
+            <span>{$t[currentProject.imageTexts][i]}</span>
           {/if}
-          <button class="current-project-image hover-highlight" onclick={() => zoomImg(image, id)}>
-            <img style="object-fit: contain; height: 100%; width: 100%;" src={image} alt="current project">
+          <button class="current-project-image hover-highlight interactive-el image-wrapper" onclick={() => zoomImg(image, id)}>
+            <img src={image} alt="current project">
           </button>
         {/each}
       </div>
@@ -184,18 +186,41 @@
     user-select: none;
   }
 
-  #contact {
+  #home-intro {
+    max-width: 60%;
+    width: 100%;
+  }
+
+  #home-intro-title h1 {
+    margin: 0;
+    font-family: 'Inter';
+    paint-order: stroke fill;
+    font-size: clamp(2.5rem, 2.65cqw, 3rem);
+  }
+  #home-intro-title h1:not(:nth-child(2)) {
+    -webkit-text-stroke: 1px #f6f6f6;
+    color: #0f0f0f;
+    font-size: clamp(2rem, 2.15cqw, 2.5rem);
+  }
+
+  #home-intro-title p {
+    padding-left: 2rem;
+    margin-top: 20px;
+    font-size: clamp(0.875rem, 1.08cqw, 1rem);
+  }
+
+  #home-contact {
     gap: 12px;
     margin-top: 40px;
   }
 
-  #contact div {
+  #home-contact div {
     justify-content: flex-start;
     width: 100%;
     gap: 20px;
   }
 
-  #view-projects {
+  #home-view-projects {
     justify-content: space-between;
     max-width: 170px;
     height: 50px;
@@ -205,34 +230,26 @@
     padding: 8px 12px;
   }
 
-  #view-projects img {
-    filter: brightness(0) invert(0.9);
-    transform: rotateZ(-90deg);
-  }
-
   .twitch {
     animation: twitch-left 0.5s;
   }
 
-  #view-projects:hover {
+  #home-view-projects img {
+    filter: brightness(0) invert(0.9);
+    transform: rotateZ(-90deg);
+  }
+
+  #home-view-projects:hover {
     background-color: rgba(255, 70, 70, 1);
   }
 
-  #view-projects::after {
+  #home-view-projects::after {
     width: 0;
-  }
-
-  #github img, #email img, #location img {
-    filter: brightness(0) invert(0.9);
-  }
-
-  #home-intro, #selfie-image {
-    max-width: 60%;
-    width: 100%;
   }
 
   #selfie-image {
     max-width: 40%;
+    width: 100%;
     padding: 1rem;
   }
 
@@ -245,10 +262,11 @@
   #home-sub-content h2 {
     font-weight: 300;
     align-self: center;
+    text-align: center;
     margin: 0;
   }
 
-  #categories {
+  #home-categories {
     justify-content: unset;
     overflow-x: auto;
     overflow-y: hidden;
@@ -258,16 +276,16 @@
     mask-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgb(0, 0, 0) 5%, rgb(0, 0, 0) 95%, rgba(0, 0, 0, 0));
   }
 
-  #categories::-webkit-scrollbar-track {
+  #home-categories::-webkit-scrollbar-track {
     margin: 0 40px;
   }
 
-  #categories-outer {
+  #home-categories-outer {
     overflow: hidden;
     padding: 0 50px;
   }
 
-  .category {
+  .home-category {
     align-items: unset;
     min-width: calc(50% - 40px);
     max-width: 650px;
@@ -275,30 +293,35 @@
     height: 100%;
     padding: 1rem;
     margin: 0 20px;
-    border-radius: 12px;
+    border-radius: 4px;
     background-color: rgba(15, 15, 15, 0.8);
   }
 
-  #categories .category .content {
-    padding-left: 1rem;
+  .home-category h3 {
+    font-size: clamp(1rem, 1.08cqw, 1.125rem);
   }
 
-  #categories .category .content span {
+  #home-categories .home-category-content {
+    align-items: flex-start;
+    padding-left: 1rem;
+    gap: 1rem;
+  }
+
+  #home-categories .home-category-content span {
     position: relative;
     display: block;
     padding-left: 1em;
-    font-size: 18px;
-    margin-bottom: 20px;
+    font-size: clamp(0.875rem, 1.08cqw, 1.125rem);
   }
 
-  #categories .category .content span::before {
+  #home-categories .home-category-content span::before {
     content: '•';
     position: absolute;
     left: 0;
-    font-size: 18px;
+    font-size: clamp(0.875rem, 1.08cqw, 1.125rem);
   }
 
-  #badges {
+  #home-badges {
     justify-content: flex-start;
     max-height: 180px;
     gap: 10px;
@@ -307,11 +330,11 @@
     overflow-y: hidden;
   }
 
-  #badges::-webkit-scrollbar-track {
+  #home-badges::-webkit-scrollbar-track {
     margin-top: 0;
   }
 
-  #badges button {
+  #home-badges button {
     height: 120px;
     width: 120px;
     border-radius: 16px;
@@ -319,10 +342,27 @@
     margin: 0;
   }
 
-  .badge {
+  #home-badges .badge {
     height: 120px;
     width: 120px;
     border-radius: 16px;
+  }
+
+  #view-current-project {
+    align-self: center;
+    max-width: 160px;
+    padding: 16px;
+    margin-top: 2rem;
+    border-radius: 16px;
+  }
+  #view-current-project:hover {
+    background-color: rgb(255, 70, 70);
+  }
+
+  #current-project span {
+    align-self: center;
+    text-align: center;
+    font-size: clamp(0.875rem, 1.08cqw, 1rem);
   }
 
   #current-project-images {
@@ -332,22 +372,14 @@
   }
 
   .current-project-image {
-    padding: 2rem;
     background-color: #0f0f0f;
-    height: 550px;
-    width: 100%;
+    height: 560px;
     margin-top: 20px;
     border: 0;
-    border-radius: 12px;
+    border-radius: 4px;
   }
-
   .current-project-image:not(:last-child) {
-    margin-bottom: 80px;
-  }
-
-  .current-project-image:hover {
-    cursor: pointer;
-    transform: translateY(-4px);
+    margin-bottom: clamp(40px, 4.5cqw, 80px);
   }
 
   @media (max-width: 1200px) {
@@ -356,7 +388,7 @@
       padding: 0;
     }
 
-    #categories-outer {
+    #home-categories-outer {
       padding: 0;
     }
 
@@ -385,17 +417,8 @@
   }
 
   @media (max-width: 750px) {
-    .category {
+    .home-category {
       min-width: calc(100% - 40px);
-    }
-
-    .category h3 {
-      font-size: 16px;
-    }
-
-    #categories .category .content span {
-      font-size: 14px;
-      margin-bottom: 10px;
     }
 
     .current-project-image {

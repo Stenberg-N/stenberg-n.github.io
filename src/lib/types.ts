@@ -30,6 +30,7 @@ export interface Project {
   repo: string;
   demolink?: string;
   paragraphKey: string;
+  featuresKey: string;
 }
 
 export type Alert = {

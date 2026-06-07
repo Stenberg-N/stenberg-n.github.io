@@ -1,11 +1,12 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { getContext, onMount } from "svelte";
   import { fade, fly } from 'svelte/transition';
+  import { cubicInOut } from "svelte/easing";
+	import { error } from "@sveltejs/kit";
+
   import { t } from "$lib/i18n";
 	import { sendAlert } from "$lib/alert";
 	import { projects } from "$lib/projects";
-	import { cubicInOut } from "svelte/easing";
-	import { error } from "@sveltejs/kit";
 
   let {
     projectId,
@@ -17,11 +18,22 @@
 
   const project = projects.find(p => p.id === projectId); if (!project) throw error(404, "Project not found");
   const projectImages = $derived(project.allPictures);
+  let windowWidth = $derived.by(() => { return getWindowWidth(); });
 
   // FINANCE TRACKER
-  const financeTrackerProject = projects.find(p => p.id === 1); if (!financeTrackerProject) throw error(404, "Project not found");
+  const financeTrackerProject = projects.find(p => p.id === 3); if (!financeTrackerProject) throw error(404, "Project not found");
   const financeTrackerDesktopPics = financeTrackerProject.allPictures.slice(0, 3).concat(financeTrackerProject.allPictures.slice(-2));
   const financeTrackerWebPics = financeTrackerProject.allPictures.slice(3, 10);
+
+  // FINRADAR
+  const finRadarProject = projects.find(p => p.id === 1); if (!finRadarProject) throw error(404, "Project not found");
+  const finRadarSectionPics = [
+    { pics: [finRadarProject.allPictures[3], finRadarProject.allPictures[8]] },
+    { pics: [finRadarProject.allPictures[2], finRadarProject.allPictures[6]] },
+    { pics: [finRadarProject.allPictures[1], finRadarProject.allPictures[4], finRadarProject.allPictures[5]] },
+    { pics: [finRadarProject.allPictures[0], finRadarProject.allPictures[9]] },
+    { pics: [finRadarProject.allPictures[7], finRadarProject.allPictures[10]] },
+  ];
 
   let zoomedImage = $state<string | null>(null);
   let zoomedImageId = $state<number | null>(null);
@@ -42,6 +54,8 @@
     document.addEventListener('click', handleClick, true);
     return { destroy() { document.removeEventListener('click', handleClick, true); }};
   };
+
+  const getWindowWidth = getContext<() => number>('windowWidth');
 
 </script>
 
@@ -67,8 +81,8 @@
   <div id="project-title-links">
     <h1>{project.title}</h1>
     <div class="links horizontal-flex-box" style="margin-bottom: 0;">
-      {#if project.id === financeTrackerProject.id}
-        <button class="button-default-bold hover-highlight interactive-el underline-el demo-link" style="max-height: 50px;"
+      {#if project === financeTrackerProject}
+        <button class="transparent-button-bold hover-highlight interactive-el underline-el demo-link" style="max-height: 50px;"
           onclick={() => sendAlert("alert.message.demo", false, true, financeTrackerProject.demolink)}
         >
           {$t["project.finance-tracker.demo"]}
@@ -76,7 +90,7 @@
       {/if}
       <div style="display: flex; flex-direction: row; gap: 10px;">
         <img src="/assets/github-logo.svg" alt="github" class="img-medium" style="filter: brightness(0) invert(0.9);">
-        <button class="button-default-bold underline-el" onclick={() => sendAlert("alert.message.github", false, true, project.repo)}>{$t["projects.project.repository"]}</button>
+        <button class="transparent-button-bold underline-el" onclick={() => sendAlert("alert.message.github", false, true, project.repo)}>{$t["projects.project.repository"]}</button>
       </div>
     </div>
   </div>
@@ -85,6 +99,11 @@
       {#each $t[project.paragraphKey] as text (text)}
         <p>{text}</p>
       {/each}
+      <div id="project-features" class="vertical-flex-box">
+        {#each $t[project.featuresKey] as feature, i (i)}
+          <span>{feature}</span>
+        {/each}
+      </div>
     </div>
     <div id="project-info">
       <div id="project-intro-images">
@@ -101,7 +120,7 @@
 
 <div id="project-sub-content">
   <h2>{$t['projects.project.imagetitle']}</h2>
-  {#if project.id === 1}
+  {#if project === financeTrackerProject}
     {#each Array.from({ length: 2 }, (_, i) => i) as i (i)}
       <div class="app-variant vertical-flex-box">
         <h2>{i === 0 ? $t["projects.project.finance-tracker.variant"][0] : $t["projects.project.finance-tracker.variant"][1]}</h2>
@@ -114,6 +133,27 @@
         </div>
       </div>
       {#if i === 0}
+        <div class="border-divider" style="margin: 100px 0;"></div>
+      {/if}
+    {/each}
+  {:else if project === finRadarProject}
+    {#each finRadarSectionPics as section, i (i)}
+      <div class="finradar-section horizontal-flex-box" style="flex-direction: {windowWidth <= 820 ? 'column' : i % 2 ? 'row-reverse' : 'row'};">
+        <div class="finradar-section-description vertical-flex-box">
+          <h1 style="align-self: {i % 2 ? 'flex-end' : 'flex-start'};">{$t["projects.project.fin-radar.section.titles"][i]}</h1>
+          {#each $t["projects.project.fin-radar.section.contents"][i] as content, i (i)}
+            <p>{content}</p>
+          {/each}
+        </div>
+        <div class="finradar-section-images vertical-flex-box" style="align-items: {windowWidth <= 820 ? 'center' : i % 2 ? 'flex-start' : 'flex-end'};">
+          {#each section.pics as image, idx (image.id)}
+          <button class="hover-highlight image-wrapper" onclick={() => zoomImg(image.pic, image.id)}>
+            <img src={image.pic} alt="FinRadar image {i + idx}" />
+          </button>
+          {/each}
+        </div>
+      </div>
+      {#if i !== finRadarSectionPics.length - 1}
         <div class="border-divider" style="margin: 100px 0;"></div>
       {/if}
     {/each}
@@ -131,6 +171,7 @@
 <style>
   #project-intro-text {
     width: 50%;
+    font-size: clamp(1rem, 1.08cqw, 1.125rem);
   }
 
   #project-info {
@@ -176,6 +217,50 @@
     #project-title-links {
       align-items: center;
     }
+  }
+
+  /*
+  FINRADAR PROJECT
+  */
+
+  .finradar-section {
+    align-items: flex-start;
+    height: fit-content;
+    padding: 2rem;
+    gap: 3rem;
+  }
+
+  .finradar-section .finradar-section-description {
+    width: 100%;
+    text-align: left;
+    font-size: clamp(1rem, 1.08cqw, 1.125rem);
+    gap: 4rem;
+  }
+
+  .finradar-section .finradar-section-description h1 {
+    width: 100%;
+    margin-bottom: 4rem;
+    font-weight: normal;
+    text-align: center;
+    line-height: clamp(1.5rem, 2cqw, 2.25rem);
+    font-size: clamp(1.5rem, 2cqw, 2.25rem);
+  }
+
+  .finradar-section .finradar-section-description p {
+    text-align: center;
+    font-size: clamp(1rem, 1.08cqw, 1.125rem);
+  }
+
+  .finradar-section .finradar-section-images {
+    height: 100%;
+    gap: 2rem;
+    width: 100%;
+  }
+
+  .finradar-section .finradar-section-images .image-wrapper {
+    border: none;
+    width: fit-content;
+    padding: 0;
   }
 
 </style>

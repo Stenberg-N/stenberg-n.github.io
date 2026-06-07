@@ -24,26 +24,35 @@ body::-webkit-scrollbar {
 
 * p, * span {
   margin: 0;
-  filter: drop-shadow(0 10px 12px rgba(0,0,0,0.8));
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.8));
 }
 
 * h1, * h2, * h3 {
-  filter: drop-shadow(0 10px 12px rgba(0,0,0,0.8));
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.8));
+}
+
+img {
+  user-select: none;
 }
 
 *::-webkit-scrollbar {
   width: 6px;
   height: 6px;
+  border-radius: 8px;
+  background-color: transparent;
+}
+
+*:hover::-webkit-scrollbar {
   background-color: #0f0f0f;
 }
 
-*::-webkit-scrollbar-track {
-  margin-top: 90px;
+*::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 8px;
 }
 
-*::-webkit-scrollbar-thumb {
+*:hover::-webkit-scrollbar-thumb {
   background-color: #888;
-  border-radius: 8px;
 }
 
 *::-webkit-scrollbar-thumb:hover {
@@ -54,19 +63,17 @@ body::-webkit-scrollbar {
 a:hover, button:hover {
   cursor: pointer;
 }
-
 .anchor {
   display: flex;
   align-items: center;
 }
-
 .anchor:link, .anchor:visited, .anchor:active, .anchor:focus {
   position: relative;
   font-weight: 800;
   text-decoration: none;
   color: inherit;
   padding-bottom: 4px;
-  filter: drop-shadow(0 10px 12px rgba(0,0,0,0.8));
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.8));
 }
 
 .horizontal-flex-box {
@@ -85,10 +92,30 @@ a:hover, button:hover {
 
 .button-default {
   border: none;
+  background-color: #222;
+  color: #f6f6f6;
+  font-weight: unset;
+  font-size: 14px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.8);
+  filter: none;
+}
+.button-default:hover {
+  box-shadow: 0 8px 16px rgba(0,0,0,0.8);
+  background-color: #333;
+}
+
+.transparent-button {
+  border: none;
   background-color: transparent;
 }
 
-.button-default-bold {
+.transparent-button img {
+  filter: brightness(0) invert(0.9);
+}
+
+.transparent-button-bold {
   border: none;
   background-color: transparent;
   font-weight: 800;
@@ -98,20 +125,21 @@ a:hover, button:hover {
 .interactive-el {
   transition: transform 0.2s;
 }
-
 .interactive-el:hover {
-  transform: translateY(-4px);
+  cursor: pointer;
+  transform: translateY(-2px);
 }
 
 .hover-highlight {
+  background-color: transparent;
   outline: 1px solid rgba(119, 119, 119, 0.4);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.8);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.8);
   transition: outline 0.2s, box-shadow 0.2s, transform 0.2s, background-color 0.2s, bottom 0.4s;
 }
-
 .hover-highlight:not(.disabled):hover {
+  background-color: rgba(30, 30, 30, 0.8);
   outline-color: rgba(255, 70, 70, 1);
-  box-shadow: 0 8px 24px rgba(255, 70, 70, 0.5);
+  box-shadow: 0 4px 8px rgba(255, 70, 70, 0.5);
 }
 
 .underline-el {
@@ -119,7 +147,6 @@ a:hover, button:hover {
   padding: 0;
   overflow: hidden;
 }
-
 .underline-el::after {
   content: '';
   position: absolute;
@@ -130,7 +157,6 @@ a:hover, button:hover {
   background-color: currentColor;
   transition: width 0.2s cubic-bezier(0.645, 0.045, 0.355, 1.000);
 }
-
 .underline-el:hover::after {
   width: 100%;
 }
@@ -269,10 +295,8 @@ a:hover, button:hover {
 
 #project-intro-images button {
   border: none;
-  background-color: transparent;
   padding: 0;
 }
-
 #project-intro-images button:not(:last-child) {
   margin-bottom: 20px;
 }
@@ -303,4 +327,20 @@ a:hover, button:hover {
   border: none;
   padding: 2px;
   background-color: transparent;
+}
+
+#project-features {
+  align-items: flex-start;
+  gap: 1rem;
+  padding-left: 1rem;
+}
+
+#project-features span {
+  position: relative;
+  padding-left: 1rem;
+}
+#project-features span::before {
+  content: '•';
+  position: absolute;
+  left: 0;
 }

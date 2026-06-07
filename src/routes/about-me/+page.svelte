@@ -14,6 +14,11 @@
     align-items: flex-start;
     gap: 1rem;
     padding: 1rem;
+    user-select: none;
+  }
+
+  #about-me-container p {
+    font-size: clamp(0.875rem, 1.08cqw, 1rem);
   }
 
   #about-me-container h2:first-of-type {

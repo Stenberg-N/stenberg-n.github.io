@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { t, lang } from "$lib/i18n";
   import { resolve } from '$app/paths';
+
+  import { t, lang } from "$lib/i18n";
 </script>
 
 <div class="vertical-flex-box" style="gap: 20px; user-select: none;">

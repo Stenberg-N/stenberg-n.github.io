@@ -1,11 +1,12 @@
 <script lang="ts">
   import { fly } from 'svelte/transition';
-  import { resolve } from '$app/paths';
-  import { t, lang } from '$lib/i18n';
-  import { alerts, sendAlert } from '$lib/alert';
   import { page } from '$app/state';
   import { onNavigate } from '$app/navigation';
   import { setContext } from 'svelte';
+  import { resolve } from '$app/paths';
+
+  import { t, lang } from '$lib/i18n';
+  import { alerts, sendAlert } from '$lib/alert';
 
   import '../styles.css';
 	import Alert from '../components/Alert.svelte';
@@ -14,17 +15,15 @@
 
 	let { children } = $props();
   let windowWidth = $state(0);
-  let backBtnBottom = $state<string>('unset');
   let alertsContainerBottom = $state<number>(30);
   let hasScrolled = $state<boolean>(false);
   const mainRoutes = ["/", "/projects", "/about-me"];
   let selectedProjectId = $state<number | null>(null);
 
-  onNavigate(({ from, to, complete }) => {
+  onNavigate(() => {
     return new Promise((resolve) => {
       document.startViewTransition(async () => {
         resolve();
-        await complete;
       });
     });
   });
@@ -36,8 +35,8 @@
   });
 
   $effect(() => {
-    if (windowWidth <= 500) { backBtnBottom = "25px"; alertsContainerBottom = 92 }
-    else { backBtnBottom = "unset"; alertsContainerBottom = 30 }
+    if (windowWidth <= 620) alertsContainerBottom = 92;
+    else alertsContainerBottom = 30;
   });
 
   /**********************************************************************************************************************\
@@ -46,11 +45,12 @@
   |
   \**********************************************************************************************************************/
     const setSelectedProjectId = (id: number | null) => { selectedProjectId = id; };
-    setContext('selectedProject', { getSelectedProjectId: () => selectedProjectId, setSelectedProjectId })
+    setContext('selectedProject', { getSelectedProjectId: () => selectedProjectId, setSelectedProjectId });
+    setContext('windowWidth', () => windowWidth);
 
   /**********************************************************************************************************************/
   const copyEmail = () => {
-    let text = 'stenbergniko@outlook.com';
+    const text = 'stenbergniko@outlook.com';
     navigator.clipboard.writeText(text);
     sendAlert("alert.email", true, false);
   };
@@ -84,7 +84,7 @@
 <div id="grid-background"></div>
 
 {#if page.route.id === "/projects/[slug]"}
-  <a id="back-btn" class="vertical-flex-box interactive-el hover-highlight" style="bottom: {backBtnBottom};"
+  <a id="back-btn" class="vertical-flex-box interactive-el hover-highlight"
     href={resolve("/projects")} onclick={() => setSelectedProjectId(null)} transition:fly={{ y: 20, duration: 200, delay: 100 }}
   >
     <img class="img-small" style="transform: rotate(90deg); filter: brightness(0) invert(0.9);" src="/assets/arrow.svg"alt="Back arrow">
@@ -97,16 +97,16 @@
       <a class="anchor underline-el" class:current={page.url.pathname === route} href={resolve(route as NavRoute)} onclick={() => setSelectedProjectId(null)}>{$t["navigation.anchors.names"][i]}</a>
     {/each}
   </div>
-  <div id="link-btns" class="horizontal-flex-box" style="gap: 8px;">
-    <button id="lang-switch" class="button-default interactive-el" style="color: #f6f6f6; font-weight: 800;" onclick={() => { if ($lang === 'en') { lang.set('fi'); } else lang.set('en'); }}>{$lang === 'en' ? 'FI' : 'EN'}</button>
-    <button id="github-link" class="button-default interactive-el" onclick={() => sendAlert("alert.message.github", false, true, "https://github.com/Stenberg-N")}>
+  <div id="link-btns" class="horizontal-flex-box">
+    <button id="lang-switch" class="transparent-button-bold interactive-el" onclick={() => { if ($lang === 'en') { lang.set('fi'); } else lang.set('en'); }}>{$lang === 'en' ? 'FI' : 'EN'}</button>
+    <button id="github-link" class="transparent-button interactive-el" onclick={() => sendAlert("alert.message.github", false, true, "https://github.com/Stenberg-N")}>
       <img src="/assets/github-logo.svg" alt="GitHub Profile" class="img-large">
     </button>
-    <button id="email-link" class="button-default interactive-el" onclick={() => copyEmail()}><img src="/assets/email-logo.svg" alt="Email" class="img-large"></button>
+    <button id="email-link" class="transparent-button interactive-el" onclick={() => copyEmail()}><img src="/assets/email-logo.svg" alt="Email" class="img-large"></button>
   </div>
 </nav>
 
-<main class="content vertical-flex-box">
+<main id="main-content" class="vertical-flex-box">
   {@render children()}
 </main>
 
@@ -142,15 +142,14 @@
     user-select: none;
   }
 
-  .content {
+  #main-content {
     align-items: unset;
-    flex: 1 1 0;
+    justify-content: flex-start;
     justify-self: center;
     max-width: 1200px;
     width: 100%;
-    margin: auto;
-    margin-top: 210px;
-    padding: 2rem 1rem;
+    margin: 210px auto 120px;
+    padding: 4rem 1rem;
     gap: 100px;
     background-color: #0f0f0f;
     z-index: 1;
@@ -164,23 +163,22 @@
     transform: translateX(-50%);
   }
 
-  #link-btns button:hover {
-    transform: translateY(-4px) scale(1.05);
+  #link-btns {
+    gap: 8px;
   }
 
-  #github-link, #email-link {
+  #link-btns button:hover {
+    transform: translateY(-2px) scale(1.05);
+  }
+  #link-btns button:not(:first-child) {
     width: 48px;
     height: 48px;
     padding: 6px;
     border-radius: 50%;
   }
-  #lang-switch {
+  #link-btns button:first-child {
     width: 32px;
     height: 24px;
-  }
-
-  #github-link img, #email-link img {
-    filter: brightness(0) invert(0.9);
   }
 
   #back-btn {
@@ -243,7 +241,7 @@
   }
 
   @media (max-width: 1200px) {
-    .content {
+    #main-content {
       width: 85%;
     }
   }
@@ -256,7 +254,9 @@
 
     #back-btn {
       top: unset;
-      left: calc(50% - 21px);
+      bottom: 25px;
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     #nav-links {
