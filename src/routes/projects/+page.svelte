@@ -29,14 +29,17 @@
 <div id="projects" class="vertical-flex-box">
   {#each projects as project (project.id)}
     <div role="link" tabindex="0" class="project horizontal-flex-box underline-el hover-highlight interactive-el"
+      style="background-image: url({project.picture});"
       onclick={() => projects.some(p => p.id === project.id) ? (setSelectedProjectId(project.id), goto(resolve(`/projects/${project.slug}` as ProjectRoute))) : sendAlert("alert.project-not-found", true, false)}
       onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedProjectId(project.id); goto(resolve(`/projects/${project.slug}` as ProjectRoute)); } }}
     >
       <div class="project-info-container vertical-flex-box">
-        <h1 style="margin: 0 0 4px 0;">{project.title}</h1>
-        <div class="project-repo-container horizontal-flex-box">
-          <img src="/assets/github-logo.svg" alt="GitHub" class="img-small" style="filter: brightness(0) invert(0.9);" />
-          <button class="transparent-button-bold underline-el" onclick={(e) => { e.stopPropagation(); sendAlert("alert.message.github", false, true, project.repo); }}>{$t["projects.project.repository"]}</button>
+        <div class="project-top-bar">
+          <h1 style="margin: 0 0 4px 0;">{project.title}</h1>
+          <div class="project-repo-container horizontal-flex-box">
+            <img src="/assets/github-logo.svg" alt="GitHub" class="img-small" style="filter: brightness(0) invert(0.9);" />
+            <button class="transparent-button-bold underline-el" onclick={(e) => { e.stopPropagation(); sendAlert("alert.message.github", false, true, project.repo); }}>{$t["projects.project.repository"]}</button>
+          </div>
         </div>
         <p>{$t[project.descriptionKey]}</p>
         <p class="project-status" style="color: {project.isWIP ? '#ff8500' : '#78ff78'}">
@@ -44,7 +47,10 @@
         </p>
         <div class="project-bottom-container vertical-flex-box">
           {#if project.demo.trim().length > 0}
-            <button class="demo-button transparent-button-bold underline-el hover-highlight" onclick={(e) => { e.stopPropagation(); sendAlert("alert.message.demo", false, true, project.demolink); }}>{$t[project.demo]}</button>
+            <button class="demo-button transparent-button-bold underline-el hover-highlight" style="background-color: #0f0f0f;"
+              onclick={(e) => { e.stopPropagation(); sendAlert("alert.message.demo", false, true, project.demolink); }}>
+              {$t[project.demo]}
+            </button>
           {/if}
           <div class="tech-card-container horizontal-flex-box">
             {#each project.tech as tech, i (i)}
@@ -52,9 +58,6 @@
             {/each}
           </div>
         </div>
-      </div>
-      <div class="image-wrapper">
-        <img src={project.picture} alt={`${project.title} image`} />
       </div>
     </div>
   {/each}
@@ -69,21 +72,23 @@
   }
 
   #projects .project {
+    justify-content: flex-start;
     width: 100%;
     height: 480px;
-    gap: 24px;
-    padding: 24px;
+    padding: 32px;
     border-radius: 4px;
+    background-repeat: no-repeat;
+    background-size: cover;
   }
-
-  #projects .project .image-wrapper {
-    justify-content: flex-end;
-    padding: 10px;
+  #projects .project::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(1px);
+    background: rgba(0, 0, 0, 0.25);
   }
-
-  #projects .project .image-wrapper img {
-    outline: 1px solid rgba(119, 119, 119, 0.4);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+  #projects .project::after {
+    transition: width 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
   }
 
   #projects .project-info-container {
@@ -91,18 +96,30 @@
     width: 100%;
     justify-content: flex-start;
     align-items: flex-start;
+    gap: 32px;
     font-size: clamp(0.875rem, 1.08cqw, 1.125rem);
+  }
+
+  #projects .project-info-container p {
+    max-width: 60%;
+    border-radius: 4px;
+    padding: 4px 8px;
+  }
+  #projects .project-info-container p:first-of-type {
+    background-color: rgba(0, 0, 0, 0.8);
   }
 
   #projects .project .project-repo-container {
     justify-content: flex-start;
     gap: 8px;
     padding-left: 1rem;
-    margin-bottom: 2rem;
+  }
+
+  #projects .project .project-repo-container button {
+    font-size: clamp(0.75rem, 0.85cqw, 14px);
   }
 
   #projects .project-info-container .project-status {
-    margin-top: 1rem;
     font-weight: bold;
   }
 
@@ -136,16 +153,12 @@
       height: 560px;
     }
 
+    #projects .project-info-container p {
+      max-width: unset;
+    }
+
     #projects .project .project-info-container {
-      height: unset;
-    }
-
-    #projects .project .image-wrapper {
-      justify-content: center;
-    }
-
-    #projects .project-bottom-container {
-      margin-top: 24px;
+      height: 100%;
     }
   }
 </style>

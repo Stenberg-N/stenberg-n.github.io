@@ -37,12 +37,12 @@
 {#if zoomedBadge || zoomedImage}
   <div role="dialog" tabindex="0" id="zoomedImageOverlay" bind:this={zoomedContainer} transition:fade={{ duration: 300, easing: cubicInOut }} onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); zoomedImage = null; zoomedBadge = null; }}}>
     <div id="zoomedContainer">
-      <button class="zoomedImg-close hover-highlight" transition:fly={{ y: -100, duration: 300, delay: 100, easing: cubicInOut }}
+      <button class="zoomedImg-close hover-highlight" in:fly={{ y: -40, duration: 400, delay: 100, easing: cubicInOut }}
         onclick={() => { if (zoomedImage) {zoomedImage = null; zoomedImageId = null; } if (zoomedBadge) { zoomedBadge = null } }}
       >
         <img src="/assets/close-x.svg" alt="close">
       </button>
-      <div class="image-wrapper" transition:fly={{ y: 100, duration: 300, delay: 100, easing: cubicInOut }}>
+      <div class="image-wrapper" in:fly={{ y: 40, duration: 400, delay: 100, easing: cubicInOut }}>
         {#if zoomedBadge}
           <img id="zoomedBadge-image" src={zoomedBadge} alt="badge" use:handleClickOutside={{ requirements: [zoomedImage, zoomedBadge], onOutsideClick: () => { zoomedImage = null; zoomedBadge = null; zoomedImageId = null; } }}>
         {:else if zoomedImage}
@@ -140,9 +140,7 @@
           {#if $t[currentProject.imageTexts]}
             <span>{$t[currentProject.imageTexts][i]}</span>
           {/if}
-          <button class="current-project-image hover-highlight interactive-el image-wrapper" onclick={() => zoomElement("image", image, id)}>
-            <img src={image} alt="current project">
-          </button>
+          <button type="button" title={`Current project image ${i}`} class="current-project-image hover-highlight interactive-el image-wrapper" style="background-image: url({image});" onclick={() => zoomElement("image", image, id)}></button>
         {/each}
       </div>
     {/if}
@@ -349,6 +347,9 @@
     margin-top: 20px;
     border: 0;
     border-radius: 4px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
   }
   .current-project-image:not(:last-child) {
     margin-bottom: clamp(40px, 4.5cqw, 80px);
@@ -369,7 +370,7 @@
     }
 
     .current-project-image {
-      height: auto;
+      background-size: contain;
       max-height: 550px;
     }
   }

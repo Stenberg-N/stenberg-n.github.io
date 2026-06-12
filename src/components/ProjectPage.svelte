@@ -64,9 +64,9 @@
 {#if zoomedImage}
   <div role="dialog" tabindex="0" id="zoomedImageOverlay" transition:fade={{ duration: 300, easing: cubicInOut }} onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); zoomedImage = null; }}} bind:this={zoomedContainer}>
     <div id="zoomedContainer">
-      <button class="zoomedImg-close hover-highlight" onclick={() => zoomedImage = null} transition:fly={{ y: -100, duration: 300, delay: 100, easing: cubicInOut }}><img src="/assets/close-x.svg" alt="close"></button>
+      <button class="zoomedImg-close hover-highlight" onclick={() => zoomedImage = null} transition:fly={{ y: -40, duration: 400, delay: 100, easing: cubicInOut }}><img src="/assets/close-x.svg" alt="close"></button>
       <div class="image-wrapper">
-        <img src={zoomedImage} alt="zoomed content" transition:fly={{ y: 100, duration: 300, delay: 100, easing: cubicInOut }} use:handleClickOutside={{ requirements: [zoomedImage], onOutsideClick: () => { zoomedImage = null; zoomedImageId = null; } }}>
+        <img src={zoomedImage} alt="zoomed content" in:fly={{ y: 40, duration: 400, delay: 100, easing: cubicInOut }} use:handleClickOutside={{ requirements: [zoomedImage], onOutsideClick: () => { zoomedImage = null; zoomedImageId = null; } }}>
       </div>
       {#if zoomedImageNote}
         <span style="text-align: center; max-width: 90%; background-color: #000;">{$t[zoomedImageNote.note]}</span>

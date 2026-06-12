@@ -188,7 +188,7 @@ const translations: Record<Language, Record<string, string | string[] | Array<st
     "home.data-science-ml.description": ["Kehykset/Frameworkit: Scikit-learn, Tensorflow & Keras, PyTorch, Optuna, XGBoost", "Talousdatan seurantasovellus ennustuksilla", "Jätteen tunnistamisen sovellus", "Harjoittanut koneoppimismalleja puulajien tunnistamiseen"],
 
     // PROJECTS
-    "projects.project.repository": "Projektin arkisto (engl. repository)",
+    "projects.project.repository": "Projektin arkisto",
     "projects.project.imagetitle": "Projektin kuvat",
     "projects.project-status.wip": "Työn alla",
     "projects.project-status.inactive": "Epäaktiivinen",

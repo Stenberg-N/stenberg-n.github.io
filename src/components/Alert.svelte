@@ -109,6 +109,7 @@
   .redirect-buttons a, .redirect-buttons button {
     height: 32px;
     font-weight: unset;
+    filter: unset;
   }
 
   .redirect-buttons a:hover::after, .redirect-buttons a::after {
