@@ -237,32 +237,32 @@
     text-align: left;
     font-size: clamp(1rem, 1.08cqw, 1.125rem);
     gap: 4rem;
-  }
 
-  .finradar-section .finradar-section-description h1 {
-    width: 100%;
-    margin-bottom: 4rem;
-    font-weight: normal;
-    text-align: center;
-    line-height: clamp(1.5rem, 2cqw, 2.25rem);
-    font-size: clamp(1.5rem, 2cqw, 2.25rem);
-  }
+    h1 {
+      width: 100%;
+      margin-bottom: 4rem;
+      font-weight: normal;
+      text-align: center;
+      line-height: clamp(1.5rem, 2cqw, 2.25rem);
+      font-size: clamp(1.5rem, 2cqw, 2.25rem);
+    }
 
-  .finradar-section .finradar-section-description p {
-    text-align: center;
-    font-size: clamp(1rem, 1.08cqw, 1.125rem);
+    p {
+      text-align: center;
+      font-size: clamp(1rem, 1.08cqw, 1.125rem);
+    }
   }
 
   .finradar-section .finradar-section-images {
     height: 100%;
     gap: 2rem;
     width: 100%;
-  }
 
-  .finradar-section .finradar-section-images .image-wrapper {
-    border: none;
-    width: fit-content;
-    padding: 0;
+    .image-wrapper {
+      border: none;
+      width: fit-content;
+      padding: 0;
+    }
   }
 
 </style>

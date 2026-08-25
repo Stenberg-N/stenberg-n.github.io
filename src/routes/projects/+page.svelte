@@ -47,7 +47,7 @@
         </p>
         <div class="project-bottom-container vertical-flex-box">
           {#if project.demo.trim().length > 0}
-            <button class="demo-button transparent-button-bold underline-el hover-highlight" style="background-color: #0f0f0f;"
+            <button class="demo-button transparent-button-bold underline-el hover-highlight"
               onclick={(e) => { e.stopPropagation(); sendAlert("alert.message.demo", false, true, project.demolink); }}>
               {$t[project.demo]}
             </button>
@@ -69,82 +69,89 @@
     padding: 4rem;
     gap: 48px;
     user-select: none;
-  }
 
-  #projects .project {
-    justify-content: flex-start;
-    width: 100%;
-    height: 480px;
-    padding: 32px;
-    border-radius: 4px;
-    background-repeat: no-repeat;
-    background-size: cover;
-  }
-  #projects .project::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    backdrop-filter: blur(1px);
-    background: rgba(0, 0, 0, 0.25);
-  }
-  #projects .project::after {
-    transition: width 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
-  }
+    .project {
+      justify-content: flex-start;
+      width: 100%;
+      height: 480px;
+      padding: 32px;
+      border-radius: 4px;
+      background-repeat: no-repeat;
+      background-size: cover;
 
-  #projects .project-info-container {
-    height: 100%;
-    width: 100%;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 32px;
-    font-size: clamp(0.875rem, 1.08cqw, 1.125rem);
-  }
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        backdrop-filter: blur(1px);
+        background: rgba(0, 0, 0, 0.25);
+      }
+      &::after {
+        transition: width 0.3s cubic-bezier(0.645, 0.045, 0.355, 1.000);
+      }
 
-  #projects .project-info-container p {
-    max-width: 60%;
-    border-radius: 4px;
-    padding: 4px 8px;
-  }
-  #projects .project-info-container p:first-of-type {
-    background-color: rgba(0, 0, 0, 0.8);
-  }
+      .project-repo-container {
+        justify-content: flex-start;
+        gap: 8px;
+        padding-left: 1rem;
 
-  #projects .project .project-repo-container {
-    justify-content: flex-start;
-    gap: 8px;
-    padding-left: 1rem;
-  }
+        button {
+          font-size: clamp(0.75rem, 0.85cqw, 14px);
+        }
+      }
+    }
 
-  #projects .project .project-repo-container button {
-    font-size: clamp(0.75rem, 0.85cqw, 14px);
-  }
+    .project-info-container {
+      height: 100%;
+      width: 100%;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 32px;
+      font-size: clamp(0.875rem, 1.08cqw, 1.125rem);
 
-  #projects .project-info-container .project-status {
-    font-weight: bold;
-  }
+      p {
+        max-width: 60%;
+        border-radius: 4px;
+        padding: 4px 8px;
+      }
+      p:first-of-type {
+        background-color: rgba(0, 0, 0, 0.8);
+      }
 
-  #projects .project-bottom-container {
-    align-items: flex-start;
-    gap: 1rem;
-    margin-top: auto;
-  }
+      .project-status {
+        font-weight: bold;
+      }
+    }
 
-  #projects .project-bottom-container .demo-button {
-    padding: 12px;
-    border-radius: 8px;
-  }
+    .project-bottom-container {
+      align-items: flex-start;
+      gap: 1rem;
+      margin-top: auto;
 
-  #projects .tech-card-container {
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
+      .demo-button {
+        padding: 12px;
+        border-radius: 8px;
+        background-color: rgba(51, 51, 51, 0.8);
+        outline: none;
 
-  #projects .tech-card-container .tech-card {
-    padding: 6px 12px;
-    background-color: rgb(255, 70, 70);
-    border-radius: 9999px;
-    font-weight: bold;
+        &:hover {
+          background-color: rgb(255, 70, 70);
+        }
+      }
+    }
+
+    .tech-card-container {
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      gap: 8px;
+
+      .tech-card {
+        padding: 6px 12px;
+        background-color: rgb(255, 70, 70);
+        border-radius: 9999px;
+        font-weight: bold;
+      }
+    }
   }
 
   @media (max-width: 1200px) {

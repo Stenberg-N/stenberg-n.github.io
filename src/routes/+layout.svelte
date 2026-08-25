@@ -125,8 +125,8 @@
     top: 90px;
     z-index: -1;
     background-image:
-      repeating-linear-gradient(to right, rgba(119,119,119,0.15) 0, rgba(119,119,119,0.15) 1px, transparent 1px, transparent 80px),
-      repeating-linear-gradient(to bottom, rgba(119,119,119,0.15) 0, rgba(119,119,119,0.15) 1px, transparent 1px, transparent 80px);
+      repeating-linear-gradient(to right, #222 0, #222 1px, transparent 1px, transparent 80px),
+      repeating-linear-gradient(to bottom, #222 0, #222 1px, transparent 1px, transparent 80px);
   }
 
   #nav-bar {
@@ -192,6 +192,10 @@
     border-radius: 50%;
     background-color: #0f0f0f;
     z-index: 101;
+
+    &:hover {
+      background-color: rgba(51, 51, 51, 0.8);
+    }
   }
 
   .current::after {
@@ -208,6 +212,10 @@
     background-color: #0f0f0f;
     border-radius: 12px;
     z-index: 1;
+
+    &:hover {
+      background-color: rgba(51, 51, 51, 0.8);
+    }
   }
 
   .alerts-container {

@@ -63,16 +63,16 @@
 <div id="home-intro-contact" class="horizontal-flex-box">
   <div id="home-intro">
     <div id="home-intro-title">
-      <h1 class="intro-title">{$t['intro-title1']}</h1>
-      <h1 class="intro-title">{$t['intro-title2']}</h1>
-      <h1 class="intro-title">{$t['intro-title3']}</h1>
+      {#each ["intro-title1", "intro-title2", "intro-title3"] as title, i (i)}
+        <h1 class="intro-title">{$t[title]}</h1>
+      {/each}
       <p>{$t['intro-paragraph']}</p>
     </div>
     <div id="home-contact" class="vertical-flex-box">
       {#each contactContainerEls as el, i (i)}
         <div class="horizontal-flex-box">
           <img src={el.img} alt={el.alt} class="img-medium" style="filter: {i === 1 ? 'unset' : 'brightness(0) invert(0.9)'};">
-          {#if i === 0 || i === 1}
+          {#if [0, 1].includes(i)}
           <button class="transparent-button-bold underline-el" onclick={() => el.command()}>{el.content}</button>
           {:else}
             <span>{i === 3 ? $t[el.content] : el.content}</span>
@@ -140,7 +140,15 @@
           {#if $t[currentProject.imageTexts]}
             <span>{$t[currentProject.imageTexts][i]}</span>
           {/if}
-          <button type="button" title={`Current project image ${i}`} class="current-project-image hover-highlight interactive-el image-wrapper" style="background-image: url({image});" onclick={() => zoomElement("image", image, id)}></button>
+          <div
+            role="button"
+            tabindex="0"
+            class="current-project-image hover-highlight interactive-el image-wrapper"
+            onclick={() => zoomElement("image", image, id)}
+            onkeydown={(e) => {if (e.key === 'Enter') zoomElement("image", image, id)}}
+          >
+            <img src={image} alt="Current project image {i}" />
+          </div>
         {/each}
       </div>
     {/if}
@@ -195,8 +203,9 @@
     max-width: 170px;
     height: 50px;
     margin-top: 60px;
-    background-color: #0f0f0f; 
+    background-color: rgb(51, 51, 51, 0.8); 
     border-radius: 16px;
+    outline: none;
     padding: 8px 12px;
   }
 
@@ -324,6 +333,8 @@
     padding: 16px;
     margin-top: 2rem;
     border-radius: 16px;
+    background-color: rgba(51, 51, 51, 0.8);
+    outline: none;
   }
   #view-current-project:hover {
     background-color: rgb(255, 70, 70);
@@ -343,13 +354,13 @@
 
   .current-project-image {
     background-color: #0f0f0f;
-    height: 560px;
     margin-top: 20px;
     border: 0;
     border-radius: 4px;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
+    
+    img {
+      object-fit: contain;
+    }
   }
   .current-project-image:not(:last-child) {
     margin-bottom: clamp(40px, 4.5cqw, 80px);
