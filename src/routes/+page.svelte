@@ -75,7 +75,7 @@
           {#if [0, 1].includes(i)}
           <button class="transparent-button-bold underline-el" onclick={() => el.command()}>{el.content}</button>
           {:else}
-            <span>{i === 3 ? $t[el.content] : el.content}</span>
+            <span style:user-select={i === 2 ? 'text' : 'none'}>{i === 3 ? $t[el.content] : el.content}</span>
           {/if}
         </div>
       {/each}
