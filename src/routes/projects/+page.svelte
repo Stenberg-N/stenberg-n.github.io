@@ -26,7 +26,7 @@
 
 </script>
 
-<div id="projects" class="vertical-flex-box">
+<div id="projects">
   {#each projects as project (project.id)}
     <div role="link" tabindex="0" class="project horizontal-flex-box underline-el outline-highlight interactive-el"
       style="background-image: url({project.picture});"
@@ -70,7 +70,9 @@
 
 <style>
   #projects {
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 1fr;
     padding: 4rem;
     gap: 48px;
     user-select: none;
@@ -78,7 +80,6 @@
     .project {
       justify-content: flex-start;
       width: 100%;
-      height: 480px;
       padding: 32px;
       border-radius: 4px;
       background-repeat: no-repeat;
@@ -120,6 +121,11 @@
         padding: 4px 8px;
       }
 
+      h1, p {
+        overflow-wrap: break-word;
+        hyphens: auto;
+      }
+
       p { max-width: 60%; }
 
       .project-status {
@@ -159,9 +165,9 @@
   }
 
   @media (max-width: 1200px) {
+    #projects, #projects .project { padding: 1rem; }
     #projects .project {
       flex-direction: column;
-      height: 560px;
     }
 
     #projects .project-info-container p {

@@ -387,7 +387,7 @@
         }
 
         &:not(:last-child) {
-          margin-bottom: clamp(40px, 4.5cqw, 80px);
+          margin-bottom: clamp(80px, 10cqw, 120px);
         }
       }
     }
@@ -401,10 +401,6 @@
 
     #home-categories-outer {
       padding: 0;
-    }
-
-    #current-project-images {
-      padding: 0 30px;
     }
 
     .current-project-image {
@@ -424,6 +420,10 @@
 
     #selfie-image {
       max-width: 500px;
+    }
+
+    #current-project #current-project-images {
+      padding: 0 1rem;
     }
   }
 

@@ -291,4 +291,8 @@
       align-self: flex-start;
     }
   }
+
+  @media (max-width: 420px) {
+    #main-content { width: 100%; }
+  }
 </style>
