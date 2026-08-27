@@ -53,10 +53,12 @@
 
 </script>
 
-<div role="alert" class="alert-container vertical-flex-box hover-highlight" transition:fly={{ y: 100, duration: 400 }}>
+<div role="alert" class="alert-container vertical-flex-box" transition:fly={{ y: 100, duration: 400 }}>
   <div class="alert-content horizontal-flex-box">
     <p class="alert-message">{$t[alert.message]}</p>
-    <button class="alert-close-btn vertical-flex-box transparent-button" onclick={() => closeAlert(alert.id)}><img src="/assets/close-x.svg" alt="Close alert"></button>
+    <button class="alert-close-btn vertical-flex-box button-transparent-highlight" onclick={() => closeAlert(alert.id)}>
+      <img src="/assets/close-x.svg" alt="Close alert">
+    </button>
   </div>
   {#if alert.showButtons}
     <div class="redirect-buttons horizontal-flex-box">
@@ -74,9 +76,8 @@
     padding: 12px;
     background-color: #0f0f0f;
     overflow: hidden;
-  }
-  .alert-container:hover {
-    background-color: #0f0f0f;
+    outline: 1px solid #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
   }
 
   .alert-content {
@@ -89,14 +90,12 @@
     height: 24px;
     align-self: center;
     border-radius: 50%;
-  }
-  .alert-close-btn:hover {
-    background-color: #333;
-  }
+    padding: 0;
 
-  .alert-close-btn img {
-    max-width: 12px;
-    max-height: 12px;
+    img {
+      max-width: 10px;
+      max-height: 10px;
+    }
   }
 
   .redirect-buttons {
@@ -104,17 +103,17 @@
     width: 100%;
     gap: 10px;
     margin-top: 20px;
-  }
 
-  .redirect-buttons a, .redirect-buttons button {
-    height: 32px;
-    font-weight: unset;
-    filter: unset;
-  }
+    a, button {
+      height: 32px;
+      font-weight: unset;
+      filter: unset;
+    }
 
-  .redirect-buttons a:hover::after, .redirect-buttons a::after {
+    a:hover::after, a::after {
     width: 0;
     transition: none;
+  }
   }
 
 </style>

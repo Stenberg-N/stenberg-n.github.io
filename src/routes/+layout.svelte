@@ -20,9 +20,15 @@
   const mainRoutes = ["/", "/projects", "/about-me"];
   let selectedProjectId = $state<number | null>(null);
 
+  const navBarButtons = [
+    { id: "lang-switch", img: null, onClick: () => $lang === 'en' ? lang.set('fi') : lang.set('en') },
+    { id: "github-link", img: "/assets/github-logo.svg", onClick: () => sendAlert({ message: "alert.message.github", isTimer: false, showButtons: true,link: "https://github.com/Stenberg-N"}) },
+    { id: "email-link", img: "/assets/email-logo.svg", onClick: () => copyEmail() },
+  ];
+
   onNavigate(() => {
     return new Promise((resolve) => {
-      document.startViewTransition(async () => {
+      document.startViewTransition(() => {
         resolve();
       });
     });
@@ -53,7 +59,7 @@
   const copyEmail = () => {
     const text = 'stenbergniko@outlook.com';
     navigator.clipboard.writeText(text);
-    sendAlert("alert.email", true, false);
+    sendAlert({ message: "alert.email", isTimer: true, showButtons: false });
   };
 
   const handleScroll = () => {
@@ -68,8 +74,8 @@
 <svelte:window onscroll={handleScroll} bind:innerWidth={windowWidth} />
 
 {#if isScrollThreshold}
-  <button id="scroll-to-top" class="button-default vertical-flex-box interactive-el hover-highlight" onclick={() => window.scrollTo(0, 0)} transition:fly={{ y: 100, duration: 300, delay: 100 }}>
-    <img src="/assets/arrow.svg" alt="arrow" class="img-small" style="transform: rotate(180deg); filter: brightness(0) invert(0.9);">
+  <button id="scroll-to-top" class="button-default vertical-flex-box interactive-el" onclick={() => window.scrollTo(0, 0)} transition:fly={{ y: 100, duration: 300, delay: 100 }}>
+    <img src="/assets/arrow.svg" alt="arrow" class="img-small" style="transform: rotate(180deg);" />
   </button>
 {/if}
 
@@ -85,11 +91,11 @@
 <div id="grid-background"></div>
 
 {#if page.route.id === "/projects/[slug]"}
-  <a id="back-btn" class="vertical-flex-box interactive-el hover-highlight"
+  <a id="back-btn" class="vertical-flex-box interactive-el"
     href={resolve("/projects")} onclick={() => setSelectedProjectId(null)} transition:fly={{ y: 20, duration: 200, delay: 100 }}
   >
-    <img class="img-small" style="transform: rotate(90deg); filter: brightness(0) invert(0.9);" src="/assets/arrow.svg"alt="Back arrow">
-</a>
+    <img class="img-small" style="transform: rotate(90deg); filter: brightness(0) invert(0.9);" src="/assets/arrow.svg" alt="Back arrow" />
+  </a>
 {/if}
 
 <nav id="nav-bar" class="horizontal-flex-box">
@@ -99,11 +105,15 @@
     {/each}
   </div>
   <div id="link-btns" class="horizontal-flex-box">
-    <button id="lang-switch" class="transparent-button-bold interactive-el" onclick={() => { if ($lang === 'en') { lang.set('fi'); } else lang.set('en'); }}>{$lang === 'en' ? 'FI' : 'EN'}</button>
-    <button id="github-link" class="transparent-button interactive-el" onclick={() => sendAlert("alert.message.github", false, true, "https://github.com/Stenberg-N")}>
-      <img src="/assets/github-logo.svg" alt="GitHub Profile" class="img-large">
-    </button>
-    <button id="email-link" class="transparent-button interactive-el" onclick={() => copyEmail()}><img src="/assets/email-logo.svg" alt="Email" class="img-large"></button>
+    {#each navBarButtons as button, i (button.id)}
+      <button id={button.id} class="button-transparent interactive-el" onclick={() => button.onClick()}>
+        {#if i === 0}
+          {$lang === 'en' ? 'FI' : 'EN'}
+        {:else}
+          <img src={button.img} alt={i === 1 ? 'GitHub' : i === 2 ? 'Email' : ''} class="img-large" />
+        {/if}
+      </button>
+    {/each}
   </div>
 </nav>
 
@@ -112,6 +122,10 @@
 </main>
 
 <style>
+  .current::after {
+    width: 100%;
+  }
+
   #background {
     position: fixed;
     inset: 0;
@@ -125,8 +139,9 @@
     top: 90px;
     z-index: -1;
     background-image:
-      repeating-linear-gradient(to right, #222 0, #222 1px, transparent 1px, transparent 80px),
-      repeating-linear-gradient(to bottom, #222 0, #222 1px, transparent 1px, transparent 80px);
+      repeating-linear-gradient(to right, rgba(34, 34, 34, 0.8) 0, rgba(34, 34, 34, 0.8) 2px, transparent 2px, transparent 80px),
+      repeating-linear-gradient(to bottom, rgba(34, 34, 34, 0.8) 0, rgba(34, 34, 34, 0.8) 2px, transparent 2px, transparent 80px);
+    transform: translateX(-1px);
   }
 
   #nav-bar {
@@ -143,6 +158,32 @@
     user-select: none;
   }
 
+  #nav-links {
+    position: absolute;
+    left: 50%;
+    gap: 40px;
+    transform: translateX(-50%);
+  }
+
+  #link-btns {
+    gap: 8px;
+
+    button:hover {
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    button:not(:first-child) {
+      width: 48px;
+      height: 48px;
+      padding: 6px;
+      border-radius: 50%;
+    }
+    button:first-child {
+      width: 32px;
+      height: 24px;
+    }
+  }
+
   #main-content {
     align-items: unset;
     justify-content: flex-start;
@@ -157,31 +198,6 @@
     overflow-x: hidden;
   }
 
-  #nav-links {
-    position: absolute;
-    left: 50%;
-    gap: 40px;
-    transform: translateX(-50%);
-  }
-
-  #link-btns {
-    gap: 8px;
-  }
-
-  #link-btns button:hover {
-    transform: translateY(-2px) scale(1.05);
-  }
-  #link-btns button:not(:first-child) {
-    width: 48px;
-    height: 48px;
-    padding: 6px;
-    border-radius: 50%;
-  }
-  #link-btns button:first-child {
-    width: 32px;
-    height: 24px;
-  }
-
   #back-btn {
     position: fixed;
     top: 24px;
@@ -191,15 +207,12 @@
     padding: 12px;
     border-radius: 50%;
     background-color: #0f0f0f;
+    outline: 1px solid #333;
     z-index: 101;
 
     &:hover {
-      background-color: rgba(51, 51, 51, 0.8);
+      background-color: #333;
     }
-  }
-
-  .current::after {
-    width: 100%;
   }
 
   #scroll-to-top {
@@ -209,12 +222,13 @@
     width: 50px;
     height: 50px;
     padding: 5px;
-    background-color: #0f0f0f;
     border-radius: 12px;
+    background-color: #0f0f0f;
     z-index: 1;
+    outline: 1px solid #333;
 
     &:hover {
-      background-color: rgba(51, 51, 51, 0.8);
+      background-color: #333;
     }
   }
 
@@ -226,10 +240,10 @@
     transform: translateX(-50%);
     gap: 12px;
     pointer-events: none;
-  }
 
-  .alerts-container > * {
-    pointer-events: auto;
+    > * {
+      pointer-events: auto;
+    }
   }
 
   :root::view-transition-old(root), :root::view-transition-new(root) {

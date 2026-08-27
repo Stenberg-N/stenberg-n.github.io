@@ -5,21 +5,21 @@ export const alerts = writable<Alert[]>([]);
 
 let id = 0;
 
-export const sendAlert = (
+export const sendAlert = (options: {
   message: string,
   isTimer: boolean,
   showButtons: boolean,
   link?: string | null,
   onCancel?: () => void
-) => {
-  const alert: Alert = {
+}) => {
+  const alert: Alert = ({
     id: ++id,
-    message,
-    isTimer: isTimer,
-    showButtons: showButtons,
-    link: link || null,
-    onCancel: onCancel || (() => {})
-  };
+    message: options.message,
+    isTimer: options.isTimer,
+    showButtons: options.showButtons,
+    link: options.link || null,
+    onCancel: options.onCancel || (() => {})
+  });
   alerts.update((alerts) => [ ...alerts, alert ]);
 };
 

@@ -28,9 +28,12 @@
 
 <div id="projects" class="vertical-flex-box">
   {#each projects as project (project.id)}
-    <div role="link" tabindex="0" class="project horizontal-flex-box underline-el hover-highlight interactive-el"
+    <div role="link" tabindex="0" class="project horizontal-flex-box underline-el outline-highlight interactive-el"
       style="background-image: url({project.picture});"
-      onclick={() => projects.some(p => p.id === project.id) ? (setSelectedProjectId(project.id), goto(resolve(`/projects/${project.slug}` as ProjectRoute))) : sendAlert("alert.project-not-found", true, false)}
+      onclick={() => projects.some(p => p.id === project.id)
+        ? (setSelectedProjectId(project.id), goto(resolve(`/projects/${project.slug}` as ProjectRoute)))
+        : sendAlert({ message: "alert.project-not-found", isTimer: true, showButtons: false })
+      }
       onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedProjectId(project.id); goto(resolve(`/projects/${project.slug}` as ProjectRoute)); } }}
     >
       <div class="project-info-container vertical-flex-box">
@@ -38,7 +41,9 @@
           <h1 style="margin: 0 0 4px 0;">{project.title}</h1>
           <div class="project-repo-container horizontal-flex-box">
             <img src="/assets/github-logo.svg" alt="GitHub" class="img-small" style="filter: brightness(0) invert(0.9);" />
-            <button class="transparent-button-bold underline-el" onclick={(e) => { e.stopPropagation(); sendAlert("alert.message.github", false, true, project.repo); }}>{$t["projects.project.repository"]}</button>
+            <button class="button-transparent underline-el" onclick={(e) => { e.stopPropagation(); sendAlert({ message: "alert.message.github", isTimer: false, showButtons: true, link: project.repo }); }}>
+              {$t["projects.project.repository"]}
+            </button>
           </div>
         </div>
         <p>{$t[project.descriptionKey]}</p>
@@ -47,8 +52,8 @@
         </p>
         <div class="project-bottom-container vertical-flex-box">
           {#if project.demo.trim().length > 0}
-            <button class="demo-button transparent-button-bold underline-el hover-highlight"
-              onclick={(e) => { e.stopPropagation(); sendAlert("alert.message.demo", false, true, project.demolink); }}>
+            <button class="demo-button button-transparent underline-el outline-highlight"
+              onclick={(e) => { e.stopPropagation(); sendAlert({ message: "alert.message.demo", isTimer: false, showButtons: true, link: project.demolink }); }}>
               {$t[project.demo]}
             </button>
           {/if}
@@ -109,14 +114,13 @@
       gap: 32px;
       font-size: clamp(0.875rem, 1.08cqw, 1.125rem);
 
-      p {
-        max-width: 60%;
+      h1, p, button {
+        background-color: rgba(0, 0, 0, 0.8);
         border-radius: 4px;
         padding: 4px 8px;
       }
-      p:first-of-type {
-        background-color: rgba(0, 0, 0, 0.8);
-      }
+
+      p { max-width: 60%; }
 
       .project-status {
         font-weight: bold;
@@ -131,7 +135,7 @@
       .demo-button {
         padding: 12px;
         border-radius: 8px;
-        background-color: rgba(51, 51, 51, 0.8);
+        background-color: #333;
         outline: none;
 
         &:hover {

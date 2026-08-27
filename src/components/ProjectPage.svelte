@@ -64,7 +64,7 @@
 {#if zoomedImage}
   <div role="dialog" tabindex="0" id="zoomedImageOverlay" transition:fade={{ duration: 300, easing: cubicInOut }} onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); zoomedImage = null; }}} bind:this={zoomedContainer}>
     <div id="zoomedContainer">
-      <button class="zoomedImg-close hover-highlight" onclick={() => zoomedImage = null} transition:fly={{ y: -40, duration: 400, delay: 100, easing: cubicInOut }}><img src="/assets/close-x.svg" alt="close"></button>
+      <button class="zoomedImg-close horizontal-flex-box outline-highlight" onclick={() => zoomedImage = null} transition:fly={{ y: -40, duration: 400, delay: 100, easing: cubicInOut }}><img src="/assets/close-x.svg" alt="close"></button>
       <div class="image-wrapper">
         <img src={zoomedImage} alt="zoomed content" in:fly={{ y: 40, duration: 400, delay: 100, easing: cubicInOut }} use:handleClickOutside={{ requirements: [zoomedImage], onOutsideClick: () => { zoomedImage = null; zoomedImageId = null; } }}>
       </div>
@@ -84,15 +84,17 @@
     <h1>{project.title}</h1>
     <div class="links horizontal-flex-box" style="margin-bottom: 0;">
       {#if project === financeTrackerProject}
-        <button class="transparent-button-bold hover-highlight interactive-el underline-el demo-link" style="max-height: 50px;"
-          onclick={() => sendAlert("alert.message.demo", false, true, financeTrackerProject.demolink)}
+        <button class="button-transparent outline-highlight interactive-el underline-el demo-link" style="max-height: 50px;"
+          onclick={() => sendAlert({ message: "alert.message.demo", isTimer: false, showButtons: true, link: financeTrackerProject.demolink })}
         >
           {$t["project.finance-tracker.demo"]}
         </button>
       {/if}
       <div style="display: flex; flex-direction: row; gap: 10px;">
         <img src="/assets/github-logo.svg" alt="github" class="img-medium" style="filter: brightness(0) invert(0.9);">
-        <button class="transparent-button-bold underline-el" onclick={() => sendAlert("alert.message.github", false, true, project.repo)}>{$t["projects.project.repository"]}</button>
+        <button class="button-transparent underline-el" onclick={() => sendAlert({ message: "alert.message.github", isTimer: false, showButtons: true, link: project.repo })}>
+          {$t["projects.project.repository"]}
+        </button>
       </div>
     </div>
   </div>
@@ -109,9 +111,9 @@
     </div>
     <div id="project-info">
       <div id="project-intro-images">
-        <button class="hover-highlight" onclick={() => zoomImage(projectImages[0].pic, projectImages[0].id)}><img style="width: {project.id === 3 ? '80%' : '100%'}; height: auto;" src={projectImages[0].pic} alt="project"></button>
+        <button class="outline-highlight horizontal-flex-box" onclick={() => zoomImage(projectImages[0].pic, projectImages[0].id)}><img style="width: {project.id === 3 ? '80%' : '100%'}; height: auto;" src={projectImages[0].pic} alt="project"></button>
         {#if isSecondIntroPic}
-          <button class="hover-highlight" onclick={() => zoomImage(projectImages[1].pic, projectImages[1].id)}><img style="width: {project.id === 3 ? '80%' : '100%'}; height: auto;" src={projectImages[1].pic} alt="project"></button>
+          <button class="outline-highlight" onclick={() => zoomImage(projectImages[1].pic, projectImages[1].id)}><img style="width: {project.id === 3 ? '80%' : '100%'}; height: auto;" src={projectImages[1].pic} alt="project"></button>
         {/if}
       </div>
     </div>
@@ -128,7 +130,7 @@
         <h2>{i === 0 ? $t["projects.project.finance-tracker.variant"][0] : $t["projects.project.finance-tracker.variant"][1]}</h2>
         <div id="project-images">
           {#each (i === 0 ? financeTrackerDesktopPics : financeTrackerWebPics) as { pic, id } (id)}
-            <button class="hover-highlight" onclick={() => zoomImage(pic, id)}>
+            <button class="outline-highlight" onclick={() => zoomImage(pic, id)}>
               <img style="width: 100%; height: auto;" src={pic} alt="project">
             </button>
           {/each}
@@ -149,7 +151,7 @@
         </div>
         <div class="finradar-section-images vertical-flex-box" style="align-items: {windowWidth <= 820 ? 'center' : i % 2 ? 'flex-start' : 'flex-end'};">
           {#each section.pics as image, idx (image.id)}
-          <button class="hover-highlight image-wrapper" onclick={() => zoomImage(image.pic, image.id)}>
+          <button class="outline-highlight image-wrapper" onclick={() => zoomImage(image.pic, image.id)}>
             <img src={image.pic} alt="FinRadar image {i + idx}" />
           </button>
           {/each}
@@ -162,7 +164,7 @@
   {:else}
   <div id="project-images">
     {#each projectImages as { pic, id } (id)}
-      <button class="hover-highlight" onclick={() => zoomImage(pic, id)}>
+      <button class="outline-highlight" onclick={() => zoomImage(pic, id)}>
         <img style="width: 100%; height: auto;" src={pic} alt="project">
       </button>
     {/each}
@@ -171,13 +173,110 @@
 </div>
 
 <style>
+  #project-intro {
+    padding: 1rem;
+    user-select: none;
+  }
+
+  #project-title-links {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 50px;
+    margin-bottom: 50px;
+  }
+
+  #project-intro-content {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    gap: 40px;
+    justify-content: space-between;
+  }
+
   #project-intro-text {
+    display: flex;
+    flex-direction: column;
     width: 50%;
     font-size: clamp(1rem, 1.08cqw, 1.125rem);
+    gap: 1rem;
+
+    p {
+      line-height: 1.5rem;
+      word-wrap: break-word;
+      -webkit-hyphens: auto;
+      -moz-hyphens: auto;
+      -ms-hyphens: auto;
+      hyphens: auto;
+    }
+  }
+
+  #project-features {
+    align-items: flex-start;
+    gap: 1rem;
+    padding-left: 1rem;
+
+    span {
+      position: relative;
+      padding-left: 1rem;
+
+      &::before {
+        content: '•';
+        position: absolute;
+        left: 0;
+      }
+    }
   }
 
   #project-info {
+    display: flex;
+    flex-direction: column;
     width: 50%;
+
+    #project-intro-images {
+      display: flex;
+      flex-direction: column;
+      max-height: 100%;
+      width: 100%;
+
+      button {
+        border: none;
+        padding: 0;
+        background-color: transparent;
+
+        &:not(:last-child) {
+          margin-bottom: 20px;
+        }
+      }
+    }
+  }
+
+  #project-sub-content {
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+
+    h2 {
+      margin: 0;
+      font-weight: 300;
+      margin-bottom: 100px;
+      align-self: center;
+    }
+  }
+
+  #project-images {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(50% - 20px), 1fr));
+    grid-template-rows: 2, minmax(250px, 1fr);
+    justify-content: center;
+    gap: 20px;
+
+    button {
+      max-width: 100%;
+      border: none;
+      padding: 2px;
+      background-color: transparent;
+    }
   }
 
   .app-variant {
@@ -191,6 +290,10 @@
   .demo-link {
     padding: 10px 18px;
     border-radius: 8px;
+
+    &:hover {
+      background-color: #333;
+    }
   }
 
   @media (max-width: 1200px) {

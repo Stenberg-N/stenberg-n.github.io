@@ -39,9 +39,7 @@ const translations: Record<Language, Record<string, string | string[] | Array<st
     "alert.project-not-found": "Project unable to be opened!",
 
     // MAIN PAGE
-    "intro-title1": "Hello, I'm",
-    "intro-title2": "Niko Stenberg",
-    "intro-title3": "Aspiring ICT engineer",
+    "intro-titles": ["Hello, I'm", "Niko Stenberg", "Aspiring ICT engineer"],
     "intro-paragraph": "Passionate about systems, security, programming and everything in between, a full-stack or generalist of sorts. What can I say, I love computers.",
     "contact-location": "Finland, Tavastia Proper",
     "home.view-projects": "My projects",
@@ -168,9 +166,7 @@ const translations: Record<Language, Record<string, string | string[] | Array<st
     "alert.project-not-found": "Projektia ei voida avata!",
 
     // MAIN PAGE
-    "intro-title1": "Hei! Olen",
-    "intro-title2": "Niko Stenberg",
-    "intro-title3": "Tuleva ICT-insinööri",
+    "intro-titles": ["Hei! Olen", "Niko Stenberg", "Tule ICT-insinööri"],
     "intro-paragraph": "Intohimoinen järjestelmistä, tietoturvasta, ohjelmoinnista/koodaamisesta ja kaikesta muusta näiden väliltä, voisi kutsua 'Full-stack' tai 'generalist'. Tykkään tietokoneista.",
     "contact-location": "Suomi, Kanta-Häme",
     "home.view-projects": "Projektit",
