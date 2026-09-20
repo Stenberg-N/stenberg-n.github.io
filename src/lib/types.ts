@@ -1,37 +1,20 @@
-export type chosenImage = {
-  id: number;
-  image: string;
-}
-
-export type imageNote = {
-  id: number;
-  note: string;
-}
-
-export type allPicture = {
-  id: number;
-  pic: string;
-}
-
-export interface Project {
-  id: number;
+export type Project = {
   title: string;
   slug: string;
   descriptionKey: string;
-  tech: string[];
-  picture: string;
-  allPictures: allPicture[];
-  chosenImages: chosenImage[];
-  imageNotes: imageNote[];
-  imageTexts: string;
-  demo: string;
+  techUsed: string[];
+  coverImage: string;
+  introImages: string[];
+  allImages: string[];
+  highlightImages?: string[] | null;
+  imageTextsKey?: string | null;
   isWIP: boolean;
   isCurrent: boolean;
   repo: string;
-  demolink?: string;
+  demoLink?: string | null;
   paragraphKey: string;
   featuresKey: string;
-}
+};
 
 export type Alert = {
   id: number;
@@ -40,4 +23,9 @@ export type Alert = {
   message: string;
   link: string | null;
   onCancel: () => void;
-}
+};
+
+export type ViewPort = {
+  height: number;
+  width: number;
+};

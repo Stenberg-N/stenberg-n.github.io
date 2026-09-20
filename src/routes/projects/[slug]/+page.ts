@@ -1,7 +1,9 @@
 import { projects } from "$lib/projects";
 import { error } from '@sveltejs/kit';
 
-export function load({ params }) {
+export const prerender = true;
+
+export const load = ({ params }) => {
   const project = projects.find(
     (p) => p.slug === params.slug
   );
@@ -11,10 +13,8 @@ export function load({ params }) {
   }
 
   return { project };
-}
+};
 
-export function entries() {
+export const entries = () => {
   return projects.map((p) => ({ slug: p.slug }));
-}
-
-export const prerender = true;
+};

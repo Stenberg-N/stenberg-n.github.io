@@ -1,454 +1,529 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-  import { fade, fly } from "svelte/transition";
-  import { cubicInOut } from "svelte/easing";
-  import { resolve } from '$app/paths';
-  
-  import { t } from '$lib/i18n';
-  import { home } from '$lib/home';
-  import { projects } from '$lib/projects';
+  import { resolve } from "$app/paths";
+  import { onMount } from "svelte";
+	import { fade } from "svelte/transition";
+	import { cubicInOut } from "svelte/easing";
+
+	import { handleHorizontalScroll, handleClickOutside } from "$lib/actions";
 	import { sendAlert } from "$lib/alert";
-  import { handleClickOutside, handleHorizontalScroll } from "$lib/actions";
+  import { t } from "$lib/i18n/i18n";
+  import { skills } from "$lib/skills";
+  import { projects } from "$lib/projects";
+	import { viewport } from "$lib/viewport";
 
-  let currentProject = projects.find(p => p.isCurrent) || null;
-  const { chosenImages = [], imageNotes = [] } = currentProject || {};
-  let twitchRight = $state<boolean>(false);
+	import ZoomElementContent from "../components/ZoomElementContent.svelte";
 
-  let zoomedBadge = $state<string | null>(null);
-  let zoomedImage = $state<string | null>(null);
-  let zoomedImageId = $state<number | null>(null);
-  const zoomedImageNote = $derived.by(() => { return zoomedImageId !== null ? imageNotes.find(note => note.id === zoomedImageId) : null; });
-  let zoomedContainer = $state<HTMLDivElement | null>(null);
+  const currentProject = projects.find((p) => p.isCurrent === true) ?? null;
+  let zoomedElement = $state<HTMLDivElement | null>(null);
+  let zoomedElementImage = $state<string | null>(null);
+  let badgeRefs = $state<HTMLElement[]>([]);
+  let projectImgRefs = $state<HTMLElement[]>([]);
 
-  const contactContainerEls = [
-    { img: "/assets/github-logo.svg", alt: "Github", content: "Stenberg-N", command: () => sendAlert({ message: "alert.message.github", isTimer: false, showButtons: true, link: "https://github.com/Stenberg-N" }) },
-    { img: "/assets/linkedin-logo.svg", alt: "LinkedIn", content: "LinkedIn", command: () => sendAlert({ message: "alert.message.linkedin", isTimer: false, showButtons: true, link: "https://www.linkedin.com/in/niko-stenberg-543982408" }) },
-    { img: "/assets/email-logo.svg", alt: "Email", content: "stenbergniko@outlook.com", command: () => {} },
-    { img: "/assets/location-pin.svg", alt: "Location", content: "contact-location", command: () => {} },
+let timeout: ReturnType<typeof setTimeout>;
+let isHovered = $state<boolean>(false);
+
+  const currentProjectImages = $derived.by(() => {
+    if (!currentProject) return;
+
+    const imageTexts = currentProject?.imageTextsKey ? ($t[currentProject.imageTextsKey] as string[] | undefined) : undefined;
+    const highlightImages = currentProject?.highlightImages;
+    if (!imageTexts || !highlightImages) return;
+
+    return imageTexts.map((text, i) => [text, highlightImages[i]]);
+  });
+  const introContacts = [
+    {
+      img: "/assets/github-logo.svg",
+      text: "GitHub",
+      command: () => sendAlert({ message: "alert.message.github", isTimer: false, showButtons: true, link: "https://github.com/Stenberg-N" }),
+    },
+    {
+      img: "/assets/linkedin-logo.svg",
+      text: "LinkedIn",
+      command: () => sendAlert({ message: "alert.message.linkedin", isTimer: false, showButtons: true, link: "https://www.linkedin.com/in/niko-stenberg-543982408/" }),
+    },
+    {
+      img: "/assets/email-logo.svg",
+      text: "stenbergniko@outlook.com",
+      command: null,
+    },
+    {
+      img: "/assets/location-pin.svg",
+      get text() { return $t["contact-location"]; },
+      command: null,
+    },
+  ];
+  const cyberSecSkillButtons = [
+    {
+      get text() { return $t["home.cybersec.description"][2]; },
+      command: () => sendAlert({ message: "alert.message.jamk", isTimer: false, showButtons: true, link: "https://cs4e.pages.labranet.jamk.fi/ooc/20-Background/" })
+    },
+    {
+      get text() { return ($t["home.cybersec.description"][1] as string).split(":")[0]; },
+      command: () => sendAlert({ message: "alert.message.dnv", isTimer: false, showButtons: true, link: "https://cyberchallenge.dnv.com/h/forensics/" })
+    },
   ];
 
-  const zoomElement = (element: "badge" | "image", image: string, id?: number) => {
-    (() => element === "badge" ? zoomedBadge = image : zoomedImage = image)();
-    if (id) zoomedImageId = id;
-  };
+  $effect(() => {
+    return () => clearTimeout(timeout);
+  });
 
-  const handleExitZoom = () => {
-    zoomedImage = null;
-    zoomedImageId = null;
-    zoomedBadge = null;
-  };
+  const handleTwitchRight = () => {
+    if (isHovered) return;
 
+    isHovered = true;
+    timeout = setTimeout(() => {
+      isHovered = false;
+    }, 400);
+  };
 </script>
 
-{#if zoomedBadge || zoomedImage}
-  <div role="dialog" tabindex="0" id="zoomedImageOverlay" bind:this={zoomedContainer} transition:fade={{ duration: 300, easing: cubicInOut }} onkeydown={(e) => { if (e.key === 'Escape')  {e.preventDefault(); handleExitZoom(); }}}>
-    <div id="zoomedContainer">
-      <button class="zoomedImg-close horizontal-flex-box" in:fly={{ y: -40, duration: 400, delay: 100, easing: cubicInOut }}
-        onclick={() => handleExitZoom()}
-      >
-        <img src="/assets/close-x.svg" alt="close">
-      </button>
-      <div class="image-wrapper" in:fly={{ y: 40, duration: 400, delay: 100, easing: cubicInOut }}>
-        {#if zoomedBadge || zoomedImage}
-          <img id="zoomedElement-image" src={zoomedBadge ? zoomedBadge : zoomedImage} alt="badge" use:handleClickOutside={{ requirements: [zoomedImage, zoomedBadge], onOutsideClick: () => handleExitZoom() }}>
+<div id="home-container" class="flex vertical">
+  {#if zoomedElementImage}
+    <div
+      bind:this={zoomedElement}
+      class="zoomed-element-container flex vertical"
+      role="dialog"
+      tabindex="0"
+      onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); zoomedElementImage = null; } }}
+      use:handleClickOutside={{ onOutsideClick: () => zoomedElementImage = null, additionalIgnorableElements: [...badgeRefs, ...projectImgRefs] }}
+      transition:fade={{ duration: 200, easing: cubicInOut }}
+    >
+      <ZoomElementContent
+        options={{
+          zoomedElement,
+          zoomedElementImage,
+          setZoomedElementImage: (state) => { zoomedElementImage = state },
+        }}
+      />
+    </div>
+
+    {#each [zoomedElement], i (i)}
+      {onMount(() => zoomedElement?.focus())}
+    {/each}
+  {/if}
+
+  <div id="intro-wrapper">
+    <section id="intro" class="marginalized">
+      <div id="intro-texts">
+        {#each $t["intro-titles"] as title (title)}
+          <h2>{title}</h2>
+        {/each}
+        <div class="divider"></div>
+        <p>{$t["intro-paragraph"]}</p>
+        <div id="intro-contacts" class="text-container">
+          {#each introContacts as el, i (i)}
+            <div class="flex horizontal">
+              <span class="span-icon img-medium" style="mask-image: url('{el.img}'); {i === 1 && 'background-color: #0e76a8;'}"></span>
+              {#if [0, 1].includes(i)}
+                <button class="button-primary text-only" onclick={el.command}>
+                  {el.text}
+                </button>
+              {:else}
+                <p>{el.text}</p>
+              {/if}
+            </div>
+          {/each}
+        </div>
+        <a class="button-primary anchor white-bg rounder-corners" href={resolve("/projects")} onmouseenter={handleTwitchRight}>
+          {$t["home.view-projects"]}
+          <span class="span-icon img-small-medium" style="mask-image: url('/assets/arrow.svg');" class:is-moved={isHovered}></span>
+        </a>
+        {#if $viewport.width <= 750}
+          <div class="divider"></div>
         {/if}
       </div>
-      {#if zoomedImageNote}
-        <span>{$t[zoomedImageNote.note]}</span>
-      {/if}
-    </div>
+      <div class="img-wrapper">
+        <img src="/images/selfie.jpg" alt="Selfie" />
+      </div>
+    </section>
   </div>
 
-  {#each [zoomedContainer], i (i)}
-    {onMount(() => zoomedContainer?.focus() )}
-  {/each}
-{/if}
-
-<div id="home-intro-contact" class="horizontal-flex-box">
-  <div id="home-intro">
-    <div id="home-intro-title">
-      {#each $t["intro-titles"] as title, i (i)}
-        <h1 class="intro-title">{title}</h1>
-      {/each}
-      <p>{$t['intro-paragraph']}</p>
-    </div>
-    <div id="home-contact" class="vertical-flex-box">
-      {#each contactContainerEls as el, i (i)}
-        <div class="horizontal-flex-box">
-          <img src={el.img} alt={el.alt} class="img-medium" style="filter: {i === 1 ? 'unset' : 'brightness(0) invert(0.9)'};">
-          {#if [0, 1].includes(i)}
-          <button class="button-transparent underline-el" onclick={() => el.command()}>{el.content}</button>
-          {:else}
-            <span style:user-select={i === 2 ? 'text' : 'none'}>{i === 3 ? $t[el.content] : el.content}</span>
-          {/if}
-        </div>
-      {/each}
-    </div>
-    <a id="home-view-projects-button" class="anchor button-default" href={resolve("/projects")} onmouseenter={() => twitchRight = true} onmouseleave={() => twitchRight = false}>
-      <span>{$t["home.view-projects"]}</span>
-      <img class:twitch={twitchRight} src="/assets/arrow.svg" alt="arrow" class="img-small">
-    </a>
-  </div>
-  <div id="selfie-image" class="image-wrapper">
-    <img src="/images/selfie.jpg" alt="Selfie" />
-  </div>
-</div>
-
-<div class="border-divider"></div>
-
-<div id="home-sub-content" class="vertical-flex-box">
-  <h2>{$t['home.sub-content.knowledge.title']}</h2>
-  <div id="home-categories-outer">
-    <div id="home-categories" class="horizontal-flex-box" use:handleHorizontalScroll>
-      {#each home as { id, titleKey, descriptionKey, badges } (id)}
-        <div class="home-category outline-highlight vertical-flex-box">
-          <h3 style="margin: 0; margin-bottom: 40px;">{$t[titleKey]}</h3>
-          <div class="home-category-content vertical-flex-box">
-            {#each $t[descriptionKey] as item (item)}
-              <span>{item}</span>
-            {/each}
-            {#if id === 3}
-              <div style="display: flex; flex-direction: column; gap: 5px;">
-                <button class="button-transparent underline-el" style="width: fit-content;" onclick={() => sendAlert({
-                  message: "alert.message.nixu",
-                  isTimer: false,
-                  showButtons: true,
-                  link: "https://thenixuchallenge.com/c/" })}
-                >
-                  NIXU
+  <div id="skills-wrapper">
+    <h1>
+      {$t["home.knowledge.title"]}
+    </h1>
+    <div id="skills-container" class="flex vertical marginalized">
+      <div id="scroll-row" class="flex horizontal" use:handleHorizontalScroll>
+        {#each skills as { title, items, badges }, i (i)}
+          <div class="skill flex vertical">
+            <p>{$t[title]}</p>
+            <ul>
+              {#each $t[items] as item (item)}
+                <li>{item}</li>
+              {/each}
+            </ul>
+            {#if i === 2}
+              {#each cyberSecSkillButtons as btn, i (i)}
+                <button class="button-primary text-only red-text" onclick={btn.command}>
+                  {btn.text}
                 </button>
-                <button class="button-transparent underline-el" style="width: fit-content;" onclick={() => sendAlert({
-                  message: "alert.message.jamk",
-                  isTimer: false,
-                  showButtons: true,
-                  link: "https://cs4e.pages.labranet.jamk.fi/ooc/20-Background/"})}
-                >
-                  {$t["home.cybersec.description"].slice(-1)}
-                </button>
-              </div>
+              {/each}
             {/if}
-          </div>
-          <div style="display: flex; flex: 1 1 0;"></div>
-          {#if badges.length >= 1}
-            <div style="overflow: hidden;">
-              <div id="home-badges" class="horizontal-flex-box" use:handleHorizontalScroll={{ multiplier: 0.5 }}>
-                {#each badges as badge (badge)}
-                  <button class="vertical-flex-box outline-highlight interactive-el" onclick={() => zoomElement("badge", badge)}>
-                    <img class="badge" src={badge} alt="badge">
-                  </button>
-                {/each}
-              </div>
+            <div class="badge-container" use:handleHorizontalScroll>
+              {#each badges as badge, i (badge)}
+                <div bind:this={badgeRefs[i]} role="button" tabindex="0" class="img-wrapper" onclick={() => zoomedElementImage = badge} onkeydown={(e) => { if (e.key === 'Enter') zoomedElementImage = badge}}>
+                  <img src="{badge}" alt="{badge}+{i}" />
+                </div>
+              {/each}
             </div>
-          {/if}
-        </div>
-      {/each}
-    </div>
-  </div>
-
-  <div class="border-divider"></div>
-
-  <h2>{$t['home.sub-content.working-on.title']}</h2>
-  <div id="current-project" style="display: flex; flex-direction: column;">
-    {#if currentProject}
-      <h2 style="margin-bottom: 10px;">{currentProject.title}</h2>
-      <span>{$t[currentProject.descriptionKey]}</span>
-      <a id="view-current-project-button" class="anchor button-default" style="justify-content: center;" href={resolve("/projects/fin-radar")}>
-        <span>{$t["home.sub-content.view-current-project"]}</span>
-      </a>
-      <div id="current-project-images" class="vertical-flex-box">
-        {#each chosenImages as { image, id }, i (image)}
-          {#if $t[currentProject.imageTexts]}
-            <span>{$t[currentProject.imageTexts][i]}</span>
-          {/if}
-          <div
-            role="button"
-            tabindex="0"
-            class="current-project-image outline-highlight interactive-el image-wrapper"
-            onclick={() => zoomElement("image", image, id)}
-            onkeydown={(e) => {if (e.key === 'Enter') zoomElement("image", image, id)}}
-          >
-            <img src={image} alt="Current project image {i}" />
           </div>
         {/each}
       </div>
-    {/if}
+    </div>
+  </div>
+
+  <div id="current-project-wrapper">
+    <h1>
+      {$t["home.working-on.title"]}
+    </h1>
+    <div id="current-project-container" class="flex vertical marginalized">
+      {#if !currentProject}
+        <p>{$t["home.paragraph.no-current-message"]}</p>
+      {:else}
+        <p>{$t[currentProject.descriptionKey]}</p>
+        <a class="button-primary anchor white-bg rounder-corners" href={resolve(`/projects/${currentProject.slug}`)}>
+          {$t["home.view-current-project"]}
+        </a>
+        <div id="project-images-container" class="flex vertical">
+          {#each currentProjectImages as el, i (i)}
+            <div class="project-img flex vertical">
+              <p><span>{el[0].split(".")[0]}<br/></span>{el[0].split(".")[1]}.</p>
+              <div
+                bind:this={projectImgRefs[i]}
+                role="button"
+                tabindex="0"
+                class="img-wrapper"
+                onclick={() => zoomedElementImage = el[1]}
+                onkeydown={(e) => { if (e.key === 'Enter') zoomedElementImage = el[1]; }}
+              >
+                <img src={el[1]} alt={el[1].split("/")[2]} />
+              </div>
+            </div>
+          {/each}
+        </div>
+      {/if}
+    </div>
   </div>
 </div>
 
 <style>
-  .twitch {
-    animation: twitch-left 0.5s;
-  }
+  #home-container {
+    gap: 0;
 
-  #home-intro-contact {
-    flex: 1 1 0;
-    gap: 50px;
-    padding: 1rem;
-    word-wrap: break-word;
-    user-select: none;
-  }
+    > div:not(.zoomed-element-container) {
+      padding: 0 2rem;
+      border-bottom: 1px solid var(--border-color-primary);
 
-  #home-intro {
-    max-width: 60%;
-    width: 100%;
-  }
-
-  #home-intro-title {
-    h1 {
-      margin: 0;
-      font-family: 'Inter';
-      paint-order: stroke fill;
-      font-size: clamp(2.5rem, 2.65cqw, 3rem);
-
-      &:not(:nth-child(2)) {
-        -webkit-text-stroke: 1px #f6f6f6;
-        color: #0f0f0f;
-        font-size: clamp(2rem, 2.15cqw, 2.5rem);
+      > h1 {
+        text-align: center;
+        margin: 8rem 0 0;
       }
     }
 
-    p {
-      padding-left: 2rem;
-      margin-top: 20px;
-      font-size: clamp(0.875rem, 1.08cqw, 1rem);
-    }
-  }
-
-  #home-contact {
-    gap: 12px;
-    margin-top: 40px;
-
-    div {
-      justify-content: flex-start;
-      width: 100%;
-      gap: 20px;
-    }
-  }
-
-  #home-view-projects-button {
-    justify-content: space-between;
-    max-width: 170px;
-    height: 50px;
-    margin-top: 60px;
-    border-radius: 16px;
-    padding: 8px 12px;
-
-    &:hover {
-      background-color: rgba(255, 70, 70, 1);
+    .zoomed-element-container {
+      top: var(--home-zoomed-element-container-top, 148px);
+      left: var(--home-zoomed-element-container-left, 16px);
     }
 
-    &::after {
-      width: 0;
+    #intro {
+      display: grid;
+      grid-template-columns: 1fr 0.8fr;
+      gap: 6rem;
+
+      h2 {
+        margin: 0;
+        font-size: 4rem;
+
+        &:first-of-type, &:last-of-type {
+          font-size: 2rem;
+        }
+      }
+
+      #intro-texts {
+
+        > a {
+          width: fit-content;
+          padding: 0.75rem;
+          font-size: inherit;
+
+          .is-moved {
+            animation: twitch-right 400ms ease-in-out;
+          }
+
+          span {
+            transform: rotate(-90deg);
+          }
+        }
+
+        > p {
+          margin: 0;
+        }
+      }
     }
 
-    img {
-      transform: rotateZ(-90deg);
-    }
-  }
+    #intro-contacts {
+      gap: 1.5rem;
+      margin: 2rem 0;
 
-  #selfie-image {
-    max-width: 40%;
-    width: 100%;
-    padding: 1rem;
-  }
+      > div {
+        gap: 1rem;
+        align-items: stretch;
 
-  #home-sub-content {
-    align-items: unset;
-    gap: 100px;
-    user-select: none;
+        p {
+          margin: 0;
+          word-break: break-word;
+        }
 
-    h2 {
-      font-weight: 300;
-      align-self: center;
-      text-align: center;
-      margin: 0;
-    }
-  }
-
-  #home-categories {
-    justify-content: unset;
-    overflow-x: auto;
-    overflow-y: hidden;
-    width: 100%;
-    height: 580px;
-    padding: 6px 10px 30px;
-    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgb(0, 0, 0) 2%, rgb(0, 0, 0) 98%, rgba(0, 0, 0, 0));
-
-    &::-webkit-scrollbar-track {
-      margin: 0 40px;
+        button {
+          font-size: inherit;
+        }
+      }
     }
 
-    .home-category-content {
-      align-items: flex-start;
-      padding-left: 1rem;
-      gap: 1rem;
+    #skills-container {
 
-      span {
+      #scroll-row {
+        justify-content: flex-start;
+        overflow-x: auto;
+        gap: 1.5rem;
+        padding: 1rem 1.5rem;
+        mask-image: linear-gradient(to left, rgba(0, 0, 0, 0), rgb(0, 0, 0) 2%, rgb(0, 0, 0) 98%, rgba(0, 0, 0, 0));
+
+        &::-webkit-scrollbar, ::-webkit-scrollbar {
+          background-color: transparent;
+        }
+
+        &::-webkit-scrollbar-track {
+          margin: 0 1.5rem;
+        }
+
+        &::-webkit-scrollbar-thumb, ::-webkit-scrollbar-thumb {
+          background-color: transparent;
+        }
+
+        &:hover::-webkit-scrollbar, :hover::-webkit-scrollbar {
+          background-color: var(--bg-color-primary2);
+        }
+
+        &:hover::-webkit-scrollbar-thumb, :hover::-webkit-scrollbar-thumb {
+          background-color: #888;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+          background-color: var(--color-white-primary);
+        }
+      }
+
+      .skill {
+        flex-shrink: 0;
+        align-self: stretch;
+        justify-content: flex-start;
+        width: calc((100% - 1.5rem) / 2);
+        gap: 1rem;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        outline: 1px solid var(--border-color-primary);
+        transition: outline-color, background-color 100ms ease-in-out;
+
+        &:hover {
+          background-color: var(--bg-color-primary1-hover);
+          outline-color: var(--border-color-primary-highlight);
+        }
+
+        button {
+          align-self: flex-start;
+          padding-left: 1rem;
+          font-size: inherit;
+          transition: transform, color 100ms ease-in-out;
+
+          &:hover {
+            transform: scale(1.02);
+          }
+        }
+
+        ul {
+          list-style-type: square;
+          padding-inline-start: 2rem;
+          
+          li {
+            margin: 1rem 0;
+            font-size: 1.125rem;
+          }
+        }
+
+        p {
+          margin: 0;
+        }
+
+        > p {
+          font-weight: bold;
+          font-size: 1.25rem;
+        }
+      }
+
+      .badge-container {
+        display: grid;
+        grid-auto-columns: 6.5rem;
+        grid-auto-flow: column;
+        gap: 1rem;
+        padding: 0.5rem;
+        overflow-x: auto;
+        mask-image: linear-gradient(to left, rgba(0, 0, 0, 0), rgb(0, 0, 0) 2%, rgb(0, 0, 0) 98%, rgba(0, 0, 0, 0));
+
+        &::-webkit-scrollbar-track {
+          margin: 0 0.5rem;
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+          background-color: var(--color-white-primary);
+        }
+
+        .img-wrapper {
+          padding: 4px;
+          background-color: var(--bg-color-secondary2);
+          border-radius: 12px;
+          transition: background-color 100ms ease-in-out;
+          
+          &:hover {
+            background-color: var(--bg-color-secondary3);
+            cursor: pointer;
+          }
+        }
+
+        img {
+          border-radius: 0.5rem;
+          width: 6rem;
+          height: 6rem;
+        }
+      }
+    }
+
+    #current-project-container {
+      align-items: center;
+
+      > p {
+        text-align: center;
+      }
+
+      > a {
+        padding: 0.75rem;
+        font-size: inherit;
+      }
+
+      #project-images-container {
+        margin-top: 8rem;
+        gap: 1.5rem;
+      }
+
+      .project-img {
         position: relative;
-        display: block;
-        padding-left: 1em;
-        font-size: clamp(0.875rem, 1.08cqw, 1.125rem);
+        padding: 3rem;
+        border-radius: 1rem;
+        background-image: var(--bg-image-linear-gradient1);
 
         &::before {
-          content: '•';
+          content: '';
           position: absolute;
-          left: 0;
-          font-size: clamp(0.875rem, 1.08cqw, 1.125rem);
+          inset: -4px;
+          z-index: -1;
+          background-color: var(--bg-color-primary2);
+          border-radius: 1rem;
+          outline: 1px solid var(--border-color-primary);
+        }
+
+        > p {
+          margin: 0 0 1rem;
+
+          span {
+            font-weight: bold;
+            font-size: 1.25rem;
+          }
+        }
+
+        > .img-wrapper {
+          outline: 1px solid var(--border-color-primary);
+          border-radius: 0.5rem;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+          transition: outline-color 100ms ease-in-out;
+
+          &:hover {
+            outline-color: var(--border-color-primary-highlight);
+            cursor: pointer;
+          }
         }
       }
     }
   }
 
-  #home-categories-outer {
-    overflow: hidden;
-    padding: 0 50px;
-  }
-
-  .home-category {
-    align-items: unset;
-    min-width: calc(50% - 40px);
-    max-width: 650px;
-    width: 100%;
-    height: 100%;
-    padding: 1rem;
-    margin: 0 20px;
-    border-radius: 4px;
-    background-color: rgba(15, 15, 15, 0.8);
-
-    h3 {
-      font-size: clamp(1rem, 1.08cqw, 1.125rem);
+  @keyframes twitch-right {
+    0% {
+      transform: translateX(0) rotate(-90deg);
     }
-
-    &:hover {
-      background-color: rgba(51, 51, 51, 0.8);
+    50% {
+      transform: translateX(4px) rotate(-90deg);
     }
-  }
-
-  #home-badges {
-    justify-content: flex-start;
-    max-height: 180px;
-    gap: 10px;
-    padding: 30px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgb(0, 0, 0) 2%, rgb(0, 0, 0) 98%, rgba(0, 0, 0, 0));
-
-    &::-webkit-scrollbar-track {
-      margin-top: 0;
-    }
-
-    button {
-      height: 120px;
-      width: 120px;
-      border-radius: 16px;
-      padding: 0;
-      margin: 0;
-    }
-
-    .badge {
-      height: 120px;
-      width: 120px;
-      border-radius: 16px;
-    }
-  }
-
-  #current-project {
-    #view-current-project-button {
-      align-self: center;
-      max-width: 160px;
-      padding: 16px;
-      margin-top: 2rem;
-      border-radius: 16px;
-
-      &:hover {
-        background-color: rgb(255, 70, 70);
-      }
-    }
-
-    span {
-      align-self: center;
-      text-align: center;
-      font-size: clamp(0.875rem, 1.08cqw, 1rem);
-    }
-
-    #current-project-images {
-      justify-content: unset;
-      margin-top: 80px;
-      padding: 0 80px;
-
-      .current-project-image {
-        background-color: #0f0f0f;
-        margin-top: 20px;
-        border: 0;
-        border-radius: 4px;
-        
-        img {
-          object-fit: contain;
-        }
-
-        &:not(:last-child) {
-          margin-bottom: clamp(80px, 10cqw, 120px);
-        }
-      }
-    }
-  }
-
-  @media (max-width: 1200px) {
-    #home-sub-content {
-      gap: 50px;
-      padding: 0;
-    }
-
-    #home-categories-outer {
-      padding: 0;
-    }
-
-    .current-project-image {
-      background-size: contain;
-      max-height: 550px;
-    }
-  }
-
-  @media (max-width: 1000px) {
-    #home-intro-contact {
-      flex-direction: column;
-    }
-
-    #home-intro {
-      max-width: 100%;
-    }
-
-    #selfie-image {
-      max-width: 500px;
-    }
-
-    #current-project #current-project-images {
-      padding: 0 1rem;
+    100% {
+      transform: translateX(0) rotate(-90deg);
     }
   }
 
   @media (max-width: 750px) {
-    .home-category {
-      min-width: calc(100% - 40px);
+    #home-container {
+
+      > div {
+        padding: 0 2rem;
+      }
+
+      #intro {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 0;
+
+        h2 {
+          font-size: 2.5rem;
+
+          &:first-of-type, &:last-of-type {
+            font-size: 1.5rem;
+          }
+        }
+
+        > .img-wrapper {
+          justify-self: center;
+        }
+      }
+
+      #skills-container {
+
+        #scroll-row {
+          flex-direction: column;
+          padding: 1rem 0.5rem;
+
+          .skill {
+            width: 100%;
+            padding: 1rem;
+            font-size: clamp(0.875rem, 2.25cqw, 1rem);
+
+            ul {
+              padding-inline-start: 1.5rem;
+            }
+
+            li {
+              font-size: clamp(0.875rem, 2.25cqw, 1rem);
+            }
+          }
+        }
+      }
+
+      #current-project-container {
+
+        #project-images-container {
+          gap: 3rem;
+        }
+
+        .project-img {
+          padding: 1rem;
+        }
+      }
     }
-
-    .current-project-image {
-      padding: 5px;
-    }
-  }
-
-  @keyframes twitch-left {
-    0% { transform: translateX(0) rotateZ(-90deg); }
-    50% { transform: translateX(6px) rotateZ(-90deg); }
-    100% { transform: translateX(0) rotateZ(-90deg); }
-  }
-
-  @font-face {
-    font-family: 'Inter';
-    font-style: normal;
-    font-display: swap;
-    font-weight: 700;
-    src: url(https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-700-normal.woff2) format('woff2');
-    unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
   }
 </style>

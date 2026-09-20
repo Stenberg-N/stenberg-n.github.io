@@ -1,27 +1,36 @@
 <script lang="ts">
-  import { t } from "$lib/i18n";
+  import { t } from "$lib/i18n/i18n";
 </script>
 
-<div id="about-me-container" class="vertical-flex-box">
+<div id="about-me-container" class="flex vertical marginalized">
   {#each $t["about-me.hobbies.titles"] as title, i (i)}
-    <h2>{title}</h2>
-    <p>{$t["about-me.hobbies.paragraphs"][i]}</p>
+    <div>
+      <h2>{title}</h2>
+      <p>{$t["about-me.hobbies.paragraphs"][i]}</p>
+    </div>
   {/each}
 </div>
 
 <style>
   #about-me-container {
     align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem;
-    user-select: none;
-  }
+    gap: 2rem;
+    padding: 0 2rem;
 
-  #about-me-container p {
-    font-size: clamp(0.875rem, 1.08cqw, 1rem);
-  }
+    > div {
+      width: 100%;
+      padding: 2rem;
+      border-radius: 8px;
+      outline: 1px solid var(--border-color-primary);
+    }
 
-  #about-me-container h2:first-of-type {
-    margin-top: 0;
+    h2 {
+      margin: 0 0 1rem;
+    }
+
+    p {
+      margin: 0;
+      hyphens: auto;
+    }
   }
 </style>

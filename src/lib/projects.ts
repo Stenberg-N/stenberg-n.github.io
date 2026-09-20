@@ -1,118 +1,152 @@
-import type { Project } from "./types";
+import { get } from "svelte/store";
+
+import type { Project } from "./types"
+import { lang, t } from './i18n/i18n';
 
 export const projects: Project[] = [
   {
-    id: 1,
     title: "FinRadar",
     slug: "fin-radar",
-    descriptionKey: "project.fin-radar.description",
-    paragraphKey: "projects.project.fin-radar.paragraph",
-    featuresKey: "projects.project.fin-radar.features",
-    tech: ["Svelte", "Rust", "TypeScript", "Tauri"],
-    picture: "/images/fin-radar4.png",
-    allPictures: [
-      { id: 1, pic: "/images/fin-radar9.png" },
-      { id: 2, pic: "/images/fin-radar4.png" },
-      { id: 3, pic: "/images/fin-radar3.png" },
-      { id: 4, pic: "/images/fin-radar2.png" },
-      { id: 5, pic: "/images/fin-radar5.png" },
-      { id: 6, pic: "/images/fin-radar6.png" },
-      { id: 7, pic: "/images/fin-radar7.png" },
-      { id: 8, pic: "/images/fin-radar8.png" },
-      { id: 9, pic: "/images/fin-radar1.png" },
-      { id: 10, pic: "/images/fin-radar10.png" },
-      { id: 11, pic: "/images/fin-radar11.png" },
+    descriptionKey: "projects.project.fin-radar.description",
+    techUsed: ["Tauri", "Rust", "Python", "TypeScript", "Svelte"],
+    coverImage: "/images/fin-radar4.png",
+    introImages: ["/images/fin-radar9.png", "/images/fin-radar4.png"],
+    allImages: [
+      "/images/fin-radar1.png",
+      "/images/fin-radar2.png",
+      "/images/fin-radar3.png",
+      "/images/fin-radar4.png",
+      "/images/fin-radar5.png",
+      "/images/fin-radar6.png",
+      "/images/fin-radar7.png",
+      "/images/fin-radar8.png",
+      "/images/fin-radar9.png",
+      "/images/fin-radar10.png",
+      "/images/fin-radar11.png",
     ],
-    chosenImages: [ { id: 1, image: "/images/fin-radar1.png" }, { id: 3, image: "/images/fin-radar3.png" }, { id: 2, image: "/images/fin-radar4.png" }, { id: 6, image: "/images/fin-radar6.png" } ],
-    imageNotes: [],
-    imageTexts: "project.fin-radar.imagetexts",
-    demo: "",
+    highlightImages: [
+      "/images/fin-radar1.png",
+      "/images/fin-radar3.png",
+      "/images/fin-radar4.png",
+      "/images/fin-radar6.png",
+    ],
+
+    imageTextsKey: "projects.project.fin-radar.imagetexts",
     isWIP: true,
     isCurrent: true,
     repo: "https://github.com/Stenberg-N/fin-radar",
+    demoLink: null,
+    paragraphKey: "projects.project.fin-radar.paragraph",
+    featuresKey: "projects.project.fin-radar.features",
   },
   {
-    id: 2,
-    title: "FocusBoard",
-    slug: "focusboard",
-    descriptionKey: "project.focusboard.description",
-    paragraphKey: "projects.project.focusboard.paragraph",
-    featuresKey: "projects.project.focusboard.features",
-    tech: ["Svelte", "Rust", "TypeScript", "Tauri"],
-    picture: "/images/focusboard1.png",
-    allPictures: [
-      { id: 1, pic: "/images/focusboard1.png" },
-      { id: 2, pic: "/images/focusboard2.png"},
-      { id: 3, pic: "/images/focusboard3.png"},
-      { id: 4, pic: "/images/focusboard4.png" },
-      { id: 5, pic: "/images/focusboard5.png" },
-      { id: 6, pic: "/images/focusboard6.png" },
-      { id: 7, pic: "/images/focusboard7.png" },
-    ],
-    chosenImages: [ { id: 1, image: "/images/focusboard1.png" }, { id: 2, image: "/images/focusboard2.png"}, { id: 3, image: "/images/focusboard3.png"}, { id: 5, image: "/images/focusboard5.png" } ],
-    imageNotes: [ { id: 5, note: "project.focusboard.imagenotes" } ],
-    imageTexts: "project.focusboard.imagetexts",
-    demo: "",
-    isWIP: false,
-    isCurrent: false,
-    repo: "https://github.com/Stenberg-N/focusboard",
-  },
-  {
-    id: 3,
     title: "Finance Tracker",
     slug: "finance-tracker",
-    descriptionKey: "project.finance-tracker.description",
-    paragraphKey: "projects.project.finance-tracker.paragraph",
-    featuresKey: "projects.project.finance-tracker.features",
-    tech: ["Python", "JavaScript", "Django", "PostgreSQL", "Scikit-learn", "Optuna"],
-    picture: "/images/web-finance-tracker1.png",
-    allPictures: [
-      { id: 1, pic: "/images/desktop-finance-tracker1.png" },
-      { id: 2, pic: "/images/desktop-finance-tracker2.png"},
-      { id: 3, pic: "/images/desktop-finance-tracker3.png"},
-      { id: 4, pic: "/images/web-finance-tracker1.png" },
-      { id: 5, pic: "/images/web-finance-tracker6.png" },
-      { id: 6, pic: "/images/web-finance-tracker7.png" },
-      { id: 7, pic: "/images/web-finance-tracker5.png" },
-      { id: 8, pic: "/images/web-finance-tracker3.png" },
-      { id: 9, pic: "/images/web-finance-tracker4.png" },
-      { id: 10, pic: "/images/web-finance-tracker2.png" },
-      { id: 11, pic: "/images/finance-tracker1.png" },
-      { id: 12, pic: "/images/finance-tracker2.png" },
+    descriptionKey: "projects.project.finance-tracker.description",
+    techUsed: ["Python", "JavaScript", "Django", "Scikit-learn"],
+    coverImage: "/images/web-finance-tracker1.png",
+    introImages: ["/images/desktop-finance-tracker1.png", "/images/web-finance-tracker1.png"],
+    allImages: [
+      "/images/desktop-finance-tracker1.png",
+      "/images/desktop-finance-tracker2.png",
+      "/images/desktop-finance-tracker3.png",
+      "/images/finance-tracker1.png",
+      "/images/finance-tracker2.png",
+      "/images/web-finance-tracker1.png",
+      "/images/web-finance-tracker2.png",
+      "/images/web-finance-tracker3.png",
+      "/images/web-finance-tracker4.png",
+      "/images/web-finance-tracker5.png",
+      "/images/web-finance-tracker6.png",
+      "/images/web-finance-tracker7.png",
     ],
-    chosenImages: [],
-    imageNotes: [ { id: 12, note: "project.finance-tracker.imagenotes" } ],
-    imageTexts: "project.finance-tracker.imagetexts",
-    demo: "project.finance-tracker.demo",
+    highlightImages: null,
+    imageTextsKey: null,
     isWIP: false,
     isCurrent: false,
     repo: "https://github.com/Stenberg-N/finance-tracker",
-    demolink: "https://site--financetracker-app--kwlb8kg8h4nw.code.run/login/?next=/",
+    demoLink: "https://site--financetracker-app--kwlb8kg8h4nw.code.run/login/?next=/",
+    paragraphKey: "projects.project.finance-tracker.paragraph",
+    featuresKey: "projects.project.finance-tracker.features",
   },
   {
-    id: 4,
+    title: "FocusBoard",
+    slug: "focusboard",
+    descriptionKey: "projects.project.focusboard.description",
+    techUsed: ["Tauri", "Rust", "TypeScript", "Svelte"],
+    coverImage: "/images/focusboard1.png",
+    introImages: ["/images/focusboard3.png", "/images/focusboard1.png"],
+    allImages: [
+      "/images/focusboard1.png",
+      "/images/focusboard2.png",
+      "/images/focusboard3.png",
+      "/images/focusboard4.png",
+      "/images/focusboard5.png",
+      "/images/focusboard6.png",
+      "/images/focusboard7.png",
+    ],
+    highlightImages: null,
+    imageTextsKey: null,
+    isWIP: false,
+    isCurrent: false,
+    repo: "https://github.com/Stenberg-N/focusboard",
+    demoLink: null,
+    paragraphKey: "projects.project.focusboard.paragraph",
+    featuresKey: "projects.project.focusboard.features",
+  },
+  {
     title: "Waste Classifier",
     slug: "waste-classifier",
-    descriptionKey: "project.waste-classifier.description",
-    paragraphKey: "projects.project.waste-classifier.paragraph",
-    featuresKey: "projects.project.waste-classifier.features",
-    tech: ["Python", "PyTorch", "PyQt 6", "Optuna"],
-    picture: "/images/waste-classifier4.png",
-    allPictures: [
-      { id: 1, pic: "/images/waste-classifier1.png" },
-      { id: 2, pic: "/images/waste-classifier2.png" },
-      { id: 3, pic: "/images/waste-classifier3.png" },
-      { id: 4, pic: "/images/waste-classifier4.png" },
-      { id: 5, pic: "/images/waste-classifier5.png" },
-      { id: 6, pic: "/images/waste-classifier6.png" },
-      { id: 7, pic: "/images/waste-classifier7.png" },
+    descriptionKey: "projects.project.waste-classifier.description",
+    techUsed: ["Python", "PyTorch", "PyQt"],
+    coverImage: "/images/waste-classifier4.png",
+    introImages: ["/images/waste-classifier7.png"],
+    allImages: [
+      "/images/waste-classifier1.png",
+      "/images/waste-classifier2.png",
+      "/images/waste-classifier3.png",
+      "/images/waste-classifier4.png",
+      "/images/waste-classifier5.png",
+      "/images/waste-classifier6.png",
+      "/images/waste-classifier7.png",
+      "/images/waste-classifier8.png",
     ],
-    chosenImages: [],
-    imageNotes: [ { id: 3, note: "project.waste-classifier.imagenotes" } ],
-    imageTexts: "project.waste-classifier.imagetexts",
-    demo: "",
+    highlightImages: null,
+    imageTextsKey: null,
     isWIP: false,
     isCurrent: false,
     repo: "https://github.com/Stenberg-N/waste-classification",
+    demoLink: null,
+    paragraphKey: "projects.project.waste-classifier.paragraph",
+    featuresKey: "projects.project.waste-classifier.features",
   },
-]
+];
+
+let imageNoteResolve: () => void;
+const imageNotePromise = new Promise<void>((resolve) => {
+  imageNoteResolve = resolve;
+});
+
+const updateImageNotes = async () => {
+  await imageNotePromise;
+
+  imageNotes.entries().forEach((entry) => {
+    imageNotes.set(entry[0], get(t)[`projects.project.${entry[0].split("/")[2].slice(0, -5)}.imagenotes`] as string);
+  });
+};
+
+lang.subscribe(updateImageNotes);
+
+const createImageNotes = () => {
+  const m = new Map([
+    ["/images/waste-classifier3.png", get(t)["projects.project.waste-classifier.imagenotes"][0] as string],
+    ["/images/focusboard5.png", get(t)["projects.project.focusboard.imagenotes"][0] as string],
+    ["/images/finance-tracker2.png", get(t)["projects.project.finance-tracker.imagenotes"] as string],
+  ]);
+
+  imageNoteResolve();
+
+  return m;
+}
+
+export const imageNotes = createImageNotes();

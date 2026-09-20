@@ -23,4 +23,8 @@ export const sendAlert = (options: {
   alerts.update((alerts) => [ ...alerts, alert ]);
 };
 
-export const closeAlert = (id: number) => alerts.update((alerts) => alerts.filter((alert) => alert.id !== id));
+export const closeAlert = (id: number) => {
+  alerts.update((alerts) => 
+    [...alerts.filter((alert) => alert.id !== id)]
+  );
+};
