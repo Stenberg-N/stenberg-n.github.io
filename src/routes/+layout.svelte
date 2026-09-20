@@ -59,7 +59,7 @@
     },
     {
       img: "/assets/email-logo.svg",
-      command: () => sendAlert({ message: "alert.email", isTimer: true, showButtons: false }),
+      command: () => copyEmail(),
       href: null,
       name: null,
       arialabel: "Copy email",
@@ -99,6 +99,15 @@
   const handleScrollTop = () => {
     if (!contentElement) return;
     contentElement.scrollTop = 0;
+  };
+
+  const copyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText("stenbergniko@outlook.com");
+      sendAlert({ message: "alert.email.success", isTimer: true, showButtons: false });
+    } catch (_) {
+      sendAlert({ message: "alert.email.fail", isTimer: true, showButtons: false });
+    }
   };
 </script>
 

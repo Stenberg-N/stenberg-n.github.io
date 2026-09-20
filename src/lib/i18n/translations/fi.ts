@@ -13,7 +13,8 @@ export const fi: Translation = {
   "alert.message.demo": "Siirrytkö demoon?",
   "alert.message.dnv": "Siirrytkö DNV Cyber haasteisiin?",
   "alert.message.jamk": "Siirrytkö JAMKiin?",
-  "alert.email": "Sähköpostiosoite kopioitu!",
+  "alert.email.success": "Sähköpostiosoite kopioitu!",
+  "alert.email.fail": "Sähköpostiosoitteen kopiointi epäonistui!",
   "alert.project-not-found": "Projektia ei voida avata!",
 
   // HOME PAGE

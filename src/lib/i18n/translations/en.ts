@@ -13,7 +13,8 @@ export const en: Translation = {
   "alert.message.demo": "Continue to demo?",
   "alert.message.dnv": "Continue to DNV Cyber challenges?",
   "alert.message.jamk": "Continue to JAMK?",
-  "alert.email": "Email copied!",
+  "alert.email.success": "Email copied!",
+  "alert.email.fail": "Failed to copy email!",
   "alert.project-not-found": "Project unable to be opened!",
 
   // HOME PAGE
