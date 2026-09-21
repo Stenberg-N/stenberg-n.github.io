@@ -147,6 +147,6 @@ const createImageNotes = () => {
   imageNoteResolve();
 
   return m;
-}
+};
 
 export const imageNotes = createImageNotes();

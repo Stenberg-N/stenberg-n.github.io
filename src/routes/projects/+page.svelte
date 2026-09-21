@@ -10,9 +10,9 @@
 
 </script>
 
-<div id="projects-container" class="flex vertical marginalized">
+<div id="projects-container" class="flex vertical">
   <h1>{$t["navigation.anchors.names"][1]}</h1>
-  <div id="projects-wrapper">
+  <div id="projects-wrapper" class="marginalized">
     {#each projects as project, i (i)}
       <div
         role="button"
@@ -47,19 +47,19 @@
 
 <style>
   #projects-container {
-    padding: 0 2rem;
+    gap: 0;
 
     &::before {
       content: '';
       position: fixed;
-      inset: 0;
+      inset: 0 8px 0 0;
       z-index: -1;
       background: radial-gradient(ellipse at 50% 60%, #111 6%, #0c0c0c 24%, #080808 50%, black 72%);
     }
 
     > h1 {
       text-align: center;
-      margin-bottom: 8rem;
+      margin: 8rem 0 0;
     }
 
     #projects-wrapper {
@@ -67,6 +67,7 @@
       grid-template-columns: 1fr 1fr;
       grid-auto-rows: 550px;
       gap: 2rem;
+      padding: 0 2rem;
 
       .project-container {
         justify-content: flex-start;
