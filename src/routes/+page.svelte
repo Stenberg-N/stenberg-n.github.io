@@ -1,10 +1,7 @@
 <script lang="ts">
   import { resolve } from "$app/paths";
-  import { onMount } from "svelte";
-	import { fade } from "svelte/transition";
-	import { cubicInOut } from "svelte/easing";
 
-	import { handleHorizontalScroll, handleClickOutside } from "$lib/actions";
+	import { handleHorizontalScroll } from "$lib/actions";
 	import { sendAlert } from "$lib/alert";
   import { t } from "$lib/i18n/i18n";
   import { skills } from "$lib/skills";
@@ -12,15 +9,15 @@
 	import { viewport } from "$lib/viewport";
 
 	import ZoomElementContent from "../components/ZoomElementContent.svelte";
+	import Wrapper from "../components/Wrapper.svelte";
 
   const currentProject = projects.find((p) => p.isCurrent === true) ?? null;
-  let zoomedElement = $state<HTMLDivElement | null>(null);
   let zoomedElementImage = $state<string | null>(null);
   let badgeRefs = $state<HTMLElement[]>([]);
   let projectImgRefs = $state<HTMLElement[]>([]);
 
-let timeout: ReturnType<typeof setTimeout>;
-let isHovered = $state<boolean>(false);
+  let timeout: ReturnType<typeof setTimeout>;
+  let isHovered = $state<boolean>(false);
 
   const currentProjectImages = $derived.by(() => {
     if (!currentProject) return;
@@ -80,27 +77,9 @@ let isHovered = $state<boolean>(false);
 
 <div id="home-container" class="flex vertical">
   {#if zoomedElementImage}
-    <div
-      bind:this={zoomedElement}
-      class="zoomed-element-container flex vertical"
-      role="dialog"
-      tabindex="0"
-      onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); zoomedElementImage = null; } }}
-      use:handleClickOutside={{ onOutsideClick: () => zoomedElementImage = null, additionalIgnorableElements: [...badgeRefs, ...projectImgRefs] }}
-      transition:fade={{ duration: 200, easing: cubicInOut }}
-    >
-      <ZoomElementContent
-        options={{
-          zoomedElement,
-          zoomedElementImage,
-          setZoomedElementImage: (state) => { zoomedElementImage = state },
-        }}
-      />
-    </div>
-
-    {#each [zoomedElement], i (i)}
-      {onMount(() => zoomedElement?.focus())}
-    {/each}
+    <Wrapper options={{ setZoomedElementImage: (state) => { zoomedElementImage = state; }, ignorableEls: [...badgeRefs, ...projectImgRefs] }}>
+      <ZoomElementContent options={{ zoomedElementImage }} />
+    </Wrapper>
   {/if}
 
   <div id="intro-wrapper">
@@ -219,11 +198,6 @@ let isHovered = $state<boolean>(false);
         text-align: center;
         margin: 8rem 0 0;
       }
-    }
-
-    .zoomed-element-container {
-      top: var(--home-zoomed-element-container-top, 148px);
-      left: var(--home-zoomed-element-container-left, 16px);
     }
 
     #intro {

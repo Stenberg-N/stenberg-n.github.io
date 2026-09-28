@@ -21,6 +21,11 @@
         onclick={() => goto(resolve(`/projects/${project.slug as ProjectSlug}`))}
         onkeydown={(e) => { if (e.key === 'Enter') goto(resolve(`/projects/${project.slug as ProjectSlug}`)); }}
       >
+        <div class="project-status">
+          <p style="color: var(--secondary-highlight-color{project.isCurrent ? '1' : '2'})">
+            {$t[project.isCurrent ? "projects.project-status.wip" : "projects.project-status.inactive"]}
+          </p>
+        </div>
         <div class="img-wrapper">
           <img src={project.coverImage} alt={project.coverImage.split("/")[2]} />
         </div>
@@ -70,6 +75,7 @@
       padding: 0 2rem;
 
       .project-container {
+        position: relative;
         justify-content: flex-start;
         width: 100%;
         border-radius: 1rem;
@@ -81,6 +87,20 @@
         &:hover {
           outline-color: var(--border-color-primary-highlight);
           cursor: pointer;
+        }
+
+        .project-status {
+          position: absolute;
+          top: 0.5rem;
+          right: 0.5rem;
+          padding: 0.25rem 0.5rem;
+          border-radius: 9999px;
+          background-color: var(--bg-color-secondary1);
+          outline: 1px solid var(--border-color-primary);
+
+          p {
+            margin: 0;
+          }
         }
 
         #content {

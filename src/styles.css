@@ -28,6 +28,8 @@ html {
   --bg-image-linear-gradient1: linear-gradient(to top, #0c0c0c 20%, #222);
   --primary-highlight-color: rgb(255, 70, 70);
   --primary-highlight-color-dimmed: rgba(255, 70, 70, 0.8);
+  --secondary-highlight-color1: rgb(0, 180, 255);
+  --secondary-highlight-color2: #aaffaa;
   --border-color-primary: #333;
   --border-color-primary-highlight: #555;
   --color-white-primary: #ccc;
@@ -263,51 +265,29 @@ body {
   border-bottom: 1px solid var(--border-color-primary);
 }
 
-.zoomed-element-container {
-  position: fixed;
-  max-width: 90dvw;
-  max-height: 88dvh;
-  z-index: 10000;
-  align-items: center;
+.wrapper-element-container {
+  .divider {
+    margin: 0 0 0.5rem;
+
+    &:nth-of-type(1) {
+      margin: 0.5rem 0;
+    }
+  }
   
   &:focus {
     outline: none;
   }
 
-  button {
-
-    &:first-of-type {
-      
-      &:hover {
-        cursor: grab;
-      }
-    }
-  
-    &:nth-of-type(2) {
-      position: absolute;
-      right: 1rem;
-    }
-  }
-  
   .img-wrapper {
     padding: 1rem;
-    border-radius: 32px;
-    background-color: var(--bg-color-secondary2);
-    outline: 1px solid var(--border-color-primary);
-    backdrop-filter: blur(8px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
-
-    .divider {
-      margin: 0.5rem 0;
-    }
 
     img {
       display: block;
       width: auto;
       height: auto;
       max-width: calc(90dvw - 2rem);
-      max-height: calc(88dvh - 4rem - 32px - 60px);
-      border-radius: 24px;
+      max-height: calc(88dvh - 4rem - 36px - 60px);
+      border-radius: 28px;
       object-fit: contain;
     }
   }

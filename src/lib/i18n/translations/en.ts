@@ -59,7 +59,7 @@ export const en: Translation = {
   // PROJECTS
   "projects.project.repository": "Project repository",
   "projects.project.imagetitle": "Project Images",
-  "projects.project-status.wip": "Work-in-progress",
+  "projects.project-status.wip": "In progress",
   "projects.project-status.inactive": "Inactive",
   "projects.project.demo.web": "Web demo",
 

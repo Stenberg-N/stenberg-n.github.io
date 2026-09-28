@@ -69,6 +69,7 @@
   onNavigate(() => {
     return new Promise((resolve) => {
       document.startViewTransition(() => {
+        if (contentElement) contentElement.scrollTop = 0;
         resolve();
       });
     });

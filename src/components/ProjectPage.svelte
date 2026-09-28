@@ -1,15 +1,12 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { fade } from "svelte/transition";
-  import { cubicInOut } from "svelte/easing";
-
 	import type { Project } from "$lib/types";
   import { t } from "$lib/i18n/i18n";
   import { sendAlert } from "$lib/alert";
-  import { handleClickOutside } from "$lib/actions";
 
   import ZoomElementContent from "./ZoomElementContent.svelte";
 	import { viewport } from "$lib/viewport";
+
+	import Wrapper from "./Wrapper.svelte";
 
   let {
     options,
@@ -20,38 +17,19 @@
   } = $props();
 
   const project = $derived(options.project);
-  let zoomedElement = $state<HTMLDivElement | null>(null);
   let zoomedElementImage = $state<string | null>(null);
   let projectImgRefs = $state<HTMLElement[]>([]);
   const imageColumns = $derived.by(() => {
     const size = Math.ceil(project.allImages.length / 3);
-    return Array.from({ length: 3}, (_, i) => project.allImages.slice(i * size, (i + 1) * size));
+    return Array.from({ length: 3 }, (_, i) => project.allImages.slice(i * size, (i + 1) * size));
   });
 </script>
 
 <div id="project-page-container" class="flex vertical">
   {#if zoomedElementImage}
-    <div
-      bind:this={zoomedElement}
-      class="zoomed-element-container flex vertical"
-      role="dialog"
-      tabindex="0"
-      onkeydown={(e) => { if (e.key === 'Escape') { e.preventDefault(); zoomedElementImage = null; } }}
-      use:handleClickOutside={{ onOutsideClick: () => zoomedElementImage = null, additionalIgnorableElements: projectImgRefs }}
-      transition:fade={{ duration: 200, easing: cubicInOut }}
-    >
-      <ZoomElementContent
-        options={{
-          zoomedElement,
-          zoomedElementImage,
-          setZoomedElementImage: (state) => { zoomedElementImage = state },
-        }}
-      />
-    </div>
-
-    {#each [zoomedElement], i (i)}
-      {onMount(() => zoomedElement?.focus())}
-    {/each}
+    <Wrapper options={{ setZoomedElementImage: (state) => { zoomedElementImage = state; }, ignorableEls: projectImgRefs }}>
+      <ZoomElementContent options={{ zoomedElementImage }} />
+    </Wrapper>
   {/if}
 
   <div id="project-intro" class="flex vertical marginalized">
@@ -123,11 +101,6 @@
 
     > div:not(.divider) {
       padding: 0 2rem;
-    }
-
-    .zoomed-element-container {
-      top: var(--home-zoomed-element-container-top, 148px);
-      left: var(--home-zoomed-element-container-left, 16px);
     }
 
     .img-wrapper {

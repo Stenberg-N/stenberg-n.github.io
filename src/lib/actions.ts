@@ -1,4 +1,4 @@
-import { get } from "svelte/store";
+import { get, writable } from "svelte/store";
 
 import { viewport } from "./viewport";
 import type { ViewPort } from "./types";
@@ -7,19 +7,32 @@ export const handleClickOutside = (
   node: HTMLElement,
   options: {
     onOutsideClick: () => void;
-    additionalIgnorableElements?: (HTMLElement | null)[];
+    getIgnorableEls?: () => (HTMLElement | null)[];
   }
 ) => {
-  const { onOutsideClick } = options;
-  const ignorableElements = options.additionalIgnorableElements ?? null;
+  let opts = options;
 
   const handleClick = (event: MouseEvent) => {
     const target = event.target as Node;
-    if (node && !node.contains(target) && !ignorableElements?.some((el) => el?.contains(target))) onOutsideClick();
+    if (!target) return;
+    if (node.contains(target)) return;
+
+    const ignored = [...opts.getIgnorableEls?.() ?? []];
+
+    if (ignored.some((el) => el?.contains(target))) return;
+
+    opts.onOutsideClick();
   };
 
   document.addEventListener('click', handleClick, true);
-  return { destroy: () => document.removeEventListener('click', handleClick, true) };
+  return {
+    destroy: () => {
+      document.removeEventListener('click', handleClick, true)
+    },
+    update: (newOptions: typeof options) => {
+      opts = newOptions;
+    }
+  };
 };
 
 export const handleHorizontalScroll = (
@@ -39,10 +52,11 @@ export const handleHorizontalScroll = (
   return { destroy: () => node.removeEventListener('wheel', handleScroll) };
 };
 
+export const isElDragged = writable<boolean>(false);
 /**
  * 
  * @param node The element to attach the action to, which acts as the drag handle for the element.
- * @param options The element to be moved is the `parentElement`.
+ * @param options The element to be moved is the `parentElement`. `ignoreEl` is an element that ignores/overrides the drag event.
  * @returns onMove returns `top` and `left`, which can be set to the corresponding CSS properties.
  */
 export const dragElement = (
@@ -50,6 +64,7 @@ export const dragElement = (
   options: {
     parentElement: HTMLElement | null;
     onMove: (top: number, left: number) => void;
+    ignoreEl?: HTMLElement | null;
   }
 ) => {
   let opts = options;
@@ -57,47 +72,49 @@ export const dragElement = (
   let vp: ViewPort | null = null;
 
   let raf: number | null = null;
-  let latestPositions: { x: number, y: number } = { x: 0, y: 0};
+  const positions: { firstX: number, x: number, firstY: number, y: number } = { firstX: 0, x: 0, firstY: 0, y: 0};
+
+  const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
   const calcMove = () => {
-    if (!parentDims) return;
+    if (!parentDims || !vp) return;
     raf = null;
 
-    const left = latestPositions.x - (parentDims.width / 2);
-    const top = latestPositions.y - 30;
-    opts.onMove(top, left);
+    const left = positions.x;
+    const top = positions.y;
+    opts.onMove(clamp(top, vp.width <= 750 ? 133 : 85, vp.height - parentDims.height), clamp(left, 0, vp.width - parentDims.width));
   };
 
   const handlePointerDown = (e: PointerEvent) => {
     if (!opts.parentElement) return;
+    e.preventDefault();
+    if (opts.ignoreEl && opts.ignoreEl.contains(e.target as Node)) return;
 
     parentDims = opts.parentElement.getBoundingClientRect();
     vp = get(viewport);
 
+    positions.firstX = e.clientX;
+    positions.firstY = e.clientY;
+
+    isElDragged.set(true);
+
     node.setPointerCapture(e.pointerId);
-    node.style.cursor = 'grabbing';
     node.addEventListener('pointerup', handlePointerUp);
     node.addEventListener('pointermove', handlePointerMove);
   };
 
   const handlePointerMove = (e: PointerEvent) => {
     if (!opts.parentElement || !parentDims) return;
+    e.preventDefault();
 
-    latestPositions = { x: e.clientX, y: e.clientY };
+    positions.x = (e.clientX + (parentDims.left - positions.firstX));
+    positions.y = (e.clientY + (parentDims.top - positions.firstY));
 
-    if (
-      vp && (
-        vp.width <= (latestPositions.x + (parentDims.width / 2)) ||
-        latestPositions.x <= parentDims.width / 2 ||
-        latestPositions.y <= (vp.width <= 750 ? 160 : 110) ||
-        latestPositions.y >= vp.height - 40
-      )
-    ) return;
-
-    if (!raf) raf = requestAnimationFrame(() => calcMove());
+    if (!raf) raf = requestAnimationFrame(calcMove);
   };
 
   const handlePointerUp = (e: PointerEvent) => {
+    e.preventDefault();
     if (node.hasPointerCapture(e.pointerId)) node.releasePointerCapture(e.pointerId);
 
     if (raf) {
@@ -105,7 +122,7 @@ export const dragElement = (
       raf = null;
     }
 
-    node.style.cursor = 'grab';
+    isElDragged.set(false);
 
     node.removeEventListener('pointerup', handlePointerUp);
     node.removeEventListener('pointermove', handlePointerMove);
