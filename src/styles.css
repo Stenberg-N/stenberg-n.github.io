@@ -30,15 +30,15 @@ html {
   --primary-highlight-color-dimmed: rgba(255, 70, 70, 0.8);
   --secondary-highlight-color1: rgb(0, 180, 255);
   --secondary-highlight-color2: #aaffaa;
-  --border-color-primary: #333;
-  --border-color-primary-highlight: #555;
+  --border-color-primary: #222;
+  --border-color-primary-highlight: #333;
   --color-white-primary: #ccc;
   --color-white-highlight: #f6f6f6;
   --button-bg-color-primary1: #0c0c0c;
   --button-bg-color-primary1-hover: #151515;
   --button-bg-color-primary2: #ccc;
   --button-bg-color-transparent: transparent;
-  --button-bg-color-transparent-hover: rgba(200, 200, 200, 0.15);
+  --button-bg-color-transparent-hover: rgba(200, 200, 200, 0.1);
 }
 
 body {
@@ -94,7 +94,7 @@ body {
 .marginalized {
   min-width: 0;
   max-width: 1200px;
-  margin: 8rem auto;
+  margin: 4rem auto 12.5rem;
 }
 
 .span-icon {
@@ -287,7 +287,7 @@ body {
       height: auto;
       max-width: calc(90dvw - 2rem);
       max-height: calc(88dvh - 4rem - 36px - 60px);
-      border-radius: 28px;
+      border-radius: 0.25rem;
       object-fit: contain;
     }
   }

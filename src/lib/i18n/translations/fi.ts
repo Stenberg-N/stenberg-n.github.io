@@ -122,11 +122,12 @@ export const fi: Translation = {
 
   // FINRADAR
   "projects.project.fin-radar.description": "Siistimpi, valmiimpi, parempi ja täysin uudelleenrakennettu versio ensimmäisestä projektistani talousdatan seurantaan. Yhdistää myös FocusBoardin itseensä.",
+  "projects.project.fin-radar.imagenotes": ["Liikuta työkalurivi sinne missä haluat sen olevan.", "Tsekkaa ajastimesi, olit millä sivulla tahansa."],
   "projects.project.fin-radar.imagetexts": [
-    "Tunnistautuminen. Tietosi ovat tunnistautumisen takana.",
-    "Kotisivusi ja valikko. Lisää tilitapahtumia ja hallitse dataasi.",
-    "Taulukko tilitapahtumistasi. Selaa, lisää, muokkaa ja hae tapahtumiasi.",
-    "Data visualisaatioita. Visualisoi dataasi kaavioilla."
+    "Kotisivu. Näe syöte tilitapahtumistasi.",
+    "Tilitapahtuma taulukko. Selaa, lisää, muokkaa ja hae tapahtumiasi.",
+    "Kalenteri. Katso ja lisää tulevia tapahtumia.",
+    "Muistilaput. Pidä kirjaa tehtävistäsi."
   ],
   "projects.project.fin-radar.paragraph": [
     "Tämän projektin tarkoituksena on tuoda aikaisempia projektejani yhteen. Tämä yhdistää aikaisemman FocusBoard ja talousdatan seurantasovelluksen yhdeksi.",
@@ -134,6 +135,7 @@ export const fi: Translation = {
   ],
   "projects.project.fin-radar.features": [
     "Kirjautuminen, tilinluonti ja -palautus",
+    "Datan salaus",
     "Kotisivu",
     "Muistiinpanot",
     "Ajastimet",

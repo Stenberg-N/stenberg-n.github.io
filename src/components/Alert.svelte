@@ -88,8 +88,7 @@
   .alert-container {
     position: relative;
     max-width: 360px;
-    border-radius: 8px;
-    padding: 12px;
+    padding: 1rem 1.5rem;
     gap: 24px;
     background-color: var(--bg-color-primary2);
     overflow: hidden;

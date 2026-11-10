@@ -1,7 +1,6 @@
 <script lang="ts">
   import { resolve } from "$app/paths";
 
-	import { handleHorizontalScroll } from "$lib/actions";
 	import { sendAlert } from "$lib/alert";
   import { t } from "$lib/i18n/i18n";
   import { skills } from "$lib/skills";
@@ -12,6 +11,7 @@
 	import Wrapper from "../components/Wrapper.svelte";
 
   const currentProject = projects.find((p) => p.isCurrent === true) ?? null;
+  const badges = $derived(skills.flatMap((s) => s.badges ?? []))
   let zoomedElementImage = $state<string | null>(null);
   let badgeRefs = $state<HTMLElement[]>([]);
   let projectImgRefs = $state<HTMLElement[]>([]);
@@ -123,12 +123,19 @@
       {$t["home.knowledge.title"]}
     </h1>
     <div id="skills-container" class="flex vertical marginalized">
-      <div id="scroll-row" class="flex horizontal" use:handleHorizontalScroll>
-        {#each skills as { title, items, badges }, i (i)}
+      <div class="badge-container flex horizontal">
+        {#each badges as badge, i (badge)}
+          <div bind:this={badgeRefs[i]} role="button" tabindex="0" class="img-wrapper" onclick={() => zoomedElementImage = badge} onkeydown={(e) => { if (e.key === 'Enter') zoomedElementImage = badge}}>
+            <img src="{badge}" alt="{badge}+{i}" />
+          </div>
+        {/each}
+      </div>
+      <div id="scroll-row" class="flex horizontal">
+        {#each skills as skill, i (i)}
           <div class="skill flex vertical">
-            <p>{$t[title]}</p>
+            <p>{$t[skill.title]}</p>
             <ul>
-              {#each $t[items] as item (item)}
+              {#each $t[skill.items] as item (item)}
                 <li>{item}</li>
               {/each}
             </ul>
@@ -139,13 +146,6 @@
                 </button>
               {/each}
             {/if}
-            <div class="badge-container" use:handleHorizontalScroll>
-              {#each badges as badge, i (badge)}
-                <div bind:this={badgeRefs[i]} role="button" tabindex="0" class="img-wrapper" onclick={() => zoomedElementImage = badge} onkeydown={(e) => { if (e.key === 'Enter') zoomedElementImage = badge}}>
-                  <img src="{badge}" alt="{badge}+{i}" />
-                </div>
-              {/each}
-            </div>
           </div>
         {/each}
       </div>
@@ -192,11 +192,10 @@
 
     > div:not(.zoomed-element-container) {
       padding: 0 2rem;
-      border-bottom: 1px solid var(--border-color-primary);
 
       > h1 {
         text-align: center;
-        margin: 8rem 0 0;
+        margin: 0;
       }
     }
 
@@ -258,11 +257,10 @@
     #skills-container {
 
       #scroll-row {
+        flex-wrap: wrap;
         justify-content: flex-start;
-        overflow-x: auto;
         gap: 1.5rem;
         padding: 1rem 1.5rem;
-        mask-image: linear-gradient(to left, rgba(0, 0, 0, 0), rgb(0, 0, 0) 2%, rgb(0, 0, 0) 98%, rgba(0, 0, 0, 0));
 
         &::-webkit-scrollbar, ::-webkit-scrollbar {
           background-color: transparent;
@@ -296,24 +294,12 @@
         width: calc((100% - 1.5rem) / 2);
         gap: 1rem;
         padding: 1.5rem;
-        border-radius: 1rem;
         outline: 1px solid var(--border-color-primary);
-        transition: outline-color, background-color 100ms ease-in-out;
-
-        &:hover {
-          background-color: var(--bg-color-primary1-hover);
-          outline-color: var(--border-color-primary-highlight);
-        }
 
         button {
           align-self: flex-start;
           padding-left: 1rem;
           font-size: inherit;
-          transition: transform, color 100ms ease-in-out;
-
-          &:hover {
-            transform: scale(1.02);
-          }
         }
 
         ul {
@@ -337,9 +323,8 @@
       }
 
       .badge-container {
-        display: grid;
-        grid-auto-columns: 6.5rem;
-        grid-auto-flow: column;
+        justify-content: center;
+        flex-wrap: wrap;
         gap: 1rem;
         padding: 0.5rem;
         overflow-x: auto;
@@ -355,20 +340,20 @@
 
         .img-wrapper {
           padding: 4px;
-          background-color: var(--bg-color-secondary2);
           border-radius: 12px;
           transition: background-color 100ms ease-in-out;
           
           &:hover {
-            background-color: var(--bg-color-secondary3);
+            background-color: var(--bg-color-secondary2);
             cursor: pointer;
           }
         }
 
         img {
+          flex-shrink: 0;
           border-radius: 0.5rem;
-          width: 6rem;
-          height: 6rem;
+          width: 8rem;
+          height: 8rem;
         }
       }
     }
@@ -386,25 +371,15 @@
       }
 
       #project-images-container {
-        margin-top: 8rem;
-        gap: 1.5rem;
+        margin-top: 4rem;
+        gap: 2rem;
       }
 
       .project-img {
         position: relative;
         padding: 3rem;
-        border-radius: 1rem;
-        background-image: var(--bg-image-linear-gradient1);
-
-        &::before {
-          content: '';
-          position: absolute;
-          inset: -4px;
-          z-index: -1;
-          background-color: var(--bg-color-primary2);
-          border-radius: 1rem;
-          outline: 1px solid var(--border-color-primary);
-        }
+        background-color: black;
+        outline: 1px solid var(--border-color-primary);
 
         > p {
           margin: 0 0 1rem;
@@ -417,7 +392,6 @@
 
         > .img-wrapper {
           outline: 1px solid var(--border-color-primary);
-          border-radius: 0.5rem;
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
           transition: outline-color 100ms ease-in-out;
 

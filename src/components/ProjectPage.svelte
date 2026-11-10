@@ -67,7 +67,6 @@
       </div>
     </div>
   </div>
-  <div class="divider"></div>
   <div id="project-images-wrapper">
     <h1>{$t["projects.project.imagetitle"]}</h1>
     <div id="project-images" class="flex horizontal marginalized">
@@ -95,27 +94,18 @@
 <style>
   #project-page-container {
 
-    .divider {
-      margin: 0;
-    }
-
-    > div:not(.divider) {
+    > div {
       padding: 0 2rem;
     }
 
     .img-wrapper {
       padding: 0.5rem;
-      border-radius: 1rem;
       outline: 1px solid var(--border-color-primary);
       transition: outline-color 100ms ease-in-out;
 
       &:hover {
         cursor: pointer;
         outline-color: var(--border-color-primary-highlight);
-      }
-
-      img {
-        border-radius: 12px;
       }
     }
     
@@ -168,7 +158,7 @@
 
       h1 {
         text-align: center;
-        margin: 8rem 0 0;
+        margin: 0;
       }
 
       #project-images {
@@ -186,7 +176,7 @@
   @media (max-width: 980px) {
     #project-page-container {
 
-      > div:not(.divider) {
+      > div {
         padding: 0 1rem;
       }
 

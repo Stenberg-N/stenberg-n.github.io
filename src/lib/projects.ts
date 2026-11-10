@@ -9,8 +9,8 @@ export const projects: Project[] = [
     slug: "fin-radar",
     descriptionKey: "projects.project.fin-radar.description",
     techUsed: ["Tauri", "Rust", "Python", "TypeScript", "Svelte"],
-    coverImage: "/images/fin-radar4.png",
-    introImages: ["/images/fin-radar9.png", "/images/fin-radar4.png"],
+    coverImage: "/images/fin-radar5.png",
+    introImages: ["/images/fin-radar8.png", "/images/fin-radar5.png"],
     allImages: [
       "/images/fin-radar1.png",
       "/images/fin-radar2.png",
@@ -23,12 +23,14 @@ export const projects: Project[] = [
       "/images/fin-radar9.png",
       "/images/fin-radar10.png",
       "/images/fin-radar11.png",
+      "/images/fin-radar12.png",
+      "/images/fin-radar13.png",
     ],
     highlightImages: [
-      "/images/fin-radar1.png",
-      "/images/fin-radar3.png",
       "/images/fin-radar4.png",
-      "/images/fin-radar6.png",
+      "/images/fin-radar5.png",
+      "/images/fin-radar7.png",
+      "/images/fin-radar8.png",
     ],
 
     imageTextsKey: "projects.project.fin-radar.imagetexts",
@@ -130,18 +132,18 @@ const imageNotePromise = new Promise<void>((resolve) => {
 const updateImageNotes = async () => {
   await imageNotePromise;
 
-  imageNotes.entries().forEach((entry) => {
-    imageNotes.set(entry[0], get(t)[`projects.project.${entry[0].split("/")[2].slice(0, -5)}.imagenotes`] as string);
-  });
+  imageNotes = createImageNotes();
 };
 
 lang.subscribe(updateImageNotes);
 
 const createImageNotes = () => {
   const m = new Map([
-    ["/images/waste-classifier3.png", get(t)["projects.project.waste-classifier.imagenotes"][0] as string],
-    ["/images/focusboard5.png", get(t)["projects.project.focusboard.imagenotes"][0] as string],
+    ["/images/waste-classifier3.png", get(t)["projects.project.waste-classifier.imagenotes"] as string],
+    ["/images/focusboard5.png", get(t)["projects.project.focusboard.imagenotes"] as string],
     ["/images/finance-tracker2.png", get(t)["projects.project.finance-tracker.imagenotes"] as string],
+    ["/images/fin-radar9.png", get(t)["projects.project.fin-radar.imagenotes"][0] as string],
+    ["/images/fin-radar11.png", get(t)["projects.project.fin-radar.imagenotes"][1] as string],
   ]);
 
   imageNoteResolve();
@@ -149,4 +151,4 @@ const createImageNotes = () => {
   return m;
 };
 
-export const imageNotes = createImageNotes();
+export let imageNotes = createImageNotes();

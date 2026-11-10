@@ -43,6 +43,7 @@ export const handleHorizontalScroll = (
 ) => {
   const scrollMultiplier = options?.multiplier ?? 1;
   const handleScroll = (event: WheelEvent) => {
+    if (!(node.scrollWidth > node.clientWidth)) return;
     event.preventDefault();
     event.stopPropagation();
     node.scrollLeft += event.deltaY * scrollMultiplier;

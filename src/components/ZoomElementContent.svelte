@@ -35,7 +35,6 @@
   @media (max-width: 750px) {
     .img-wrapper {
       padding: 0.5rem;
-      border-radius: 24px;
 
       img {
         max-width: calc(90dvw - 1rem);

@@ -181,7 +181,7 @@
     width: 100%;
     height: 5rem;
     padding: 16px;
-    background-color: var(--bg-color-primary2);
+    background-color: var(--bg-color-primary);
     border-bottom: 1px solid var(--border-color-primary);
 
     #nav-bar-anchors {
@@ -200,7 +200,6 @@
 
   #content {
     overflow-y: auto;
-    mask-image: linear-gradient(to top, rgba(0, 0, 0, 0), rgb(0, 0, 0) 2%, rgb(0, 0, 0) 98%, rgba(0, 0, 0, 0));
 
     &::-webkit-scrollbar {
       display: block;

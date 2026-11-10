@@ -118,11 +118,12 @@ export const en: Translation = {
 
   // FINRADAR
   "projects.project.fin-radar.description": "A polished, completely redone version of my first project, the finance tracker. Also integrates FocusBoard.",
+  "projects.project.fin-radar.imagenotes": ["Move the toolbar where you want it to be.", "Check on your timers from anywhere in the app."],
   "projects.project.fin-radar.imagetexts": [
-    "Authentication. Your data is behind authentication.",
-    "Your home page and menu. Add transactions and control your data.",
-    "Table of your transactions. View, add, edit and search your transactions.",
-    "Data visualizations. Visualize your data with charts."
+    "Home page. See a feed of your transactions.",
+    "Transactions table. View, add, edit and search your transactions.",
+    "Calendar. View and add upcoming events.",
+    "Notes. Keep track of your tasks."
   ],
   "projects.project.fin-radar.paragraph": [
     "This project's aim is to bring together my past projects. It combines my finance tracker and FocusBoard applications into one.",
@@ -130,6 +131,7 @@ export const en: Translation = {
   ],
   "projects.project.fin-radar.features": [
     "Account registration, login, and recovery",
+    "Data encryption",
     "Home page",
     "Notes",
     "Timers",

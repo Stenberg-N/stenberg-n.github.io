@@ -54,14 +54,6 @@
   #projects-container {
     gap: 0;
 
-    &::before {
-      content: '';
-      position: fixed;
-      inset: 0 8px 0 0;
-      z-index: -1;
-      background: radial-gradient(ellipse at 50% 60%, #111 6%, #0c0c0c 24%, #080808 50%, black 72%);
-    }
-
     > h1 {
       text-align: center;
       margin: 8rem 0 0;
@@ -78,7 +70,6 @@
         position: relative;
         justify-content: flex-start;
         width: 100%;
-        border-radius: 1rem;
         background-color: var(--bg-color-secondary1);
         outline: 1px solid var(--border-color-primary);
         overflow: hidden;

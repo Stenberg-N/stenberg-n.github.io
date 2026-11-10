@@ -75,8 +75,7 @@
     z-index: 10000;
     align-items: center;
     gap: 0;
-    border-radius: 2rem;
-    background-color: var(--bg-color-secondary2);
+    background-color: var(--bg-color-primary1);
     outline: 1px solid var(--border-color-primary);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
 
@@ -89,7 +88,8 @@
     #drag-handle {
       width: 100%;
       justify-content: space-between;
-      padding: 0.25rem 1.5rem;
+      padding: 0.25rem 0.5rem;
+      background-color: var(--bg-color-secondary1);
 
       &.dragged {
         cursor: grabbing;
