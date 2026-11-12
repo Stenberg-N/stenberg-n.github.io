@@ -41,14 +41,14 @@
           {$t["projects.project.repository"]}
         </button>
         {#if project.demoLink}
-          <button class="button-primary outline" onclick={() => sendAlert({ message: "alert.message.demo", isTimer: false, showButtons: true, link: project.demoLink })}>
+          <button class="button-primary notched lighter" onclick={() => sendAlert({ message: "alert.message.demo", isTimer: false, showButtons: true, link: project.demoLink })}>
             {$t["projects.project.demo.web"]}
           </button>
         {/if}
       </div>
     </div>
     <div id="intro-text-images-container">
-      <div class="text-container">
+      <div class="text-container notched lighter">
         {#each $t[project.paragraphKey] as text, i (i)}
           <p>{text}</p>
         {/each}
@@ -100,7 +100,7 @@
 
     .img-wrapper {
       padding: 0.5rem;
-      outline: 1px solid var(--border-color-primary);
+      outline: 2px solid var(--border-color-primary);
       transition: outline-color 100ms ease-in-out;
 
       &:hover {

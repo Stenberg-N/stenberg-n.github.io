@@ -38,7 +38,7 @@
 
       img {
         max-width: calc(90dvw - 1rem);
-        max-height: calc(88dvh - 3rem - 36px - 60px);
+        max-height: calc(88dvh - 3rem - 42px - 60px);
       }
     }
   }

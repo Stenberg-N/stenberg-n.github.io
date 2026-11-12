@@ -4,7 +4,7 @@
 
 <div id="about-me-container" class="flex vertical marginalized">
   {#each $t["about-me.hobbies.titles"] as title, i (i)}
-    <div>
+    <div class="notched lighter">
       <h2>{title}</h2>
       <p>{$t["about-me.hobbies.paragraphs"][i]}</p>
     </div>

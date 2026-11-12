@@ -30,8 +30,8 @@ html {
   --primary-highlight-color-dimmed: rgba(255, 70, 70, 0.8);
   --secondary-highlight-color1: rgb(0, 180, 255);
   --secondary-highlight-color2: #aaffaa;
-  --border-color-primary: #222;
-  --border-color-primary-highlight: #333;
+  --border-color-primary: #333;
+  --border-color-primary-highlight: #555;
   --color-white-primary: #ccc;
   --color-white-highlight: #f6f6f6;
   --button-bg-color-primary1: #0c0c0c;
@@ -76,6 +76,155 @@ body {
   display: none;
 }
 
+.notched {
+  --n: 8px;
+  position: relative;
+  border: none;
+  background-color: var(--border-color-primary);
+  clip-path: polygon(
+    0 var(--n), var(--n) var(--n), var(--n) 0,
+    calc(100% - var(--n)) 0, calc(100% - var(--n)) var(--n), 100% var(--n),
+    100% calc(100% - var(--n)), calc(100% - var(--n)) calc(100% - var(--n)), calc(100% - var(--n)) 100%,
+    var(--n) 100%, var(--n) calc(100% - var(--n)), 0 calc(100% - var(--n))
+  );
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+  }
+
+  &::before {
+    inset: 2px;
+    background-color: var(--bg-color-primary1);
+    clip-path: polygon(
+      0 var(--n), var(--n) var(--n), var(--n) 0,
+      calc(100% - var(--n)) 0, calc(100% - var(--n)) var(--n), 100% var(--n),
+      100% calc(100% - var(--n)), calc(100% - var(--n)) calc(100% - var(--n)), calc(100% - var(--n)) 100%,
+      var(--n) 100%, var(--n) calc(100% - var(--n)), 0 calc(100% - var(--n))
+    );
+  }
+
+  &.double {
+    --n: 4px;
+    --n2: 8px;
+
+    &.sn {
+      --n: 2px;
+      --n2: 4px;
+    }
+
+    clip-path: polygon(
+      0 var(--n2), var(--n) var(--n2), var(--n) var(--n), var(--n2) var(--n), var(--n2) 0,
+      calc(100% - var(--n2)) 0, calc(100% - var(--n2)) var(--n), calc(100% - var(--n)) var(--n), calc(100% - var(--n)) var(--n2), 100% var(--n2),
+      100% calc(100% - var(--n2)), calc(100% - var(--n)) calc(100% - var(--n2)), calc(100% - var(--n)) calc(100% - var(--n)), calc(100% - var(--n2)) calc(100% - var(--n)), calc(100% - var(--n2)) 100%,
+      var(--n2) 100%, var(--n2) calc(100% - var(--n)), var(--n) calc(100% - var(--n)), var(--n) calc(100% - var(--n2)), 0 calc(100% - var(--n2))
+    );
+
+    &::before {
+      clip-path: polygon(
+        0 var(--n2), var(--n) var(--n2), var(--n) var(--n), var(--n2) var(--n), var(--n2) 0,
+        calc(100% - var(--n2)) 0, calc(100% - var(--n2)) var(--n), calc(100% - var(--n)) var(--n), calc(100% - var(--n)) var(--n2), 100% var(--n2),
+        100% calc(100% - var(--n2)), calc(100% - var(--n)) calc(100% - var(--n2)), calc(100% - var(--n)) calc(100% - var(--n)), calc(100% - var(--n2)) calc(100% - var(--n)), calc(100% - var(--n2)) 100%,
+        var(--n2) 100%, var(--n2) calc(100% - var(--n)), var(--n) calc(100% - var(--n)), var(--n) calc(100% - var(--n2)), 0 calc(100% - var(--n2))
+      );
+    }
+  }
+
+  &::after {
+    inset: 10px;
+    box-shadow:
+      0 -8px 0 0 #0b0b0b,
+      8px 0 0 #060606,
+      0 8px 0 0 #060606,
+      -8px 0 0 0 #0b0b0b;
+  }
+
+  &.lighter {
+    background-color: var(--border-color-primary);
+
+    &::before {
+      background-color: var(--bg-color-primary2);
+    }
+
+    &::after {
+      inset: 10px;
+      box-shadow:
+        0 -8px 0 0 #161616,
+        8px 0 0 #080808,
+        0 8px 0 0 #080808,
+        -8px 0 0 0 #161616;
+    }
+  }
+
+  &.light {
+    background-color: var(--border-color-primary);
+
+    &::before {
+      background-color: var(--bg-color-secondary3);
+    }
+
+    &::after {
+      box-shadow:
+        0 -8px 0 0 #444,
+        8px 0 0 #222,
+        0 8px 0 0 #222,
+        -8px 0 0 0 #444;
+    }
+  }
+
+  &.button-primary, .smaller-notch {
+    --n: 4px;
+
+    &:not(.smaller-notch):hover {
+      opacity: 0.8;
+
+      &:not(.white-bg) {
+        background-color: var(--border-color-primary);
+      }
+    }
+
+    &::after {
+      inset: 6px;
+    }
+
+    &.white-bg {
+      border-radius: 0;
+      outline: none;
+      background-color: #888;
+
+      &::after {
+        box-shadow:
+          0 -4px 0 0 #e0e0e0,
+          4px 0 0 #b7b7b7,
+          0 4px 0 0 #b7b7b7,
+          -4px 0 0 0 #e0e0e0;
+      }
+
+      &::before {
+        background-color: var(--button-bg-color-primary2);
+      }
+    }
+
+    &.lighter::after {
+      box-shadow:
+        0 -4px 0 0 #181818,
+        4px 0 0 #050505,
+        0 4px 0 0 #050505,
+        -4px 0 0 0 #181818;
+    }
+
+    &.light::after {
+      box-shadow:
+        0 -4px 0 0 #444,
+        4px 0 0 #222,
+        0 4px 0 0 #222,
+        -4px 0 0 0 #444;
+    }
+  }
+}
+
 .flex {
   display: flex;
   gap: 8px;
@@ -103,6 +252,11 @@ body {
   mask-size: contain;
   mask-repeat: no-repeat;
   user-select: none;
+}
+
+.img-extra-small {
+  width: 12px;
+  height: 12px;
 }
 
 .img-small {
@@ -135,7 +289,7 @@ body {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  padding: 6px;
+  padding: 8px 12px;
   gap: 1rem;
   border: none;
   outline: none;
@@ -148,7 +302,6 @@ body {
 
   &:hover {
     background-color: var(--button-bg-color-primary1-hover);
-    color: var(--color-white-highlight);
     cursor: pointer;
   }
 
@@ -169,6 +322,10 @@ body {
   &.transparent-highlight {
     border-radius: 50%;
     background-color: var(--button-bg-color-transparent);
+
+    &.sharp-corners {
+      border-radius: 0;
+    }
 
     &.default-corners {
       border-radius: 4px;
@@ -207,6 +364,11 @@ body {
   &.text-only {
     background-color: transparent;
     padding: 0;
+    transition: color 100ms ease-in-out;
+
+    &:hover {
+      color: var(--color-white-highlight);
+    }
 
     &.red-text {
       color: var(--primary-highlight-color);
@@ -223,7 +385,7 @@ body {
   text-decoration: none;
   transition: color 100ms ease-in-out;
 
-  &:hover:not(.white-bg) {
+  &:hover:not(.white-bg, .notched) {
     color: var(--color-white-highlight);
   }
 }
@@ -254,15 +416,13 @@ body {
   flex-shrink: 0;
   padding: 2rem;
   background-color: var(--bg-color-primary2);
-  border-top: 1px solid var(--border-color-primary);
-  border-bottom: 1px solid var(--border-color-primary);
 }
 
 .divider {
   height: 0;
   width: 100%;
   margin: 2rem 0;
-  border-bottom: 1px solid var(--border-color-primary);
+  border-bottom: 2px solid var(--border-color-primary);
 }
 
 .wrapper-element-container {
@@ -286,7 +446,7 @@ body {
       width: auto;
       height: auto;
       max-width: calc(90dvw - 2rem);
-      max-height: calc(88dvh - 4rem - 36px - 60px);
+      max-height: calc(88dvh - 4rem - 42px - 60px);
       border-radius: 0.25rem;
       object-fit: contain;
     }

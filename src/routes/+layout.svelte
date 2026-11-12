@@ -118,7 +118,7 @@
 
 <main id="main" class="flex vertical" bind:clientHeight={$viewport.height} bind:clientWidth={$viewport.width}>
   {#if isScrollThreshold}
-    <button id="scroll-to-top" aria-label="Scroll back to start" class="button-primary rounder-corners outline" onclick={handleScrollTop} transition:fly={{ y: 36, duration: 200, easing: cubicInOut }}>
+    <button id="scroll-to-top" aria-label="Scroll back to start" class="button-primary notched lighter" onclick={handleScrollTop} transition:fly={{ y: 36, duration: 200, easing: cubicInOut }}>
       <span class="span-icon img-small-medium" style="mask-image: url('/assets/arrow.svg'); transform: rotate(180deg);"></span>
     </button>
   {/if}
@@ -139,7 +139,7 @@
     </div>
     <div class="flex horizontal">
       {#each navBarElements.slice(3) as button, i (i)}
-        <button aria-label={button.arialabel} class="button-primary transparent-highlight {i === 0 && 'default-corners'}" onclick={button.command}>
+        <button aria-label={button.arialabel} class="button-primary notched lighter" onclick={button.command}>
           {#if i !== 0}
             <span class="span-icon img-medium-large" style="mask-image: url('{button.img}');"></span>
           {:else}
@@ -181,8 +181,30 @@
     width: 100%;
     height: 5rem;
     padding: 16px;
-    background-color: var(--bg-color-primary);
-    border-bottom: 1px solid var(--border-color-primary);
+    background-color: var(--bg-color-primary1);
+    border-bottom: 2px solid var(--border-color-primary);
+
+    &::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 8px;
+      box-shadow:
+        0 -8px 0 0 #0b0b0b,
+        8px 0 0 0 #060606,
+        0 8px 0 0 #060606,
+        -8px 0 0 0 #0b0b0b,
+
+        -8px -8px 0 0 #0b0b0b,
+        8px -8px 0 0 #0b0b0b,
+        8px 8px 0 0 #060606,
+        -8px 8px 0 0 #0b0b0b;
+    }
+
+    .button-primary {
+      height: 3rem;
+      width: 3rem;
+    }
 
     #nav-bar-anchors {
       gap: 24px;

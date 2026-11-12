@@ -17,7 +17,7 @@
       <div
         role="button"
         tabindex="0"
-        class="project-container flex vertical"
+        class="project-container flex vertical notched lighter"
         onclick={() => goto(resolve(`/projects/${project.slug as ProjectSlug}`))}
         onkeydown={(e) => { if (e.key === 'Enter') goto(resolve(`/projects/${project.slug as ProjectSlug}`)); }}
       >
@@ -39,7 +39,7 @@
           <p>{$t[project.descriptionKey]}</p>
           <div id="techs-used" class="flex horizontal">
             {#each project.techUsed as tech (tech)}
-              <div>
+              <div class="notched light smaller-notch">
                 <p>{tech}</p>
               </div>
             {/each}
@@ -67,25 +67,22 @@
       padding: 0 2rem;
 
       .project-container {
-        position: relative;
         justify-content: flex-start;
         width: 100%;
-        background-color: var(--bg-color-secondary1);
-        outline: 1px solid var(--border-color-primary);
+        padding: 0 2px;
         overflow: hidden;
-        transition: outline-color 100ms ease-in-out;
+        transition: background-color 100ms ease-in-out;
 
         &:hover {
-          outline-color: var(--border-color-primary-highlight);
           cursor: pointer;
+          background-color: var(--border-color-primary-highlight);
         }
 
         .project-status {
           position: absolute;
-          top: 0.5rem;
-          right: 0.5rem;
+          top: 0.75rem;
+          right: 0.75rem;
           padding: 0.25rem 0.5rem;
-          border-radius: 9999px;
           background-color: var(--bg-color-secondary1);
           outline: 1px solid var(--border-color-primary);
 
@@ -116,6 +113,7 @@
 
         .img-wrapper {
           width: 100%;
+          padding: 10px;
         }
 
         .divider {
@@ -128,9 +126,6 @@
 
           div {
             padding: 0.5rem 1rem;
-            border-radius: 9999px;
-            background-color: var(--bg-color-secondary2);
-            outline: 1px solid var(--border-color-primary);
           }
 
           p {

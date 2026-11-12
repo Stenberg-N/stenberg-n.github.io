@@ -41,7 +41,7 @@
 </script>
 
 <div
-  class="wrapper-element-container flex vertical"
+  class="wrapper-element-container flex vertical notched lighter"
   bind:this={wrapper}
   role="dialog"
   tabindex="0"
@@ -52,8 +52,8 @@
   <div id="drag-handle" class="flex horizontal" class:dragged={$isElDragged} use:dragElement={{ parentElement: wrapper, onMove: (top, left) => { applyProperty(top, left); }, ignoreEl: closeBtn }}>
     <div id="filler"></div>
     <span class="span-icon img-small" style="mask-image: url('/assets/burger.svg');"></span>
-    <button bind:this={closeBtn} aria-label="Close image" class="button-primary transparent-highlight" onclick={(e) => { e.stopPropagation(); options.setZoomedElementImage(null); }}>
-      <span class="span-icon img-small" style="mask-image: url('/assets/close-x.svg');"></span>
+    <button bind:this={closeBtn} aria-label="Close image" class="button-primary static notched light" onclick={(e) => { e.stopPropagation(); options.setZoomedElementImage(null); }}>
+      <span class="span-icon img-extra-small" style="mask-image: url('/assets/close-x.svg');"></span>
     </button>
   </div>
   <div class="divider"></div>
@@ -75,21 +75,21 @@
     z-index: 10000;
     align-items: center;
     gap: 0;
-    background-color: var(--bg-color-primary1);
-    outline: 1px solid var(--border-color-primary);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+
+    &::after {
+      box-shadow: none;
+    }
 
     #filler {
       flex-shrink: 0;
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 32px;
     }
 
     #drag-handle {
       width: 100%;
       justify-content: space-between;
-      padding: 0.25rem 0.5rem;
-      background-color: var(--bg-color-secondary1);
+      padding: 6px 0.75rem 0.25rem;
 
       &.dragged {
         cursor: grabbing;

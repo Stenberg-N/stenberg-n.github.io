@@ -11,7 +11,8 @@
 	import Wrapper from "../components/Wrapper.svelte";
 
   const currentProject = projects.find((p) => p.isCurrent === true) ?? null;
-  const badges = $derived(skills.flatMap((s) => s.badges ?? []))
+  const badges = $derived(skills.flatMap((s) => s.badges ?? []));
+  let hoveredBadge = $state<number | null>(null);
   let zoomedElementImage = $state<string | null>(null);
   let badgeRefs = $state<HTMLElement[]>([]);
   let projectImgRefs = $state<HTMLElement[]>([]);
@@ -28,6 +29,7 @@
 
     return imageTexts.map((text, i) => [text, highlightImages[i]]);
   });
+
   const introContacts = [
     {
       img: "/assets/github-logo.svg",
@@ -50,6 +52,7 @@
       command: null,
     },
   ];
+
   const cyberSecSkillButtons = [
     {
       get text() { return $t["home.cybersec.description"][2]; },
@@ -90,7 +93,7 @@
         {/each}
         <div class="divider"></div>
         <p>{$t["intro-paragraph"]}</p>
-        <div id="intro-contacts" class="text-container">
+        <div id="intro-contacts" class="text-container notched lighter">
           {#each introContacts as el, i (i)}
             <div class="flex horizontal">
               <span class="span-icon img-medium" style="mask-image: url('{el.img}'); {i === 1 && 'background-color: #0e76a8;'}"></span>
@@ -104,7 +107,7 @@
             </div>
           {/each}
         </div>
-        <a class="button-primary anchor white-bg rounder-corners" href={resolve("/projects")} onmouseenter={handleTwitchRight}>
+        <a class="button-primary anchor white-bg notched" href={resolve("/projects")} onmouseenter={handleTwitchRight}>
           {$t["home.view-projects"]}
           <span class="span-icon img-small-medium" style="mask-image: url('/assets/arrow.svg');" class:is-moved={isHovered}></span>
         </a>
@@ -125,14 +128,23 @@
     <div id="skills-container" class="flex vertical marginalized">
       <div class="badge-container flex horizontal">
         {#each badges as badge, i (badge)}
-          <div bind:this={badgeRefs[i]} role="button" tabindex="0" class="img-wrapper" onclick={() => zoomedElementImage = badge} onkeydown={(e) => { if (e.key === 'Enter') zoomedElementImage = badge}}>
+          <div
+            bind:this={badgeRefs[i]}
+            role="button"
+            tabindex="0"
+            class="img-wrapper"
+            class:dimmed={hoveredBadge !== null && i !== hoveredBadge}
+            onmouseenter={() => hoveredBadge = i}
+            onmouseleave={() => hoveredBadge = null}
+            onclick={() => zoomedElementImage = badge} onkeydown={(e) => { if (e.key === 'Enter') zoomedElementImage = badge}}
+          >
             <img src="{badge}" alt="{badge}+{i}" />
           </div>
         {/each}
       </div>
       <div id="scroll-row" class="flex horizontal">
         {#each skills as skill, i (i)}
-          <div class="skill flex vertical">
+          <div class="skill flex vertical notched lighter">
             <p>{$t[skill.title]}</p>
             <ul>
               {#each $t[skill.items] as item (item)}
@@ -161,7 +173,7 @@
         <p>{$t["home.paragraph.no-current-message"]}</p>
       {:else}
         <p>{$t[currentProject.descriptionKey]}</p>
-        <a class="button-primary anchor white-bg rounder-corners" href={resolve(`/projects/${currentProject.slug}`)}>
+        <a class="button-primary anchor white-bg notched" href={resolve(`/projects/${currentProject.slug}`)}>
           {$t["home.view-current-project"]}
         </a>
         <div id="project-images-container" class="flex vertical">
@@ -294,7 +306,6 @@
         width: calc((100% - 1.5rem) / 2);
         gap: 1rem;
         padding: 1.5rem;
-        outline: 1px solid var(--border-color-primary);
 
         button {
           align-self: flex-start;
@@ -340,12 +351,11 @@
 
         .img-wrapper {
           padding: 4px;
-          border-radius: 12px;
-          transition: background-color 100ms ease-in-out;
-          
-          &:hover {
-            background-color: var(--bg-color-secondary2);
-            cursor: pointer;
+          transition: opacity 200ms ease-in-out;
+          cursor: pointer;
+
+          &.dimmed {
+            opacity: 0.5;
           }
         }
 
@@ -379,7 +389,7 @@
         position: relative;
         padding: 3rem;
         background-color: black;
-        outline: 1px solid var(--border-color-primary);
+        outline: 2px solid var(--border-color-primary);
 
         > p {
           margin: 0 0 1rem;

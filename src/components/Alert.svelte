@@ -64,7 +64,7 @@
 </script>
 
 <div bind:this={alertEl} role="alert" class="alert-container flex vertical" transition:fly={{ y: 100, duration: 400 }} onmouseenter={() => { isHovered = true; stopTimer(); }} onmouseleave={() => isHovered = false}>
-  <button aria-label="Close alert" id="alert-close-btn" class="flex vertical button-primary transparent-highlight" onclick={() => closeAlert(alert.id)}>
+  <button aria-label="Close alert" id="alert-close-btn" class="flex vertical button-primary transparent-highlight sharp-corners" onclick={() => closeAlert(alert.id)}>
     <span class="span-icon" style="mask-image: url('/assets/close-x.svg');"></span>
   </button>
   <div class="alert-content flex horizontal">
@@ -74,10 +74,10 @@
   </div>
   {#if alert.showButtons}
     <div class="redirect-buttons flex horizontal">
-      <a class="button-primary anchor outline" href={alert.link} rel="external">
+      <a class="button-primary anchor notched light" href={alert.link} rel="external">
         {$t['button.confirm']}
       </a>
-      <button class="button-primary outline" onclick={() => { alert.onCancel(); closeAlert(alert.id); }}>
+      <button class="button-primary notched light" onclick={() => { alert.onCancel(); closeAlert(alert.id); }}>
         {$t['button.cancel']}
       </button>
     </div>
@@ -92,7 +92,7 @@
     gap: 24px;
     background-color: var(--bg-color-primary2);
     overflow: hidden;
-    outline: 1px solid var(--border-color-primary);
+    outline: 2px solid var(--border-color-primary);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
 
     &::after {
@@ -121,7 +121,6 @@
     width: 20px;
     height: 20px;
     align-self: center;
-    border-radius: 50%;
     padding: 0;
 
     span {
