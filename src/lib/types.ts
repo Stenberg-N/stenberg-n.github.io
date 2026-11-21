@@ -29,3 +29,9 @@ export type ViewPort = {
   height: number;
   width: number;
 };
+
+export type CodeSample = {
+  slug: string;
+  title: string;
+  sample: string;
+};

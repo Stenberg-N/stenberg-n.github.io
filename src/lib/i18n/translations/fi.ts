@@ -1,7 +1,7 @@
 import type { Translation } from "../i18n";
 
 export const fi: Translation = {
-  "navigation.anchors.names": ["Koti", "Projektit", "Tietoa minusta"],
+  "navigation.anchors.names": ["Koti", "Projektit", "Tietoa minusta", "Koodinäytteet"],
   "page-not-found": ["Jokin meni pieleen.", "Sivua ei löytynyt.", "Sivua jota etsit ei ole olemassa."],
   "button.confirm": "Vahvista",
   "button.cancel": "Peruuta",
@@ -16,6 +16,8 @@ export const fi: Translation = {
   "alert.email.success": "Sähköpostiosoite kopioitu!",
   "alert.email.fail": "Sähköpostiosoitteen kopiointi epäonistui!",
   "alert.project-not-found": "Projektia ei voida avata!",
+  "alert.code-sample.success": "Koodiesimerkki kopioitu!",
+  "alert.code-sample.fail": "Koodiesimerkin kopiointi epäonnistui!",
 
   // HOME PAGE
   "intro-titles": ["Hei! Olen", "Niko Stenberg", "Tuleva ICT-insinööri"],
@@ -155,4 +157,8 @@ export const fi: Translation = {
     "Suunnittelen ja 3D-tulostan omia pieniä projekteja, tuoden ratkaisuja tarpeisiini.",
     "Vapaa-ajallani koodaan sovelluksia omiin tarpeisiini. Yritän aina miettiä eri vaihtoehtoja ongelmaani ja valita tehokkaimman niistä suhteessa lisättyyn kompleksisuuteen."
   ],
+
+  // SAMPLES
+  "samples.c_sharp": "C# koodi esimerkit",
+  "samples.c_sharp.ex1.title": "Palkanlaskenta",
 };

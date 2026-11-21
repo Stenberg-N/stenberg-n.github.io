@@ -13,7 +13,7 @@
   import '../styles.css';
 	import Alert from '../components/Alert.svelte';
 
-  type NavRoute = "/" | "/projects" | "/about-me";
+  type NavRoute = "/" | "/projects" | "/about-me" | "/samples";
 
   let { children } = $props();
 
@@ -42,6 +42,13 @@
       img: null,
       command: null,
       arialabel: "Navigate to about me",
+    },
+    {
+      get name() { return $t["navigation.anchors.names"][3]; },
+      href: "/samples",
+      img: null,
+      command: null,
+      arialabel: "Navigate to samples",
     },
     {
       get img() { return $lang === 'en' ? 'FI' : 'EN'; },
@@ -131,14 +138,23 @@
 
   <nav id="nav-bar" class="flex horizontal">
     <div id="nav-bar-anchors" class="flex horizontal">
-      {#each navBarElements.slice(0, 3) as el, i (i)}
-        <a aria-label={el.arialabel} class="anchor" class:current-page={el.href === page.url.pathname} href={resolve(el.href as NavRoute)}>
+      {#each navBarElements.slice(0, 4) as el, i (i)}
+        <a
+          aria-label={el.arialabel}
+          class="anchor"
+          class:current-page={
+            el.href === "/"
+              ? page.url.pathname === "/"
+              : page.url.pathname.startsWith(el.href as NavRoute)
+          }
+          href={resolve(el.href as NavRoute)}
+        >
           {el.name}
         </a>
       {/each}
     </div>
     <div class="flex horizontal">
-      {#each navBarElements.slice(3) as button, i (i)}
+      {#each navBarElements.slice(4) as button, i (i)}
         <button aria-label={button.arialabel} class="button-primary notched lighter" onclick={button.command}>
           {#if i !== 0}
             <span class="span-icon img-medium-large" style="mask-image: url('{button.img}');"></span>
@@ -263,6 +279,17 @@
       > div:not(#nav-bar-anchors) {
         position: relative;
         right: unset;
+      }
+    }
+  }
+
+  @media (max-width: 410px) {
+    #nav-bar {
+      height: 16rem;
+
+      #nav-bar-anchors {
+        flex-direction: column;
+        gap: 12px;
       }
     }
   }

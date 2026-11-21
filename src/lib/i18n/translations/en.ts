@@ -1,7 +1,7 @@
 import type { Translation } from "../i18n";
 
 export const en: Translation = {
-  "navigation.anchors.names": ["Home", "Projects", "About me"],
+  "navigation.anchors.names": ["Home", "Projects", "About me", "Code samples"],
   "page-not-found": ["Something went wrong.", "Page not found.", "The page you are looking for does not exist."],
   "button.confirm": "Confirm",
   "button.cancel": "Cancel",
@@ -16,6 +16,8 @@ export const en: Translation = {
   "alert.email.success": "Email copied!",
   "alert.email.fail": "Failed to copy email!",
   "alert.project-not-found": "Project unable to be opened!",
+  "alert.code-sample.success": "Code sample copied!",
+  "alert.code-sample.fail": "Failed to copy code sample!",
 
   // HOME PAGE
   "intro-titles": ["Hello, I am", "Niko Stenberg", "Aspiring ICT engineer"],
@@ -147,4 +149,8 @@ export const en: Translation = {
     "I design and 3D print my own small projects, bringing solutions to my needs.",
     "In my free time, I build programs for my needs. I always try to think of different options for my problem and and choose the most effective one in relation to the added complexity."
   ],
+
+  // SAMPLES
+  "samples.c_sharp": "C# code samples",
+  "samples.c_sharp.ex1.title": "Payroll processing"
 };

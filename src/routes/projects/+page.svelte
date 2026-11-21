@@ -39,7 +39,7 @@
           <p>{$t[project.descriptionKey]}</p>
           <div id="techs-used" class="flex horizontal">
             {#each project.techUsed as tech (tech)}
-              <div class="notched light smaller-notch">
+              <div class="notched light smaller-notch no-hover">
                 <p>{tech}</p>
               </div>
             {/each}
