@@ -1,4 +1,4 @@
-import { samples } from '#lib/samples.js';
+import { samples } from '#lib/samples.ts';
 import { error } from '@sveltejs/kit';
 
 export const prerender = true;

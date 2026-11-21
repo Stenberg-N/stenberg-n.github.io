@@ -1,15 +1,15 @@
 <script lang="ts">
-	import { sendAlert } from '#lib/alert.js';
+	import { sendAlert } from '#lib/alert.ts';
 	import { t } from '#lib/i18n/i18n.ts';
 
 	let { data } = $props();
 
 	const title = $derived($t[`samples.${data.sample.slug}`] as string);
-	const subtitle = $derived($t[`${data.sample.title}`] as string);
+  let codeSampleRefs = $state<(HTMLElement | null)[]>([]);
 
-	const copyCode = async () => {
+	const copyCode = async (idx: number) => {
 		try {
-			await navigator.clipboard.writeText(data.sample.sample);
+			await navigator.clipboard.writeText(data.sample.samples[idx].code);
 			sendAlert({
 				message: 'alert.code-sample.success',
 				isTimer: true,
@@ -23,32 +23,74 @@
 			});
 		}
 	};
+
+  const moveTo = (idx: number) => {
+    codeSampleRefs[idx]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
 </script>
 
 <div id="code-sample-page" class="flex vertical">
 	<h1>{title}</h1>
-	<div class="marginalized">
-		<div class="flex horizontal" style="gap: 2rem;">
-			<button aria-label="Copy code" class="button-primary notched lighter" onclick={copyCode}>
-				<span class="span-icon img-medium" style="mask-image: url('/assets/copy.svg');"></span>
-			</button>
-			<h2>{subtitle}</h2>
-		</div>
-		<pre><code>{data.sample.sample}</code></pre>
-	</div>
+  <div class="flex horizontal marginalized">
+    <div id="code-samples-sidebar" class="flex vertical">
+      {#each data.sample.samples as sample, i (sample.title)}
+        <button class="button-primary text-only" onclick={() => moveTo(i)}>
+          {$t[sample.title] as string}
+        </button>
+      {/each}
+    </div>
+    <div id="code-samples" class="flex vertical">
+      {#each data.sample.samples as sample, i (sample.title)}
+        <div>
+          <div class="flex horizontal" style="gap: 2rem;">
+            <button aria-label="Copy code" class="button-primary notched lighter" onclick={() => copyCode(i)}>
+              <span class="span-icon img-medium" style="mask-image: url('/assets/copy.svg');"></span>
+            </button>
+            <h2 bind:this={codeSampleRefs[i]}>{$t[sample.title] as string}</h2>
+          </div>
+          <pre><code>{sample.code}</code></pre>
+        </div>
+        {#if i !== data.sample.samples.length - 1}
+          <div class="divider"></div>
+        {/if}
+      {/each}
+    </div>
+  </div>
 </div>
 
 <style>
 	#code-sample-page {
 		.marginalized {
-			outline: 2px solid var(--border-color-primary);
-			padding: 2rem;
+      gap: 1rem;
+
+      > div {
+        outline: 2px solid var(--border-color-primary);
+      }
 		}
 
-		button {
-			height: 3rem;
-			width: 3rem;
-		}
+    #code-samples-sidebar {
+      position: sticky;
+      align-self: flex-start;
+      top: calc(var(--nav-height) + 4rem);
+      justify-content: flex-start;
+      width: 200px;
+      padding: 1rem;
+
+      button {
+        justify-content: flex-start;
+      }
+    }
+
+    #code-samples {
+      min-width: 0;
+      flex: 1;
+      padding: 2rem;
+
+      button {
+        height: 3rem;
+        width: 3rem;
+      }
+    }
 
 		h2 {
 			margin: 0;
@@ -62,6 +104,7 @@
 		pre {
 			padding: 2rem;
 			background-color: var(--bg-color-primary2);
+      overflow-x: auto;
 		}
 
 		code {

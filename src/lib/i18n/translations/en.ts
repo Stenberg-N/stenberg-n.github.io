@@ -171,5 +171,6 @@ export const en: Translation = {
 
 	// SAMPLES
 	'samples.c_sharp': 'C# code samples',
-	'samples.c_sharp.ex1.title': 'Payroll processing'
+	'samples.c_sharp.ex1.title': 'Payroll processing',
+  'samples.c_sharp.ex2.title': 'Movie library',
 };

@@ -17,10 +17,10 @@
 
 	let { children } = $props();
 
-	let isScrollThreshold = $state<boolean>(false);
-	let contentElement = $state<HTMLDivElement | null>(null);
+  let scrollY = $state<number>(0);
+	const isScrollThreshold = $derived(scrollY > 750);
 	let alertsContainer = $state<HTMLDivElement | null>(null);
-	let raf: number | null = null;
+
 	const navBarElements = [
 		{
 			get name() {
@@ -89,13 +89,13 @@
 		}
 	];
 
-	onNavigate(({ shallow, type }) => {
+	onNavigate(({ shallow, type, complete }) => {
 		if (shallow && type === 'goto') return;
 
-		return new Promise((resolve) => {
-			document.startViewTransition(() => {
-				if (contentElement) contentElement.scrollTop = 0;
-				resolve();
+		return new Promise((done) => {
+			document.startViewTransition(async () => {
+        done();
+				await complete;
 			});
 		});
 	});
@@ -109,22 +109,11 @@
 
 	$effect(() => {
 		if (!alertsContainer) return;
-		alertsContainer.style.bottom = `${$viewport.width <= 318 ? 80 : 20}px`;
+		alertsContainer.style.bottom = `${$viewport.width <= 520 ? 80 : 20}px`;
 	});
 
-	const handleScroll = () => {
-		if (!raf) raf = requestAnimationFrame(handleScrollThreshold);
-	};
-
-	const handleScrollThreshold = () => {
-		if (!contentElement) return;
-		raf = null;
-		isScrollThreshold = contentElement.scrollTop > 750;
-	};
-
 	const handleScrollTop = () => {
-		if (!contentElement) return;
-		contentElement.scrollTop = 0;
+		scrollY = 0;
 	};
 
 	const copyEmail = async () => {
@@ -141,11 +130,15 @@
 	<link rel="icon" href="/assets/favicon.svg" />
 </svelte:head>
 
+<svelte:window
+  bind:scrollY={scrollY}
+  bind:innerHeight={$viewport.height}
+  bind:innerWidth={$viewport.width}
+/>
+
 <main
 	id="main"
 	class="flex vertical"
-	bind:clientHeight={$viewport.height}
-	bind:clientWidth={$viewport.width}
 >
 	{#if isScrollThreshold}
 		<button
@@ -203,18 +196,15 @@
 		</div>
 	</nav>
 
-	<div id="content" bind:this={contentElement} onscroll={handleScroll}>
+	<div id="content">
 		{@render children()}
 	</div>
 </main>
 
 <style>
 	#main {
-		position: fixed;
-		inset: 0;
 		justify-content: flex-start;
 		gap: 0;
-		overflow: hidden;
 
 		> #scroll-to-top {
 			position: fixed;
@@ -222,15 +212,31 @@
 			bottom: 20px;
 			z-index: 10000;
 			padding: 1rem;
+
+      &:hover {
+        opacity: 1;
+        background-color: #292929;
+
+        &::after {
+          background-color: #090909;
+          box-shadow:
+            0 -4px 0 0 #131313,
+            4px 0 0 #030303,
+            0 4px 0 0 #030303,
+            -4px 0 0 0 #131313;
+        }
+      }
 		}
 	}
 
 	#nav-bar {
-		position: sticky;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 		flex-shrink: 0;
 		justify-content: center;
 		width: 100%;
-		height: 5rem;
+		height: var(--nav-height);
 		padding: 16px;
 		background-color: var(--bg-color-primary1);
 		border-bottom: 2px solid var(--border-color-primary);
@@ -270,14 +276,6 @@
 		}
 	}
 
-	#content {
-		overflow-y: auto;
-
-		&::-webkit-scrollbar {
-			display: block;
-		}
-	}
-
 	#alerts {
 		position: fixed;
 		left: 50%;
@@ -311,7 +309,6 @@
 
 	@media (max-width: 750px) {
 		#nav-bar {
-			height: 8rem;
 			flex-direction: column;
 			justify-content: space-between;
 
@@ -322,14 +319,17 @@
 		}
 	}
 
-	@media (max-width: 410px) {
-		#nav-bar {
-			height: 16rem;
+  @media (max-width: 520px) {
+    #main #scroll-to-top {
+      right: 50%;
+      transform: translateX(50%);
+    }
+  }
 
-			#nav-bar-anchors {
-				flex-direction: column;
-				gap: 12px;
-			}
-		}
-	}
+	@media (max-width: 410px) {
+		#nav-bar #nav-bar-anchors {
+      flex-direction: column;
+      gap: 12px;
+    }
+  }
 </style>

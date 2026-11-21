@@ -25,7 +25,7 @@
 	onMount(() => {
 		if (!wrapper) return;
 
-		const h = vp.width <= 750 ? '148px' : '100px';
+		const h = vp.width <= 410 ? '271px' : vp.width <= 750 ? '148px' : '100px';
 		const w = `${vp.width / 2 - wrapper.clientWidth / 2}px`;
 
 		wrapper.style.top = h;

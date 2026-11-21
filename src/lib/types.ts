@@ -32,6 +32,8 @@ export type ViewPort = {
 
 export type CodeSample = {
 	slug: string;
-	title: string;
-	sample: string;
+  samples: {
+    title: string;
+    code: string;
+  }[]
 };

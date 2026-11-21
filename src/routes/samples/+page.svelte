@@ -28,7 +28,7 @@
 			justify-content: flex-start;
 			width: 100%;
 			padding: 1rem 2rem;
-			font-size: 1rem;
+			font-size: 1.25rem;
 		}
 	}
 </style>

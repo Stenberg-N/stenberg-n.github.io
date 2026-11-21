@@ -177,6 +177,7 @@ export const fi: Translation = {
 	],
 
 	// SAMPLES
-	'samples.c_sharp': 'C# koodi esimerkit',
-	'samples.c_sharp.ex1.title': 'Palkanlaskenta'
+	'samples.c_sharp': 'C# koodinäytteet',
+	'samples.c_sharp.ex1.title': 'Palkanlaskenta',
+  'samples.c_sharp.ex2.title': 'Leffakirjasto',
 };
