@@ -1,11 +1,11 @@
-import dedent from "ts-dedent";
-import type { CodeSample } from "./types";
+import dedent from 'ts-dedent';
+import type { CodeSample } from './types';
 
 export const samples: CodeSample[] = [
-  {
-    slug: "c_sharp",
-    title: "samples.c_sharp.ex1.title",
-    sample: dedent`
+	{
+		slug: 'c_sharp',
+		title: 'samples.c_sharp.ex1.title',
+		sample: dedent`
       using System;
       using System.Collections.Generic;
       using System.IO;
@@ -383,5 +383,5 @@ export const samples: CodeSample[] = [
           }
       }
     `
-  },
+	}
 ];

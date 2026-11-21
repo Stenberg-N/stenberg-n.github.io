@@ -1,148 +1,161 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
-  import { resolve } from "$app/paths";
-	import { sendAlert } from "$lib/alert";
+	import { goto } from '$app/navigation';
+	import { sendAlert } from '#lib/alert.ts';
 
-  import { t } from "$lib/i18n/i18n";
-  import { projects } from "$lib/projects";
+	import { t } from '#lib/i18n/i18n.ts';
+	import { projects } from '#lib/projects.ts';
 
-  type ProjectSlug = "fin-radar" | "finance-tracker" | "focusboard" | "waste-classifer";
-
+	type ProjectSlug = 'fin-radar' | 'finance-tracker' | 'focusboard' | 'waste-classifer';
 </script>
 
 <div id="projects-container" class="flex vertical">
-  <h1>{$t["navigation.anchors.names"][1]}</h1>
-  <div id="projects-wrapper" class="marginalized">
-    {#each projects as project, i (i)}
-      <div
-        role="button"
-        tabindex="0"
-        class="project-container flex vertical notched lighter"
-        onclick={() => goto(resolve(`/projects/${project.slug as ProjectSlug}`))}
-        onkeydown={(e) => { if (e.key === 'Enter') goto(resolve(`/projects/${project.slug as ProjectSlug}`)); }}
-      >
-        <div class="project-status">
-          <p style="color: var(--secondary-highlight-color{project.isCurrent ? '1' : '2'})">
-            {$t[project.isCurrent ? "projects.project-status.wip" : "projects.project-status.inactive"]}
-          </p>
-        </div>
-        <div class="img-wrapper">
-          <img src={project.coverImage} alt={project.coverImage.split("/")[2]} />
-        </div>
-        <div class="divider"></div>
-        <div id="content" class="flex vertical">
-          <h2>{project.title}</h2>
-          <button class="button-primary anchor text-only red-text" onclick={(e) => { e.stopPropagation(); sendAlert({ message: "alert.message.github", isTimer: false, showButtons: true, link: project.repo }); }}>
-            <span class="span-icon img-small" style="mask-image: url('/assets/github-logo.svg');"></span>
-            {$t["projects.project.repository"]}
-          </button>
-          <p>{$t[project.descriptionKey]}</p>
-          <div id="techs-used" class="flex horizontal">
-            {#each project.techUsed as tech (tech)}
-              <div class="notched light smaller-notch no-hover">
-                <p>{tech}</p>
-              </div>
-            {/each}
-          </div>
-        </div>
-      </div>
-    {/each}
-  </div>
+	<h1>{$t['navigation.anchors.names'][1]}</h1>
+	<div id="projects-wrapper" class="marginalized">
+		{#each projects as project, i (i)}
+			<div
+				role="button"
+				tabindex="0"
+				class="project-container flex vertical notched lighter"
+				onclick={() => goto(`projects/${project.slug as ProjectSlug}`)}
+				onkeydown={(e) => {
+					if (e.key === 'Enter') goto(`projects/${project.slug as ProjectSlug}`);
+				}}
+			>
+				<div class="project-status">
+					<p style="color: var(--secondary-highlight-color{project.isCurrent ? '1' : '2'})">
+						{$t[
+							project.isCurrent ? 'projects.project-status.wip' : 'projects.project-status.inactive'
+						]}
+					</p>
+				</div>
+				<div class="img-wrapper">
+					<img src={project.coverImage} alt={project.coverImage.split('/')[2]} />
+				</div>
+				<div class="divider"></div>
+				<div id="content" class="flex vertical">
+					<h2>{project.title}</h2>
+					<button
+						class="button-primary anchor text-only red-text"
+						onclick={(e) => {
+							e.stopPropagation();
+							sendAlert({
+								message: 'alert.message.github',
+								isTimer: false,
+								showButtons: true,
+								link: project.repo
+							});
+						}}
+					>
+						<span class="span-icon img-small" style="mask-image: url('/assets/github-logo.svg');"
+						></span>
+						{$t['projects.project.repository']}
+					</button>
+					<p>{$t[project.descriptionKey]}</p>
+					<div id="techs-used" class="flex horizontal">
+						{#each project.techUsed as tech (tech)}
+							<div class="notched light smaller-notch no-hover">
+								<p>{tech}</p>
+							</div>
+						{/each}
+					</div>
+				</div>
+			</div>
+		{/each}
+	</div>
 </div>
 
 <style>
-  #projects-container {
-    gap: 0;
+	#projects-container {
+		gap: 0;
 
-    > h1 {
-      text-align: center;
-      margin: 8rem 0 0;
-    }
+		> h1 {
+			text-align: center;
+			margin: 8rem 0 0;
+		}
 
-    #projects-wrapper {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-auto-rows: 550px;
-      gap: 2rem;
-      padding: 0 2rem;
+		#projects-wrapper {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			grid-auto-rows: 550px;
+			gap: 2rem;
+			padding: 0 2rem;
 
-      .project-container {
-        justify-content: flex-start;
-        width: 100%;
-        padding: 0 2px;
-        overflow: hidden;
-        transition: background-color 100ms ease-in-out;
+			.project-container {
+				justify-content: flex-start;
+				width: 100%;
+				padding: 0 2px;
+				overflow: hidden;
+				transition: background-color 100ms ease-in-out;
 
-        &:hover {
-          cursor: pointer;
-          background-color: var(--border-color-primary-highlight);
-        }
+				&:hover {
+					cursor: pointer;
+					background-color: var(--border-color-primary-highlight);
+				}
 
-        .project-status {
-          position: absolute;
-          top: 0.75rem;
-          right: 0.75rem;
-          padding: 0.25rem 0.5rem;
-          background-color: var(--bg-color-secondary1);
-          outline: 1px solid var(--border-color-primary);
+				.project-status {
+					position: absolute;
+					top: 0.75rem;
+					right: 0.75rem;
+					padding: 0.25rem 0.5rem;
+					background-color: var(--bg-color-secondary1);
+					outline: 1px solid var(--border-color-primary);
 
-          p {
-            margin: 0;
-          }
-        }
+					p {
+						margin: 0;
+					}
+				}
 
-        #content {
-          align-items: flex-start;
-          justify-content: flex-start;
-          flex: 1 1 auto;
-          padding: 1rem;
-          gap: 0;
+				#content {
+					align-items: flex-start;
+					justify-content: flex-start;
+					flex: 1 1 auto;
+					padding: 1rem;
+					gap: 0;
 
-          h2 {
-            margin: 0;
-          }
+					h2 {
+						margin: 0;
+					}
 
-          p {
-            margin: 2rem 0;
-          }
-        }
+					p {
+						margin: 2rem 0;
+					}
+				}
 
-        button {
-          gap: 0.5rem;
-        }
+				button {
+					gap: 0.5rem;
+				}
 
-        .img-wrapper {
-          width: 100%;
-          padding: 10px;
-        }
+				.img-wrapper {
+					width: 100%;
+					padding: 10px;
+				}
 
-        .divider {
-          margin: 0;
-        }
+				.divider {
+					margin: 0;
+				}
 
-        #techs-used {
-          flex-wrap: wrap;
-          margin-top: auto;
+				#techs-used {
+					flex-wrap: wrap;
+					margin-top: auto;
 
-          div {
-            padding: 0.5rem 1rem;
-          }
+					div {
+						padding: 0.5rem 1rem;
+					}
 
-          p {
-            margin: 0;
-          }
-        }
-      }
-    }
-  }
+					p {
+						margin: 0;
+					}
+				}
+			}
+		}
+	}
 
-  @media (max-width: 880px) {
-    #projects-container {
-
-      #projects-wrapper {
-        grid-template-columns: 1fr;
-        gap: 3rem;
-      }
-    }
-  }
+	@media (max-width: 880px) {
+		#projects-container {
+			#projects-wrapper {
+				grid-template-columns: 1fr;
+				gap: 3rem;
+			}
+		}
+	}
 </style>
