@@ -31,7 +31,7 @@
 
 <div id="code-sample-page" class="flex vertical">
 	<h1>{title}</h1>
-  <div class="flex horizontal marginalized">
+  <div id="code-samples-wrapper" class="flex horizontal marginalized">
     <div id="code-samples-sidebar" class="flex vertical">
       {#each data.sample.samples as sample, i (sample.title)}
         <button class="button-primary text-only" onclick={() => moveTo(i)}>
@@ -41,12 +41,12 @@
     </div>
     <div id="code-samples" class="flex vertical">
       {#each data.sample.samples as sample, i (sample.title)}
-        <div>
+        <div bind:this={codeSampleRefs[i]}>
           <div class="flex horizontal" style="gap: 2rem;">
             <button aria-label="Copy code" class="button-primary notched lighter" onclick={() => copyCode(i)}>
               <span class="span-icon img-medium" style="mask-image: url('/assets/copy.svg');"></span>
             </button>
-            <h2 bind:this={codeSampleRefs[i]}>{$t[sample.title] as string}</h2>
+            <h2>{$t[sample.title] as string}</h2>
           </div>
           <pre><code>{sample.code}</code></pre>
         </div>
@@ -62,6 +62,7 @@
 	#code-sample-page {
 		.marginalized {
       gap: 1rem;
+      padding: 0 2rem;
 
       > div {
         outline: 2px solid var(--border-color-primary);
@@ -70,11 +71,13 @@
 
     #code-samples-sidebar {
       position: sticky;
+      z-index: 100;
       align-self: flex-start;
       top: calc(var(--nav-height) + 4rem);
       justify-content: flex-start;
       width: 200px;
       padding: 1rem;
+      background-color: var(--bg-color-primary1);
 
       button {
         justify-content: flex-start;
@@ -85,6 +88,10 @@
       min-width: 0;
       flex: 1;
       padding: 2rem;
+
+      > div {
+        min-width: 0;
+      }
 
       button {
         height: 3rem;
@@ -102,6 +109,7 @@
 		}
 
 		pre {
+      container-type: inline-size;
 			padding: 2rem;
 			background-color: var(--bg-color-primary2);
       overflow-x: auto;
@@ -122,6 +130,37 @@
 				'Helvetica Neue',
 				sans-serif;
 			white-space: pre;
+      font-size: clamp(12px, 2cqw, 1rem);
 		}
 	}
+
+  @media (max-width: 1100px) {
+    #code-samples-wrapper {
+      align-items: flex-start;
+      flex-direction: column;
+
+      #code-samples {
+        width: 100%;
+        padding: 1rem;
+      }
+    }
+  }
+
+  @media (max-width: 680px) {
+    #code-sample-page {
+      #code-samples-wrapper {
+        padding: 0 1rem;
+
+        > div:nth-of-type(2) {
+          outline: none;
+        }
+        
+
+        #code-samples {
+          width: 100%;
+          padding: 0;
+        }
+      }
+    }
+  }
 </style>

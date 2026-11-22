@@ -247,6 +247,7 @@ body {
 }
 
 .marginalized {
+  width: 100%;
 	min-width: 0;
 	max-width: 1200px;
 	margin: 4rem auto 12.5rem;
